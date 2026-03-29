@@ -1,0 +1,28 @@
+Maksymalny Przepływ - notatki
+
+=== Metoda Forda-Fulkersona ===
+[Cel]: Znajdowanie ścieżek od źródła (S) do ujścia (T).
+
+[Działanie]: 
+1. Znajdź ścieżkę powiększającą
+	Szukamy ścieżki gdzie mamy:
+	-> nie pełne krawędzie A->B (idące do)
+	-> nie puste krawędzie B->A (wracające z)
+2. Zwiększ przepływ wzdłuż tej ścieżki (wykorzystaj to wolne miejsce).
+3. Powtarzaj, dopóki istnieje choć jedna taka droga.
+
+[Koniec]: Brak ścieżek (S -> T) oznacza, że osiągnąłeś maksymalny możliwy przepływ.
+
+[Uwaga] Ta metoda nie określa konkretnego sposobu w jaki maja być znajdowane ścieżki powiększające
+
+[Zlozonosc] FF uzywajac DFS to O(Ef), gdzie E to liczba krawędzi a f to max przeplyw
+
+=== Algorytm Edmondsa-Karpa ===
+
+Algorytm Edmondsa-Karpa wykorzystuje BFS do znajdowania ścieżek powiększających
+
+(The Edmonds-Karp algorithm is very similar to Ford-Fulkerson, but it uses BFS instead of DFS to find augmented paths, which leads to fewer iterations to find maximum flow.)
+
+[Zlozonosc] O(VE^2) gdzie V to wierzchołki a E to krawedzie
+
+Jest lepsza niż FF z DFS ponieważ nie zależy już od przepustowości krawędzi czyli danych wprowadzanych.
