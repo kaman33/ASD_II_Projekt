@@ -1,0 +1,13 @@
+to pliki z funkcjami do skopiowania ktore moge sie przydac gdzies
+
+warto by bylo cos zrobic zeby mozna bylo latwo importowac je
+
+nwm jak poki co tylko napisalem je, moze ktos ma pomysl
+
+w planach:
+ - przeciecie dwoch odcinkow
+ - nalezenie punktu do odcinka
+ - punkt w wielokacie
+ - otoczka
+
+jak ktos zrobi albo robi co innego to dajta znac
