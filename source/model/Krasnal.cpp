@@ -1,8 +1,17 @@
 #include "Krasnal.h"
 
-Krasnal::Krasnal()
-    : id(0), xDom(0), yDom(0), kompetencje({}), ulubionySurowiec(""), mnoznikPremii(1.0) {
-}
+Krasnal::Krasnal() : id(0), xDom(0), yDom(0), kompetencje({}), ulubionySurowiec(""), czyUlubionySurowiec(false) {}
+
+Krasnal::Krasnal(int id, int xDom, int yDom,
+                 const std::vector<std::string>& kompetencje,
+                 const std::string& ulubionySurowiec,
+                 bool czyUlubionySurowiec)
+    : id(id),
+      xDom(xDom),
+      yDom(yDom),
+      kompetencje(kompetencje),
+      ulubionySurowiec(ulubionySurowiec),
+      czyUlubionySurowiec(czyUlubionySurowiec) {}
 
 int Krasnal::getId() const{
   return id;
@@ -24,8 +33,8 @@ const std::string& Krasnal::getUlubionySurowiec() const{
   return ulubionySurowiec;
 }
 
-double Krasnal::getMnoznikPremii() const{
-  return mnoznikPremii;
+bool Krasnal::isUlubionySurowiec() const{
+  return czyUlubionySurowiec;
 }
 
 void Krasnal::setId(int noweId){
@@ -44,6 +53,6 @@ void Krasnal::setKompetencje(const std::vector<std::string>& noweKompetencje){
 void Krasnal::setUlubionySurowiec(const std::string& nowySurowiec){
   this->ulubionySurowiec = nowySurowiec;
 }
-void Krasnal::setMnoznikPremii(double nowyMnoznikPremii){
-  this->mnoznikPremii = nowyMnoznikPremii;
+void Krasnal::setCzyUlubionySurowiec(bool czyUlubionySurowiec){
+  this->czyUlubionySurowiec = czyUlubionySurowiec;
 }
