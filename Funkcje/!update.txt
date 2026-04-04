@@ -34,6 +34,6 @@ wydajeniejszy
 - Rozpisałem do końca Krasnala
 
 DoZrobienia:
--Napisać sprawdzanie i wybieranie odpowiedniego punkty startowego do grahama
--Jakaś podstawowa obsługa błędów, np. czy mamy przynajmniej 3 punkty
+-Napisać sprawdzanie i wybieranie odpowiedniego punkty startowego do grahama ZROBIONE
+-Jakaś podstawowa obsługa błędów, np. czy mamy przynajmniej 3 punkty ZROBIONE/DO SPRAWDZENIA CZY JESZCZE COŚ JEST DO OBSŁUGI
 -Reszta obiektów kopalnia i strażnik
