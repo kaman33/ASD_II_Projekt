@@ -1,7 +1,6 @@
-#include<vector>
-#include "punkt.cpp"
+#include "det.h"
 
-float det(const Punkt p1, const Punkt p2, const Punkt p3){
+float det(Punkt p1, Punkt p2, Punkt p3) {
     // 3 x 3 
     // D = (x2 − x1)(y3 − y1) − (y2 − y1)(x3 − x1)
 
@@ -16,7 +15,5 @@ float det(const Punkt p1, const Punkt p2, const Punkt p3){
     
     */
 
-    float D = (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x);
-
-    return D;
+    return (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x);
 }

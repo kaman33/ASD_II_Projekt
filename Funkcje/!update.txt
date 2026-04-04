@@ -26,3 +26,14 @@ jest otoczka grahamowska ale jeszcze dopracuje ten kod pod wzgledem wygladu
 i pod wzgledem optymalizacji chyba ze ktos by chcial to wydaje mi sie ze
 krok 2 z sortowaniem i usuwaniem "dalszego" elementu mógłby być o wiele
 wydajeniejszy
+
+04.04.2026 - Eryk
+- Poprawiłem if'a w przecięciach, wcześniej zawsze zwracał false.
+- Drobne poprawki typów
+- Rozbiłem pliki cpp na headery + cpp
+- Rozpisałem do końca Krasnala
+
+DoZrobienia:
+-Napisać sprawdzanie i wybieranie odpowiedniego punkty startowego do grahama
+-Jakaś podstawowa obsługa błędów, np. czy mamy przynajmniej 3 punkty
+-Reszta obiektów kopalnia i strażnik

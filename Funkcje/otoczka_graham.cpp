@@ -1,8 +1,10 @@
 #include <algorithm>
 #include <iostream>
-#include "det.cpp"
+#include <vector>
 
-float dystans(const Punkt a, const Punkt b) {
+#include "det.h"
+
+float dystans(Punkt a, Punkt b) {
     return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
 }
 
@@ -28,7 +30,7 @@ int main() {
 
     /// NAJPIERW SORTUJEMY LISTĘ PUNKTÓW
     std::sort(punkty.begin() + 1, punkty.end(), [&](const Punkt& pi, const Punkt& pj) {
-        int d = det(punkty[0], pi, pj);
+        float d = det(punkty[0], pi, pj);
         if (d == 0) return dystans(punkty[0], pi) < dystans(punkty[0], pj);
         return d > 0;
     });

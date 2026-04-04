@@ -1,10 +1,12 @@
-#include <vector>
-#include "det.cpp"
+#include <algorithm>
+
+#include "is_point_on_segment.h"
+#include "det.h"
 
 // Sprawdzenie czy punkt P należy do odcinka p1p2
 bool is_point_on_segment(Punkt p1, Punkt p2, Punkt P)
 {
-    // P nalezy gdy p1 p2 i P sa wspoliniowe -> D = 0
+    // P nalezy gdy p1 p2 i P sa współliniowe -> D = 0
     if(det(p1, p2, P) != 0){
         return false;
     }
