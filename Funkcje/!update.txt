@@ -1,3 +1,4 @@
+03.04.2026 - Gosia
 to pliki z funkcjami do skopiowania ktore moge sie przydac gdzies
 
 warto by bylo cos zrobic zeby mozna bylo latwo importowac je
@@ -8,7 +9,7 @@ w planach:
  - przeciecie dwoch odcinkow - ZROBIONE
  - nalezenie punktu do odcinka - ZROBIONE
  - punkt w wielokacie
- - otoczka
+ - otoczka (Grahama) - ZROBIONE/KOD DO WYSZLIFOWANIA
 
 jak ktos zrobi albo robi co innego to dajta znac
 
@@ -19,3 +20,9 @@ jak ktos zrobi albo robi co innego to dajta znac
 
 Plik testowy pozniej do usuniecia tylko na biezaco sprawdzalam czy dziala
 i tez potestujcie czy te moje funkcje sa okej
+
+04.04.2026 - Jerry
+jest otoczka grahamowska ale jeszcze dopracuje ten kod pod wzgledem wygladu
+i pod wzgledem optymalizacji chyba ze ktos by chcial to wydaje mi sie ze
+krok 2 z sortowaniem i usuwaniem "dalszego" elementu mógłby być o wiele
+wydajeniejszy
