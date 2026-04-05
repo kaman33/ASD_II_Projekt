@@ -4,13 +4,18 @@ warto by bylo cos zrobic zeby mozna bylo latwo importowac je
 
 nwm jak poki co tylko napisalem je, moze ktos ma pomysl
 
-w planach:
+ZROBIONE:
  - przeciecie dwoch odcinkow - ZROBIONE
  - nalezenie punktu do odcinka - ZROBIONE
- - punkt w wielokacie
- - otoczka (Grahama) - ZROBIONE/KOD DO WYSZLIFOWANIA
+ - Napisać sprawdzanie i wybieranie odpowiedniego punkty startowego do grahama ZROBIONE
+ - Jakaś podstawowa obsługa błędów, np. czy mamy przynajmniej 3 punkty ZROBIONE
 
-jak ktos zrobi albo robi co innego to dajta znac
+DO PRZEJRZENIA:
+ - otoczka (Grahama) - zwlaszcza krok 2 pod wzgledem optymalizacji
+
+DO ZROBIENIA:
+ - punkt w wielokacie
+ - Reszta obiektów kopalnia i strażnik
 
 03.04.2026 - Gosia
 ///
@@ -32,8 +37,3 @@ wydajeniejszy
 - Drobne poprawki typów
 - Rozbiłem pliki cpp na headery + cpp
 - Rozpisałem do końca Krasnala
-
-DoZrobienia:
--Napisać sprawdzanie i wybieranie odpowiedniego punkty startowego do grahama ZROBIONE
--Jakaś podstawowa obsługa błędów, np. czy mamy przynajmniej 3 punkty ZROBIONE/DO SPRAWDZENIA CZY JESZCZE COŚ JEST DO OBSŁUGI
--Reszta obiektów kopalnia i strażnik
