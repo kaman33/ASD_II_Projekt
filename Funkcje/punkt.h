@@ -1,6 +1,8 @@
 #ifndef PUNKT_H
 #define PUNKT_H
 
+#include <ostream>
+
 struct Punkt {
     float x;
     float y;
@@ -9,6 +11,8 @@ struct Punkt {
 
     bool operator<(const Punkt& other) const;
     bool operator>(const Punkt& other) const;
+
+    friend std::ostream& operator<<(std::ostream& os, const Punkt& p);
 };
 
 #endif

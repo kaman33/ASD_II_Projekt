@@ -14,3 +14,9 @@ bool Punkt::operator<(const Punkt& other) const {
 bool Punkt::operator>(const Punkt& other) const {
     return other < *this;
 }
+
+// Wypisanie punktu
+std::ostream& operator<<(std::ostream& stream, const Punkt& p){
+    stream << "(" << p.x << ", " << p.y << ")";
+    return stream;
+}
