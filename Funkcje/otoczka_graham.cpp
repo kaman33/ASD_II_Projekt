@@ -87,7 +87,7 @@ int main() {
     /// WYPISANIE WYNIKU - PUNKTY TWORZĄCE OTOCZKĘ ZE ZBIORU PUNKTÓW
 
     for (auto& point : stack) {
-        std::cout << "(" << point.x << ", " << point.y << ")\n";
+        std::cout << point << "\n";
     }
 
 }
