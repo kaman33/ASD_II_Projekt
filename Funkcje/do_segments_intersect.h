@@ -1,8 +1,10 @@
 #ifndef DO_SEGMENTS_INTERSECT_H
 #define DO_SEGMENTS_INTERSECT_H
 
-#include "punkt.h"
+#include "point.h"
+#include "det.h"
+#include "is_point_on_segment.h"
 
-bool do_segments_intersect(Punkt p1, Punkt p2, Punkt p3, Punkt p4);
+bool do_segments_intersect(Point p1, Point p2, Point p3, Point p4);
 
 #endif

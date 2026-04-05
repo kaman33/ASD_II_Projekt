@@ -9,13 +9,14 @@ ZROBIONE:
  - nalezenie punktu do odcinka - ZROBIONE
  - Napisać sprawdzanie i wybieranie odpowiedniego punkty startowego do grahama ZROBIONE
  - Jakaś podstawowa obsługa błędów, np. czy mamy przynajmniej 3 punkty ZROBIONE
+ - punkt w wielokacie ZROBIONE
 
 DO PRZEJRZENIA:
  - otoczka (Grahama) - zwlaszcza krok 2 pod wzgledem optymalizacji
 
 DO ZROBIENIA:
- - punkt w wielokacie
  - Reszta obiektów kopalnia i strażnik
+ - Wprowadzanie danych w main.cpp
 
 03.04.2026 - Gosia
 ///
@@ -25,6 +26,7 @@ DO ZROBIENIA:
 
 Plik testowy pozniej do usuniecia tylko na biezaco sprawdzalam czy dziala
 i tez potestujcie czy te moje funkcje sa okej
+^- wielokat zwraca poprawne wyniki wiec powinny byc okej - aleks
 
 04.04.2026 - Jerry
 jest otoczka grahamowska ale jeszcze dopracuje ten kod pod wzgledem wygladu
@@ -37,3 +39,11 @@ wydajeniejszy
 - Drobne poprawki typów
 - Rozbiłem pliki cpp na headery + cpp
 - Rozpisałem do końca Krasnala
+
+05.04.2026 - Aleks
+- Napisalem wielokat 
+- Fajnie ze wam sie spodobal ten pomysl z tym folderem :>
+- Przerzucilem krasnala w lepsze miejsce (pdw)
+- Usunalem test.txt
+- Zmienilem nazwe punkt na point (przepraszam)
+- Dodalem testy (ze slajdow)

@@ -1,8 +1,8 @@
 #ifndef DET_H
 #define DET_H
 
-#include "punkt.h"
+#include "point.h"
 
-float det(Punkt p1, Punkt p2, Punkt p3);
+float det(Point p1, Point p2, Point p3);
 
 #endif

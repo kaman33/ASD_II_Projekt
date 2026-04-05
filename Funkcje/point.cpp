@@ -1,9 +1,9 @@
-#include "punkt.h"
+#include "point.h"
 
-Punkt::Punkt(float x, float y) : x(x), y(y) {}
+Point::Point(float x, float y) : x(x), y(y) {}
 
 // Operator mniejszosci
-bool Punkt::operator<(const Punkt& other) const {
+bool Point::operator<(const Point& other) const {
     if (x != other.x) {
         return x < other.x;
     }
@@ -11,12 +11,12 @@ bool Punkt::operator<(const Punkt& other) const {
 }
 
 // Operator wiekszosci
-bool Punkt::operator>(const Punkt& other) const {
+bool Point::operator>(const Point& other) const {
     return other < *this;
 }
 
 // Wypisanie punktu
-std::ostream& operator<<(std::ostream& stream, const Punkt& p){
+std::ostream& operator<<(std::ostream& stream, const Point& p){
     stream << "(" << p.x << ", " << p.y << ")";
     return stream;
 }

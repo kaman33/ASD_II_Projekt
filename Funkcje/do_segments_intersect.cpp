@@ -1,9 +1,7 @@
 #include "do_segments_intersect.h"
-#include "det.h"
-#include "is_point_on_segment.h"
 
 // Sprawdzenie czy odcinki p1p2 p3p4 się przeciniają
-bool do_segments_intersect(Punkt p1, Punkt p2, Punkt p3, Punkt p4)
+bool do_segments_intersect(Point p1, Point p2, Point p3, Point p4)
 {
     float d1 = det(p1,p2,p3);
     float d2 = det(p1,p2,p4);
