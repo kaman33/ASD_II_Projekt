@@ -1,14 +1,14 @@
 #ifndef KRASNAL_H
 #define KRASNAL_H
 
+#include "../Funkcje/point.h"
 #include <string>
 #include <vector>
 
 class Krasnal {
 private:
     int id;
-    int xDom;
-    int yDom;
+    Point dom;
     std::vector<std::string> kompetencje;
     std::string ulubionySurowiec;
     bool czyUlubionySurowiec;
@@ -16,20 +16,22 @@ private:
 public:
     Krasnal();
 
-    Krasnal(int id, int xDom, int yDom,
+    Krasnal(int id, const Point& dom,
             const std::vector<std::string>& kompetencje,
             const std::string& ulubionySurowiec, bool czyUlubionySurowiec);
 
     int getId() const;
-    int getXDom() const;
-    int getYDom() const;
+    const Point& getDom() const;
+    float getXDom() const;
+    float getYDom() const;
     const std::vector<std::string>& getKompetencje() const;
     const std::string& getUlubionySurowiec() const;
     bool isUlubionySurowiec() const;
 
     void setId(int noweId);
-    void setXDom(int noweX);
-    void setYDom(int noweY);
+    void setDom(const Point& nowyDom);
+    void setXDom(float noweX);
+    void setYDom(float noweY);
     void setKompetencje(const std::vector<std::string>& noweKompetencje);
     void setUlubionySurowiec(const std::string& nowySurowiec);
     void setCzyUlubionySurowiec(bool czyUlubionySurowiec);

@@ -1,14 +1,13 @@
 #include "Krasnal.h"
 
-Krasnal::Krasnal() : id(0), xDom(0), yDom(0), kompetencje({}), ulubionySurowiec(""), czyUlubionySurowiec(false) {}
+Krasnal::Krasnal() : id(0), dom(0.0f, 0.0f), kompetencje({}), ulubionySurowiec(""), czyUlubionySurowiec(false) {}
 
-Krasnal::Krasnal(int id, int xDom, int yDom,
+Krasnal::Krasnal(int id, const Point& dom,
                  const std::vector<std::string>& kompetencje,
                  const std::string& ulubionySurowiec,
                  bool czyUlubionySurowiec)
     : id(id),
-      xDom(xDom),
-      yDom(yDom),
+      dom(dom),
       kompetencje(kompetencje),
       ulubionySurowiec(ulubionySurowiec),
       czyUlubionySurowiec(czyUlubionySurowiec) {}
@@ -17,12 +16,16 @@ int Krasnal::getId() const{
   return id;
 }
 
-int Krasnal::getYDom() const{
-  return yDom;
+const Point& Krasnal::getDom() const{
+  return dom;
 }
 
-int Krasnal::getXDom() const{
-    return xDom;
+float Krasnal::getYDom() const{
+  return dom.y;
+}
+
+float Krasnal::getXDom() const{
+    return dom.x;
 }
 
 const std::vector<std::string>& Krasnal::getKompetencje() const{
@@ -41,12 +44,18 @@ void Krasnal::setId(int noweId){
   this->id = noweId;
 }
 
-void Krasnal::setXDom(int noweX){
-  this->xDom = noweX;
+void Krasnal::setDom(const Point& nowyDom){
+  this->dom = nowyDom;
 }
-void Krasnal::setYDom(int noweY){
-  this->yDom = noweY;
+
+void Krasnal::setXDom(float noweX){
+  this->dom.x = noweX;
 }
+
+void Krasnal::setYDom(float noweY){
+  this->dom.y = noweY;
+}
+
 void Krasnal::setKompetencje(const std::vector<std::string>& noweKompetencje){
   this->kompetencje = noweKompetencje;
 }

@@ -15,8 +15,10 @@ DO PRZEJRZENIA:
  - otoczka (Grahama) - zwlaszcza krok 2 pod wzgledem optymalizacji
 
 DO ZROBIENIA:
- - Reszta obiektów kopalnia i strażnik
  - Wprowadzanie danych w main.cpp
+
+PROPOZYCJE:
+- Przeniesienie point do folderu ze strukturami żeby były w jednym miejscu
 
 03.04.2026 - Gosia
 ///
@@ -51,3 +53,7 @@ wydajeniejszy
 06.04.2026 - Aleks
 - poprawilem testy
 - napisalem skrypty do uruchamiania testow
+
+06.04.2026 - Eryk
+- Dodałem Kopalnie i Strażnika
+- Przepisałem Krasnala żeby używał point.cpp
