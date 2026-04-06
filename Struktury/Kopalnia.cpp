@@ -1,7 +1,5 @@
 #include "Kopalnia.h"
 
-#include <algorithm>
-
 Kopalnia::Kopalnia()
     : id(0), lokalizacja(0.0f, 0.0f), typSurowca(""), pojemnosc(0), przypisaneKrasnale({}) {}
 

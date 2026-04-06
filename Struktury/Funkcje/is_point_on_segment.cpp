@@ -1,7 +1,4 @@
-#include <algorithm>
-
 #include "is_point_on_segment.h"
-#include "det.h"
 
 // Sprawdzenie czy punkt P należy do odcinka p1p2
 bool is_point_on_segment(Point p1, Point p2, Point P)

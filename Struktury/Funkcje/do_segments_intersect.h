@@ -1,7 +1,7 @@
 #ifndef DO_SEGMENTS_INTERSECT_H
 #define DO_SEGMENTS_INTERSECT_H
 
-#include "point.h"
+#include "../Point.h"
 #include "det.h"
 #include "is_point_on_segment.h"
 

@@ -1,0 +1,43 @@
+03.04.2026 - Gosia
+- Dodalam do structa operatory < i > (moze sie potem przyda)
+- Napisalam funkcje sprawdzająca czy dany punkt nalezy do odcinka
+- Napisalam funkcje sprawdzajaca czy dwa odcinki sie przecinaja
+
+Plik testowy pozniej do usuniecia tylko na biezaco sprawdzalam czy dziala
+i tez potestujcie czy te moje funkcje sa okej
+^- wielokat zwraca poprawne wyniki wiec powinny byc okej - aleks
+
+04.04.2026 - Jerry
+jest otoczka grahamowska ale jeszcze dopracuje ten kod pod wzgledem wygladu
+i pod wzgledem optymalizacji chyba ze ktos by chcial to wydaje mi sie ze
+krok 2 z sortowaniem i usuwaniem "dalszego" elementu mógłby być o wiele
+wydajeniejszy
+
+04.04.2026 - Eryk
+- Poprawiłem if'a w przecięciach, wcześniej zawsze zwracał false.
+- Drobne poprawki typów
+- Rozbiłem pliki cpp na headery + cpp
+- Rozpisałem do końca Krasnala
+
+05.04.2026 - Aleks
+- Napisalem wielokat 
+- Fajnie ze wam sie spodobal ten pomysl z tym folderem :>
+- Przerzucilem krasnala w lepsze miejsce (pdw)
+- Usunalem test.txt
+- Zmienilem nazwe punkt na point (przepraszam)
+- Dodalem testy (ze slajdow)
+
+06.04.2026 - Aleks
+- poprawilem testy
+- napisalem skrypty do uruchamiania testow
+
+06.04.2026 - Eryk
+- Dodałem Kopalnie i Strażnika
+- Przepisałem Krasnala żeby używał point.cpp
+
+06.04.2026 - Aleks
+- Poprawilem testy (znowu)
+- Przerzucilem folder Funkcje do Struktury
+- Point wyemigrowal do z Funkcji do Struktur (bez paszportu)
+- Przez emigracje pojawily sie bledy include ale chyba wszedzie naprawilem
+- Skoro to czytasz to widzisz co zrobilem z plikiem !wazne.txt

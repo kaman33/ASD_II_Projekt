@@ -1,6 +1,6 @@
 #include<iostream>
 #include<sstream>
-#include "../point.h"
+#include "../../Point.h"
 
 bool test1(){
     Point A(1,2);
@@ -34,9 +34,9 @@ bool test3(){
 
 int main(){
     std::cout<<"Testy dla klasy Point:"<<std::endl;
-    std::cout<<"Test 1: "<<test1()<<std::endl;
-    std::cout<<"Test 2: "<<test2()<<std::endl;
-    std::cout<<"Test 3: "<<test3()<<std::endl;
+    std::cout<<"Test 1: "<<(test1()?"OK":"ERROR")<<std::endl;
+    std::cout<<"Test 2: "<<(test2()?"OK":"ERROR")<<std::endl;
+    std::cout<<"Test 3: "<<(test3()?"OK":"ERROR")<<std::endl;
 
     return 0;
 }

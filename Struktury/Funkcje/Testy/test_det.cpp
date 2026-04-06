@@ -63,10 +63,10 @@ bool test6(){
 
 int main(){
     std::cout<<"Testy dla funkcji det:"<<std::endl;
-    std::cout<<"Test 1: "<<test1()<<std::endl;
-    std::cout<<"Test 2: "<<test2()<<std::endl;
-    std::cout<<"Test 3: "<<test3()<<std::endl;
-    std::cout<<"Test 4: "<<test4()<<std::endl;
-    std::cout<<"Test 5: "<<test5()<<std::endl;
-    std::cout<<"Test 6: "<<test6()<<std::endl;
+    std::cout<<"Test 1: "<<(test1()?"OK":"ERROR")<<std::endl;
+    std::cout<<"Test 2: "<<(test2()?"OK":"ERROR")<<std::endl;
+    std::cout<<"Test 3: "<<(test3()?"OK":"ERROR")<<std::endl;
+    std::cout<<"Test 4: "<<(test4()?"OK":"ERROR")<<std::endl;
+    std::cout<<"Test 5: "<<(test5()?"OK":"ERROR")<<std::endl;
+    std::cout<<"Test 6: "<<(test6()?"OK":"ERROR")<<std::endl;
 }

@@ -1,9 +1,10 @@
 #ifndef KOPALNIA_H
 #define KOPALNIA_H
 
-#include "../Funkcje/point.h"
+#include "Point.h"
 #include <string>
 #include <vector>
+#include <algorithm>
 
 class Kopalnia {
 private:

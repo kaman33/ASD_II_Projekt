@@ -1,7 +1,7 @@
 #ifndef DET_H
 #define DET_H
 
-#include "point.h"
+#include "../Point.h"
 
 float det(Point p1, Point p2, Point p3);
 

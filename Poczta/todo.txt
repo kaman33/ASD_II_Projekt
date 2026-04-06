@@ -1,0 +1,19 @@
+PROPOZYCJE:
+- Cos pomyslec nad dokumentacja? (jakies propozycje?)
+
+DO ZROBIENIA:
+- Wprowadzanie danych w main.cpp
+- Wiecej testow
+- Natywne odpalanie testow w powershellu na windowsie (nie mam windowsa)
+- Testy dla struktur
+
+DO PRZEJRZENIA:
+- Otoczka (Grahama) - zwlaszcza krok 2 pod wzgledem optymalizacji
+
+ZROBIONE:
+- Przeciecie dwoch odcinkow
+- Nalezenie punktu do odcinka
+- Napisać sprawdzanie i wybieranie odpowiedniego punkty startowego do grahama
+- Jakaś podstawowa obsługa błędów, np. czy mamy przynajmniej 3 punkty
+- Punkt w wielokacie
+- Przeniesienie point do folderu ze strukturami żeby były w jednym miejscu

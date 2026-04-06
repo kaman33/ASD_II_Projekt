@@ -1,7 +1,7 @@
 #ifndef KRASNAL_H
 #define KRASNAL_H
 
-#include "../Funkcje/point.h"
+#include "Point.h"
 #include <string>
 #include <vector>
 
