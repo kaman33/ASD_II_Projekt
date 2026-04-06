@@ -47,3 +47,7 @@ wydajeniejszy
 - Usunalem test.txt
 - Zmienilem nazwe punkt na point (przepraszam)
 - Dodalem testy (ze slajdow)
+
+06.04.2026 - Aleks
+- poprawilem testy
+- napisalem skrypty do uruchamiania testow
