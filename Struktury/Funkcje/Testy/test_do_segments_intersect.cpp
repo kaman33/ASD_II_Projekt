@@ -11,7 +11,7 @@ bool test1(){
 
 int main(){
     std::cout<<"Testy dla funkcji do_segments_intersect:"<<std::endl;
-    std::cout<<"Test 1: "<<(test1()?"OK":"ERROR")<<std::endl;
+    std::cout<<"Test 1: "<<(test1()?"OK":"ERROR")<<" (do not intersect)"<<std::endl;
 
     return 0;
 }

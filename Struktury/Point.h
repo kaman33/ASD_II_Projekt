@@ -11,6 +11,11 @@ struct Point{
 
     bool operator<(const Point& other) const;
     bool operator>(const Point& other) const;
+    bool operator==(const Point& other) const;
+    bool operator!=(const Point& other) const;
+    bool operator<=(const Point& other) const;
+    bool operator>=(const Point& other) const;
+    Point& operator=(const Point& other);
 
     friend std::ostream& operator<<(std::ostream& os, const Point& p);
 };

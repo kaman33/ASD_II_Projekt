@@ -21,6 +21,6 @@ bool test2(){
 
 int main(){
     std::cout<<"Testy dla funkcji is_point_in_polygon:"<<std::endl;
-    std::cout<<"Test 1: "<<(test1()?"OK":"ERROR")<<std::endl;
-    std::cout<<"Test 2: "<<(test2()?"OK":"ERROR")<<std::endl;
+    std::cout<<"Test 1: "<<(test1()?"OK":"ERROR")<<" (in polygon)"<<std::endl;
+    std::cout<<"Test 2: "<<(test2()?"OK":"ERROR")<<" (not in polygon)"<<std::endl;
 }

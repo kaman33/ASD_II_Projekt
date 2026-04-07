@@ -19,8 +19,8 @@ bool test2(){
 
 int main(){
     std::cout<<"Testy dla funkcji is_point_on_segment:"<<std::endl;
-    std::cout<<"Test 1: "<<(test1()?"OK":"ERROR")<<std::endl;
-    std::cout<<"Test 2: "<<(test2()?"OK":"ERROR")<<std::endl;
+    std::cout<<"Test 1: "<<(test1()?"OK":"ERROR")<<" (on segment)"<<std::endl;
+    std::cout<<"Test 2: "<<(test2()?"OK":"ERROR")<<" (not on segment)"<<std::endl;
 
     return 0;
 }
