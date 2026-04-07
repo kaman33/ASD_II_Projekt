@@ -41,3 +41,8 @@ wydajeniejszy
 - Point wyemigrowal do z Funkcji do Struktur (bez paszportu)
 - Przez emigracje pojawily sie bledy include ale chyba wszedzie naprawilem
 - Skoro to czytasz to widzisz co zrobilem z plikiem !wazne.txt
+
+07.04.2026 - Aleks
+- Nowe operatory dla Point
+- Test nowych operatorow
+- Dopisanie do testow co dany sprawdza
