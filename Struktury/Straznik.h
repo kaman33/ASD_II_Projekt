@@ -1,23 +1,20 @@
 #ifndef STRAZNIK_H
 #define STRAZNIK_H
 
-#include "Krasnal.h"
-
-class Straznik : public Krasnal {
+class Straznik {
 private:
+    int id;
     int glosnosc;
 
 public:
     Straznik();
 
-    Straznik(int id, const Point& dom,
-             const std::vector<std::string>& kompetencje,
-             const std::string& ulubionySurowiec,
-             bool czyUlubionySurowiec, int glosnosc);
-
+    Straznik(int id, int glosnosc);
+    int getId() const;
     int getGlosnosc() const;
 
     void setGlosnosc(int nowaGlosnosc);
+    void setId(int noweId);
 };
 
 #endif

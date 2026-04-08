@@ -1,13 +1,12 @@
 #include "Straznik.h"
 
-Straznik::Straznik() : Krasnal(), glosnosc(0) {}
+Straznik::Straznik() : id(0), glosnosc(0) {}
 
-Straznik::Straznik(int id, const Point& dom,
-                   const std::vector<std::string>& kompetencje,
-                   const std::string& ulubionySurowiec,
-                   bool czyUlubionySurowiec, int glosnosc)
-    : Krasnal(id, dom, kompetencje, ulubionySurowiec, czyUlubionySurowiec),
-      glosnosc(glosnosc) {}
+Straznik::Straznik(int id, int glosnosc) : id(id), glosnosc(glosnosc) {}
+
+int Straznik::getId() const {
+    return id;
+}
 
 int Straznik::getGlosnosc() const {
     return glosnosc;
@@ -15,4 +14,8 @@ int Straznik::getGlosnosc() const {
 
 void Straznik::setGlosnosc(int nowaGlosnosc) {
     this->glosnosc = nowaGlosnosc;
+}
+
+void Straznik::setId(int noweId) {
+    this->id = noweId;
 }
