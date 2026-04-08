@@ -69,4 +69,6 @@ int main(){
     std::cout<<"Test 4: "<<(test4()?"OK":"ERROR")<<" (det = 0)"<<std::endl;
     std::cout<<"Test 5: "<<(test5()?"OK":"ERROR")<<" (det = 0)"<<std::endl;
     std::cout<<"Test 6: "<<(test6()?"OK":"ERROR")<<" (det = 6)"<<std::endl;
+
+    return 0;
 }

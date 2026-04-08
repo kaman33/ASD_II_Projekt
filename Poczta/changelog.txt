@@ -46,3 +46,9 @@ wydajeniejszy
 - Nowe operatory dla Point
 - Test nowych operatorow
 - Dopisanie do testow co dany sprawdza
+
+08.04.2026 - Aleks
+- przerobilem otoczke na funkcje
+- dodalem do niej .h 
+- dodalem testy
+- mam zamiar przerzucic z otoczki funkcje dystansu do osobnego pliku (moze sie przydac gdzies indziej)

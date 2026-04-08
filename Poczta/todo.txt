@@ -6,6 +6,7 @@ DO ZROBIENIA:
 - Wiecej testow
 - Natywne odpalanie testow w powershellu na windowsie (nie mam windowsa)
 - Testy dla struktur
+- Przerzucenie funckji dystansu z otoczki do osobnego pliku
 
 DO PRZEJRZENIA:
 - Otoczka (Grahama) - zwlaszcza krok 2 pod wzgledem optymalizacji

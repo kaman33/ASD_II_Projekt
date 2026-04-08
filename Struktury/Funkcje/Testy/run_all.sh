@@ -9,3 +9,5 @@ echo ""
 ./run_test_do_segments_intersect.sh
 echo ""
 ./run_test_is_point_in_polygon.sh
+echo ""
+./run_test_graham_scan.sh

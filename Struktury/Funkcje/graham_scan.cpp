@@ -1,14 +1,11 @@
-#include <algorithm>
-#include <iostream>
-#include <vector>
-#include <float.h>
+#include "graham_scan.h"
 
-#include "det.h"
+// https://en.wikipedia.org/wiki/Graham_scan
 
-int nearestIdx(std::vector<Punkt> &points) {
+int nearestIdx(std::vector<Point> &points) {
     int best = 0;
 
-    for (int i = 1; i < points.size(); i++) {
+    for (unsigned int i = 1; i < points.size(); i++) {
         if (points[i].y < points[best].y || 
            (points[i].y == points[best].y && points[i].x < points[best].x)) {
             best = i;
@@ -17,29 +14,29 @@ int nearestIdx(std::vector<Punkt> &points) {
     return best;
 }
 
-float distance(Punkt a, Punkt b) {
+float distance(Point a, Point b) {
     return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
 }
 
-int main() {
+std::vector<Point> graham_scan(std::vector<Point> &points){
 
-    std::vector<Punkt> points;
+    /*std::vector<Point> points;
 
     /// PRZYKŁADOWE PUNKTY Z WYKŁADU
-    points.push_back(Punkt(0, 0));
-    points.push_back(Punkt(1, 0));
-    points.push_back(Punkt(2, 0));
-    points.push_back(Punkt(2, 1));
-    points.push_back(Punkt(4, 2));
-    points.push_back(Punkt(3, 4));
-    points.push_back(Punkt(1, 3));
-    points.push_back(Punkt(5, 1));
-    points.push_back(Punkt(3, 0));
-    points.push_back(Punkt(2, 2));
+    points.push_back(Point(0, 0));
+    points.push_back(Point(1, 0));
+    points.push_back(Point(2, 0));
+    points.push_back(Point(2, 1));
+    points.push_back(Point(4, 2));
+    points.push_back(Point(3, 4));
+    points.push_back(Point(1, 3));
+    points.push_back(Point(5, 1));
+    points.push_back(Point(3, 0));
+    points.push_back(Point(2, 2));*/
 
-    if (points.size() < 4) {
-        std::cout << "[ERROR] W zbiorze muszą być więcej niż 3 punkty\n";
-        return 1;
+    if (points.size() < 3){ // dla 3 elementow chyba tez ok
+        //std::cout<<"[ERROR - Graham Scan] W zbiorze muszą być więcej niż 3 punkty\n";
+        return points;
     }
 
     /// USTAWIENIE NAJBLIŻSZEGO PUNKTU JAKO PIERWSZY (NAJPIERW NA Y, W RAZIE REMISU NA X)
@@ -50,17 +47,17 @@ int main() {
     /// KROK 1: SORTUJEMY I DOSTOSOWUJEMY LISTĘ PUNKTÓW ZE WZGLĘDU NA WSPÓŁRZĘDNE KĄTOWE
 
     /// NAJPIERW SORTUJEMY LISTĘ PUNKTÓW
-    std::sort(points.begin() + 1, points.end(), [&](const Punkt& pi, const Punkt& pj) {
+    std::sort(points.begin() + 1, points.end(), [&](const Point& pi, const Point& pj){
         float d = det(points[0], pi, pj);
         if (d == 0) return distance(points[0], pi) < distance(points[0], pj);
         return d > 0;
     });
 
     /// USUWAMY Z LISTY BLIŻSZE PUNKTY Z TĄ SAMĄ WSPÓŁRZĘDNĄ KĄTOWĄ CO DALSZY PUNKT
-    std::vector<Punkt> furtherPoints;
+    std::vector<Point> furtherPoints;
     furtherPoints.push_back(points[0]);
 
-    for(int i = 1; i < points.size(); i++){
+    for(unsigned int i = 1; i < points.size(); i++){
         while(i < points.size() - 1 && det(points[0], points[i], points[i+1]) == 0)
             i++;
         furtherPoints.push_back(points[i]);
@@ -70,14 +67,14 @@ int main() {
 
     /// KROK 2: UTWORZENIE STOSU I DODANIE 3 PIERWSZYCH PUNKTÓW
 
-    std::vector<Punkt> stack;
+    std::vector<Point> stack;
     stack.push_back(points[0]);
     stack.push_back(points[1]);
     stack.push_back(points[2]);
 
     /// KROK 3: OSTATECZNE DOBRANIE PUNKTÓW OTOCZKI
 
-    for (int i = 3; i < points.size(); i++) {
+    for (unsigned int i = 3; i < points.size(); i++) {
         while (stack.size() >= 2 && det(stack[stack.size() - 2], stack.back(), points[i]) < 0) {
             stack.pop_back();
         }
@@ -85,9 +82,10 @@ int main() {
     }
 
     /// WYPISANIE WYNIKU - PUNKTY TWORZĄCE OTOCZKĘ ZE ZBIORU PUNKTÓW
-
+    /*
     for (auto& point : stack) {
-        std::cout << point << "\n";
-    }
+        std::cout<<point<<"\n";
+    }*/
 
+    return stack;
 }
