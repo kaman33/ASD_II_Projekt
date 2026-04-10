@@ -38,9 +38,9 @@ bool test2(){
 bool test3(){
     std::vector<Point> points, expected;
 
-    points = {Point(0, 0), Point(2, 0)};
+    points = {Point(0, 0), Point(0, 0)};
 
-    expected = points;
+    expected = {Point(0, 0)};
     points = graham_scan(points);
 
     if(points.size() != expected.size()) return false;
@@ -55,9 +55,9 @@ bool test3(){
 bool test4(){
     std::vector<Point> points, expected;
 
-    points = {Point(0, 0), Point(2, 0), Point(1, 2)};
-
-    expected = points;
+    points = {Point(0, 0), Point(0, 0), Point(1, 2)};
+    
+    expected = {Point(0, 0), Point(1, 2)};
     points = graham_scan(points);
 
     if(points.size() != expected.size()) return false;
@@ -72,9 +72,9 @@ bool test4(){
 bool test5(){
     std::vector<Point> points, expected;
 
-    points = {Point(0, 0), Point(2, 0), Point(1, 2), Point(1, 1)};
+    points = {Point(0, 0), Point(1, 1), Point(2, 0), Point(3, 0)};
 
-    expected = {Point(0, 0), Point(2, 0), Point(1, 2)};
+    expected = {Point(0, 0), Point(3, 0), Point(1, 1)};
     points = graham_scan(points);
 
     if(points.size() != expected.size()) return false;
