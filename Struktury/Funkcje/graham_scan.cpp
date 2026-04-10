@@ -2,27 +2,15 @@
 
 // https://en.wikipedia.org/wiki/Graham_scan
 
-int nearestIdx(std::vector<Point> &points) {
-    int best = 0;
-
-    for (unsigned int i = 1; i < points.size(); i++) {
-        if (points[i].y < points[best].y || 
-           (points[i].y == points[best].y && points[i].x < points[best].x)) {
-            best = i;
-        }
-    }
-    return best;
-}
-
 float distance(Point a, Point b) {
     return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
 }
 
 std::vector<Point> graham_scan(std::vector<Point> &points){
 
-    /*std::vector<Point> points;
-
-    /// PRZYKŁADOWE PUNKTY Z WYKŁADU
+    /*
+    PRZYKŁADOWE PUNKTY Z WYKŁADU
+    std::vector<Point> points;
     points.push_back(Point(0, 0));
     points.push_back(Point(1, 0));
     points.push_back(Point(2, 0));
@@ -32,30 +20,28 @@ std::vector<Point> graham_scan(std::vector<Point> &points){
     points.push_back(Point(1, 3));
     points.push_back(Point(5, 1));
     points.push_back(Point(3, 0));
-    points.push_back(Point(2, 2));*/
+    points.push_back(Point(2, 2));
+    */
 
-    if (points.size() < 4){ // dla 3 elementow chyba tez ok
-        //std::cout<<"[ERROR - Graham Scan] W zbiorze muszą być więcej niż 3 punkty\n";
-        if(points.size() == 2){
-            if(points[0] == points[1]){
-                return {points[0]};
-            }
-        }
-        if(points.size() == 3){
-            std::vector<Point> uniquePoints = {points[0]};
-            if(points[1] != points[0]) uniquePoints.push_back(points[1]);
-            if(points[2] != points[0] && points[2] != points[1]) uniquePoints.push_back(points[2]);
-            return uniquePoints;
-        }
-        return points;
+    /// KROK 1: USUNIĘCIE DUPLIKATÓW I USTAWIENIE NAJBLIŻSZEGO
+    ///         PUNKTU JAKO PIERWSZY (NAJPIERW NA Y, W RAZIE REMISU NA X)
+
+    std::sort(points.begin(), points.end(), [](const Point& a, const Point& b) {
+        if (a.y != b.y) return a.y < b.y;
+        return a.x < b.x;
+    });
+
+    points.erase(std::unique(points.begin(), points.end(), [](const Point& a, const Point& b) {
+        return a.x == b.x && a.y == b.y;
+    }), points.end());
+
+    /// PRZYPADKI, GDY JEST PONIŻEJ 3 PUNKTÓW
+    if (points.size() < 3) {
+        if (points.size() == 0) return {};
+        if(points.size() == 1 || points.size() == 2) return points;
     }
 
-    /// USTAWIENIE NAJBLIŻSZEGO PUNKTU JAKO PIERWSZY (NAJPIERW NA Y, W RAZIE REMISU NA X)
-    std::swap(points[nearestIdx(points)], points[0]);
-
-    /// ALGORYTM
-
-    /// KROK 1: SORTUJEMY I DOSTOSOWUJEMY LISTĘ PUNKTÓW ZE WZGLĘDU NA WSPÓŁRZĘDNE KĄTOWE
+    /// KROK 2: SORTUJEMY I DOSTOSOWUJEMY LISTĘ PUNKTÓW ZE WZGLĘDU NA WSPÓŁRZĘDNE KĄTOWE
 
     /// NAJPIERW SORTUJEMY LISTĘ PUNKTÓW
     std::sort(points.begin() + 1, points.end(), [&](const Point& pi, const Point& pj){
@@ -69,34 +55,30 @@ std::vector<Point> graham_scan(std::vector<Point> &points){
     furtherPoints.push_back(points[0]);
 
     for(unsigned int i = 1; i < points.size(); i++){
-        while(i < points.size() - 1 && det(points[0], points[i], points[i+1]) == 0)
+        while(i + 1 < points.size() && det(points[0], points[i], points[i+1]) == 0)
             i++;
         furtherPoints.push_back(points[i]);
     }
-
+    
     points = furtherPoints;
 
-    /// KROK 2: UTWORZENIE STOSU I DODANIE 3 PIERWSZYCH PUNKTÓW
+    /// KROK 3: UTWORZENIE STOSU I DODANIE 3 PIERWSZYCH PUNKTÓW
+
+    if (points.size() < 3) return points;
 
     std::vector<Point> stack;
     stack.push_back(points[0]);
     stack.push_back(points[1]);
     stack.push_back(points[2]);
 
-    /// KROK 3: OSTATECZNE DOBRANIE PUNKTÓW OTOCZKI
+    /// KROK 4: OSTATECZNE DOBRANIE PUNKTÓW OTOCZKI
 
     for (unsigned int i = 3; i < points.size(); i++) {
-        while (stack.size() >= 2 && det(stack[stack.size() - 2], stack.back(), points[i]) < 0) {
+        while (stack.size() >= 2 && det(stack[stack.size() - 2], stack.back(), points[i]) <= 0) {
             stack.pop_back();
         }
         stack.push_back(points[i]);
     }
-
-    /// WYPISANIE WYNIKU - PUNKTY TWORZĄCE OTOCZKĘ ZE ZBIORU PUNKTÓW
-    /*
-    for (auto& point : stack) {
-        std::cout<<point<<"\n";
-    }*/
 
     return stack;
 }
