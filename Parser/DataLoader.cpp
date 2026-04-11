@@ -49,7 +49,7 @@ InputData DataLoader::loadFromFile(const std::string& filePath) const
         {
             istringstream iss(line);
             int id;
-            float x, y;
+            double x, y;
             string ulubionySurowiec;
             int liczbaKompetencji;
 
@@ -85,7 +85,7 @@ InputData DataLoader::loadFromFile(const std::string& filePath) const
         {
             istringstream iss(line);
             int id;
-            float x, y;
+            double x, y;
             string typSurowca;
             int pojemnosc;
 

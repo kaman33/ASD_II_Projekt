@@ -6,7 +6,7 @@ bool test1(){
     Point p2(3, 1);
     Point p3(1, 3);
 
-    const float expected = 8;
+    const double expected = 8;
 
     return (det(p1, p2, p3) == expected);
 }
@@ -16,7 +16,7 @@ bool test2(){
     Point p2(3, 1);
     Point p3(4, -1);
 
-    const float expected = -7;
+    const double expected = -7;
 
     return (det(p1, p2, p3) == expected);
 }
@@ -26,7 +26,7 @@ bool test3(){
     Point p2(3, 1);
     Point p3(6, 2);
 
-    const float expected = 0;
+    const double expected = 0;
 
     return (det(p1, p2, p3) == expected);
 }
@@ -36,7 +36,7 @@ bool test4(){
     Point p2(4, 2);
     Point p3(2, 1);
 
-    const float expected = 0;
+    const double expected = 0;
 
     return (det(p1, p2, p3) == expected);
 }
@@ -46,7 +46,7 @@ bool test5(){
     Point p2(4, 2);
     Point p3(6, 3);
 
-    const float expected = 0;
+    const double expected = 0;
 
     return (det(p1, p2, p3) == expected);
 }
@@ -56,7 +56,7 @@ bool test6(){
     Point p2(4, 2);
     Point p3(3, 3);
 
-    const float expected = 6;
+    const double expected = 6;
 
     return (det(p1, p2, p3) == expected);
 }

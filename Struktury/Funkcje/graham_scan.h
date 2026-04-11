@@ -4,12 +4,11 @@
 #include<algorithm>
 #include<iostream>
 #include<vector>
-#include<float.h>
 #include"det.h"
 #include"../Point.h"
 
 int nearestIdx(std::vector<Point> &points);
-float distance(Point a, Point b);
+double distance(Point a, Point b);
 std::vector<Point> graham_scan(std::vector<Point> &points);
 
 #endif

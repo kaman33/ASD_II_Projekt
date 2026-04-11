@@ -20,11 +20,11 @@ const Point& Krasnal::getDom() const{
   return dom;
 }
 
-float Krasnal::getYDom() const{
+double Krasnal::getYDom() const{
   return dom.y;
 }
 
-float Krasnal::getXDom() const{
+double Krasnal::getXDom() const{
     return dom.x;
 }
 
@@ -48,11 +48,11 @@ void Krasnal::setDom(const Point& nowyDom){
   this->dom = nowyDom;
 }
 
-void Krasnal::setXDom(float noweX){
+void Krasnal::setXDom(double noweX){
   this->dom.x = noweX;
 }
 
-void Krasnal::setYDom(float noweY){
+void Krasnal::setYDom(double noweY){
   this->dom.y = noweY;
 }
 

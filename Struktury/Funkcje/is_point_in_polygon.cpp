@@ -1,8 +1,8 @@
 #include "is_point_in_polygon.h"
 
 bool is_point_in_polygon(Point p, const std::vector<Point>& polygon){
-    float u = polygon[0].x;
-    float v = polygon[0].x;
+    double u = polygon[0].x;
+    double v = polygon[0].x;
     int n = polygon.size();
     for(int i = 0; i < n; i++){
         u = std::min(u, polygon[i].x);

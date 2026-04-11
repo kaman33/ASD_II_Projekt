@@ -19,11 +19,11 @@ const Point& Kopalnia::getLokalizacja() const {
     return lokalizacja;
 }
 
-float Kopalnia::getX() const {
+double Kopalnia::getX() const {
     return lokalizacja.x;
 }
 
-float Kopalnia::getY() const {
+double Kopalnia::getY() const {
     return lokalizacja.y;
 }
 
@@ -47,11 +47,11 @@ void Kopalnia::setLokalizacja(const Point& nowaLokalizacja) {
     this->lokalizacja = nowaLokalizacja;
 }
 
-void Kopalnia::setX(float noweX) {
+void Kopalnia::setX(double noweX) {
     this->lokalizacja.x = noweX;
 }
 
-void Kopalnia::setY(float noweY) {
+void Kopalnia::setY(double noweY) {
     this->lokalizacja.y = noweY;
 }
 

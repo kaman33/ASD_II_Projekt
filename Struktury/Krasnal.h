@@ -22,16 +22,16 @@ public:
 
     int getId() const;
     const Point& getDom() const;
-    float getXDom() const;
-    float getYDom() const;
+    double getXDom() const;
+    double getYDom() const;
     const std::vector<std::string>& getKompetencje() const;
     const std::string& getUlubionySurowiec() const;
     bool isUlubionySurowiec() const;
 
     void setId(int noweId);
     void setDom(const Point& nowyDom);
-    void setXDom(float noweX);
-    void setYDom(float noweY);
+    void setXDom(double noweX);
+    void setYDom(double noweY);
     void setKompetencje(const std::vector<std::string>& noweKompetencje);
     void setUlubionySurowiec(const std::string& nowySurowiec);
     void setCzyUlubionySurowiec(bool czyUlubionySurowiec);

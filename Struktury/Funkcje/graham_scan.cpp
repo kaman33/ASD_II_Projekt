@@ -2,7 +2,7 @@
 
 // https://en.wikipedia.org/wiki/Graham_scan
 
-float distance(Point a, Point b) {
+double distance(Point a, Point b) {
     return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
 }
 
@@ -45,7 +45,7 @@ std::vector<Point> graham_scan(std::vector<Point> &points){
 
     /// NAJPIERW SORTUJEMY LISTĘ PUNKTÓW
     std::sort(points.begin() + 1, points.end(), [&](const Point& pi, const Point& pj){
-        float d = det(points[0], pi, pj);
+        double d = det(points[0], pi, pj);
         if (d == 0) return distance(points[0], pi) < distance(points[0], pj);
         return d > 0;
     });

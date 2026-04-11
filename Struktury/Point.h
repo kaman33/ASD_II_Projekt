@@ -4,10 +4,10 @@
 #include <ostream>
 
 struct Point{
-    float x;
-    float y;
+    double x;
+    double y;
 
-    Point(float x, float y);
+    Point(double x, double y);
 
     bool operator<(const Point& other) const;
     bool operator>(const Point& other) const;

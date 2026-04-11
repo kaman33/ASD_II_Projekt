@@ -3,6 +3,6 @@
 
 #include "../Point.h"
 
-float det(Point p1, Point p2, Point p3);
+double det(Point p1, Point p2, Point p3);
 
 #endif
