@@ -1,4 +1,5 @@
 #include "do_segments_intersect.h"
+#include "EPS.h"
 
 // Sprawdzenie czy odcinki p1p2 p3p4 się przeciniają
 bool do_segments_intersect(Point p1, Point p2, Point p3, Point p4)
@@ -10,7 +11,7 @@ bool do_segments_intersect(Point p1, Point p2, Point p3, Point p4)
 
     // Przecinają się gdy:
     // WARUNEK 2: każdy odcinek przecina prostą wyznaczoną przez drugi odcinek
-    if((d1 * d2 < 0) && (d3 * d4 < 0)) return true;
+    if((sgn(d1) * sgn(d2) < 0) && (sgn(d3) * sgn(d4) < 0)) return true;
 
     // WARUNEK 1: ktorys z koncow odc. nalezy do drugiego odc.
     // Czy P1 leży na P3P4 || Czy P2 leży na P3P4 || Czy P3 leży na P1P2 || Czy P4 leży na P1P2

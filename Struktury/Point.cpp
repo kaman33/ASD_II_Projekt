@@ -1,13 +1,15 @@
 #include "Point.h"
+#include "Funkcje/EPS.h"
 
 Point::Point(double x, double y) : x(x), y(y) {}
 
 // Operator mniejszosci
 bool Point::operator<(const Point& other) const {
-    if (x != other.x) {
-        return x < other.x;
+    int cmpX = cmpDouble(x, other.x);
+    if (cmpX != 0) {
+        return cmpX < 0;
     }
-    return y < other.y;
+    return cmpDouble(y, other.y) < 0;
 }
 
 // Operator wiekszosci
@@ -17,7 +19,7 @@ bool Point::operator>(const Point& other) const {
 
 // Operator rownosci
 bool Point::operator==(const Point& other) const {
-    return ((x == other.x) && (y == other.y));
+    return cmpDouble(x, other.x) == 0 && cmpDouble(y, other.y) == 0;
 }
 
 // Operator nierownosci

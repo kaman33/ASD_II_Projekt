@@ -20,9 +20,12 @@ add_executable(ASD_II_Projekt
         Struktury/Straznik.cpp
         Struktury/Funkcje/det.h
         Struktury/Funkcje/det.cpp
+        Struktury/Funkcje/graham_scan.h
+        Struktury/Funkcje/graham_scan.cpp
         Struktury/Funkcje/is_point_on_segment.h
         Struktury/Funkcje/is_point_on_segment.cpp
         Struktury/Funkcje/do_segments_intersect.h
         Struktury/Funkcje/do_segments_intersect.cpp
         Struktury/Funkcje/is_point_in_polygon.h
-        Struktury/Funkcje/is_point_in_polygon.cpp)
+        Struktury/Funkcje/is_point_in_polygon.cpp
+        Struktury/Funkcje/EPS.h)
