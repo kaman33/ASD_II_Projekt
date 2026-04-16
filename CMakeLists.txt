@@ -20,6 +20,8 @@ add_executable(ASD_II_Projekt
         Struktury/Straznik.cpp
         Struktury/Funkcje/det.h
         Struktury/Funkcje/det.cpp
+        Struktury/Funkcje/distance.h
+        Struktury/Funkcje/distance.cpp
         Struktury/Funkcje/graham_scan.h
         Struktury/Funkcje/graham_scan.cpp
         Struktury/Funkcje/is_point_on_segment.h

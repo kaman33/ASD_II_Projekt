@@ -8,7 +8,6 @@
 #include"../Point.h"
 
 int nearestIdx(std::vector<Point> &points);
-double distance(Point a, Point b);
 std::vector<Point> graham_scan(std::vector<Point> &points);
 
 #endif

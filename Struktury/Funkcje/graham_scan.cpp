@@ -1,12 +1,8 @@
 #include "graham_scan.h"
 #include "EPS.h"
+#include "distance.h"
 
 // https://en.wikipedia.org/wiki/Graham_scan
-
-double distance(Point a, Point b) {
-    return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
-}
-
 std::vector<Point> graham_scan(std::vector<Point> &points){
 
     /*
