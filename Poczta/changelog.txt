@@ -52,3 +52,7 @@ wydajeniejszy
 - dodalem do niej .h 
 - dodalem testy
 - mam zamiar przerzucic z otoczki funkcje dystansu do osobnego pliku (moze sie przydac gdzies indziej)
+
+16.04.2026 - Gosia
+- przerzuciłam funkcje dystansu z otoczki
+- dodalam skrypt do odpalania testow na Windowsie i odpalilam dzieki temu testy natywnie, wszystkie dzialaja
