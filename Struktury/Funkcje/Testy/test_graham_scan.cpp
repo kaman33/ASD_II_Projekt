@@ -1,4 +1,5 @@
 #include"../graham_scan.h"
+#include "../distance.h"
 #include<iostream>
 
 bool test1(){
