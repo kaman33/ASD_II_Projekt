@@ -6,7 +6,6 @@ DO ZROBIENIA:
 - Wiecej testow
 - Natywne odpalanie testow w powershellu na windowsie (nie mam windowsa)
 - Testy dla struktur
-- Przerzucenie funckji dystansu z otoczki do osobnego pliku
 
 DO PRZEJRZENIA:
 - Otoczka (Grahama) - zwlaszcza krok 2 pod wzgledem optymalizacji
@@ -18,3 +17,4 @@ ZROBIONE:
 - Jakaś podstawowa obsługa błędów, np. czy mamy przynajmniej 3 punkty
 - Punkt w wielokacie
 - Przeniesienie point do folderu ze strukturami żeby były w jednym miejscu
+- Przerzucenie funckji dystansu z otoczki do osobnego pliku
