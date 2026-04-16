@@ -5,6 +5,8 @@ DO ZROBIENIA:
 - Wprowadzanie danych w main.cpp
 - Wiecej testow
 - Testy dla struktur
+- Dodac jakies struktury Grafu i Wezla (bedzie przydatne do sieci przeplywu - problem przydzialu pracy)
+
 
 DO PRZEJRZENIA:
 - Otoczka (Grahama) - zwlaszcza krok 2 pod wzgledem optymalizacji

@@ -1,7 +1,7 @@
 #include "Kopalnia.h"
 
 Kopalnia::Kopalnia()
-    : id(0), lokalizacja(0.0f, 0.0f), typSurowca(""), pojemnosc(0), przypisaneKrasnale({}) {}
+    : id(0), lokalizacja(0.0, 0.0), typSurowca(""), pojemnosc(0), przypisaneKrasnale({}) {}
 
 Kopalnia::Kopalnia(int id, const Point& lokalizacja, const std::string& typSurowca,
                    int pojemnosc, const std::vector<int>& przypisaneKrasnale)

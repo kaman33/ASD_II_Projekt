@@ -56,3 +56,4 @@ wydajeniejszy
 16.04.2026 - Gosia
 - przerzuciłam funkcje dystansu z otoczki
 - dodalam skrypt do odpalania testow na Windowsie i odpalilam dzieki temu testy natywnie, wszystkie dzialaja
+- dodalam wiecej testow do funkcji z przecinaniem punktow + test na punkty wspolliniowe do Grahama

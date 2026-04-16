@@ -1,6 +1,6 @@
 #include "Krasnal.h"
 
-Krasnal::Krasnal() : id(0), dom(0.0f, 0.0f), kompetencje({}), ulubionySurowiec(""), czyUlubionySurowiec(false) {}
+Krasnal::Krasnal() : id(0), dom(0.0, 0.0), kompetencje({}), ulubionySurowiec(""), czyUlubionySurowiec(false) {}
 
 Krasnal::Krasnal(int id, const Point& dom,
                  const std::vector<std::string>& kompetencje,
