@@ -11,3 +11,5 @@ echo ""
 ./run_test_is_point_in_polygon.sh
 echo ""
 ./run_test_graham_scan.sh
+echo ""
+./run_test_class_BorderPatrol.sh

@@ -10,6 +10,8 @@ add_executable(ASD_II_Projekt
         Parser/InputData.h
         Parser/DataLoader.h
         Parser/DataLoader.cpp
+        Struktury/BorderPatrolSolver.h
+        Struktury/BorderPatrolSolver.cpp
         Struktury/Point.h
         Struktury/Point.cpp
         Struktury/Krasnal.h

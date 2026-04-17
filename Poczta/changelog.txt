@@ -57,3 +57,8 @@ wydajeniejszy
 - przerzuciłam funkcje dystansu z otoczki
 - dodalam skrypt do odpalania testow na Windowsie i odpalilam dzieki temu testy natywnie, wszystkie dzialaja
 - dodalam wiecej testow do funkcji z przecinaniem punktow + test na punkty wspolliniowe do Grahama
+
+17.04.2026 - Gosia
+- dodalam nowa klase (BorderPatrolSolver) ktora laczy caly problem otoczki w jedno
+- dodalam testy dla nowej klasy
+- uzupelnilam skrypty .sh i .ps1 oraz dopisalam klase do Cmake'a

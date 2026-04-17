@@ -1,5 +1,6 @@
 PROPOZYCJE:
 - Cos pomyslec nad dokumentacja? (jakies propozycje?)
+^ proponuje Overleaf, korzysta z Latexa, mozna edytowac jednoczesnie i wydaje sie okej - Gosia
 
 DO ZROBIENIA:
 - Wprowadzanie danych w main.cpp
