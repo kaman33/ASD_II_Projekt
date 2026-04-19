@@ -14,10 +14,6 @@ Problem przydzialu pracy
 - Funkcja minCostMaxFlow
 - WorkAssigmentSolver - spiecie wszystkiego w klase
 
-
-DO PRZEJRZENIA:
-- Otoczka (Grahama) - zwlaszcza krok 2 pod wzgledem optymalizacji
-
 ZROBIONE:
 - Przeciecie dwoch odcinkow
 - Nalezenie punktu do odcinka
