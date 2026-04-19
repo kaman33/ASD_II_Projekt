@@ -6,7 +6,13 @@ DO ZROBIENIA:
 - Wprowadzanie danych w main.cpp
 - Wiecej testow
 - Testy dla struktur
-- Dodac jakies struktury Grafu i Wezla (bedzie przydatne do sieci przeplywu - problem przydzialu pracy)
+
+Problem przydzialu pracy
+- Struktury Grafu i Krawedzi
+- Funkcja na tworzajaca siec przeplywu
+- Algorytm Bellmana-Forda
+- Funkcja minCostMaxFlow
+- WorkAssigmentSolver - spiecie wszystkiego w klase
 
 
 DO PRZEJRZENIA:
