@@ -33,3 +33,15 @@ add_executable(ASD_II_Projekt
         Struktury/Funkcje/is_point_in_polygon.h
         Struktury/Funkcje/is_point_in_polygon.cpp
         Struktury/Funkcje/EPS.h)
+
+enable_testing()
+
+add_executable(DataLoaderTests
+        Parser/Testy/test_data_loader.cpp
+        Parser/DataLoader.cpp
+        Struktury/Point.cpp
+        Struktury/Krasnal.cpp
+        Struktury/Kopalnia.cpp
+        Struktury/Straznik.cpp)
+
+add_test(NAME DataLoaderTests COMMAND DataLoaderTests)

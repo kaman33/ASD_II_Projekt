@@ -65,3 +65,6 @@ wydajeniejszy
 
 19.04.2026 - Jerry
 - struktury grafu i wezlow jako przygotowanie do przeplywu krasnali
+
+20.04.2026 - Eryk
+- Dodatnie testów dla data loadera
