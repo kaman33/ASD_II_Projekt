@@ -2,6 +2,7 @@
 #define POINT_H
 
 #include <ostream>
+#include "Funkcje/EPS.h"
 
 struct Point{
     double x;

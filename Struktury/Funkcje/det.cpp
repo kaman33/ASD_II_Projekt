@@ -2,7 +2,7 @@
 
 double det(Point p1, Point p2, Point p3) {
     // 3 x 3 
-    // D = (x2 − x1)(y3 − y1) − (y2 − y1)(x3 − x1)
+    // D = (x2 - x1)(y3 - y1) - (y2 - y1)(x3 - x1)
 
     /*
         | 1 x1 y1 |  = p1

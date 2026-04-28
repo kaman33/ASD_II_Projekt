@@ -1,6 +1,4 @@
 #include "graham_scan.h"
-#include "EPS.h"
-#include "distance.h"
 
 // https://en.wikipedia.org/wiki/Graham_scan
 std::vector<Point> graham_scan(std::vector<Point> points){

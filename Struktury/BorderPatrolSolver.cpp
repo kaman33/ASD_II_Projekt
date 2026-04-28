@@ -1,7 +1,4 @@
-#include <cmath>
 #include "BorderPatrolSolver.h"
-#include "Funkcje/graham_scan.h"
-#include "Funkcje/distance.h"
 
 BorderPatrolSolver::BorderPatrolSolver(const std::vector<Point> &mines)
     : activeMines(mines), calculated(false) {}

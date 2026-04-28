@@ -1,10 +1,9 @@
 #include "is_point_on_segment.h"
-#include "EPS.h"
 
-// Sprawdzenie czy punkt P należy do odcinka p1p2
+// Sprawdzenie czy punkt P nalezy do odcinka p1p2
 bool is_point_on_segment(Point p1, Point p2, Point P)
 {
-    // P nalezy gdy p1 p2 i P sa współliniowe -> D = 0
+    // P nalezy gdy p1 p2 i P sa wspolliniowe -> D = 0
     if(sgn(det(p1, p2, P)) != 0){
         return false;
     }

@@ -1,0 +1,98 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[a4paper, total={6in, 9in}]{geometry}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage[unicode=true,pdfencoding=auto]{hyperref}
+
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{inputencoding=utf8}
+\lstset{style=mystyle}
+
+\title{\textbf{Projekt: Krasnal}}
+\author{\textbf{Eryk Duczyński} \\ \textbf{Małgorzata Maćkowiak} \\ \textbf{Jeremiasz Wacławski} \\ \textbf{Aleks Zieliński}}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\newpage
+\tableofcontents
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Informacje wstępne}
+
+\begin{lstlisting}[language=C++, caption=x example]
+int main(){
+    int i = 0;
+
+    return i;
+}
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Funkcje}
+\subsection{det()}
+\lstinputlisting[language=C++, caption=det.h]{../Struktury/Funkcje/det.h}
+\lstinputlisting[language=C++, caption=det.cpp]{../Struktury/Funkcje/det.cpp}
+
+\subsection{cmpDouble() i sgn()}
+\lstinputlisting[language=C++, caption=EPS.h]{../Struktury/Funkcje/EPS.h}
+
+\subsection{is\_point\_on\_segment()}
+\lstinputlisting[language=C++, caption={is\_point\_on\_segment.cpp}]{../Struktury/Funkcje/is_point_on_segment.cpp}
+
+\subsection{do\_segments\_intersect()}
+\lstinputlisting[language=C++, caption={do\_segments\_intersect.cpp}]{../Struktury/Funkcje/do_segments_intersect.cpp}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Struktury}
+\subsection{Point}
+\lstinputlisting[language=C++, caption={Point.cpp}]{../Struktury/Point.cpp}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Testy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Prezentacja działania}
+
+
+
+\end{document}

@@ -4,6 +4,7 @@
 #include "../Point.h"
 #include "det.h"
 #include <algorithm>
+#include "EPS.h"
 
 bool is_point_on_segment(Point p1, Point p2, Point p);
 

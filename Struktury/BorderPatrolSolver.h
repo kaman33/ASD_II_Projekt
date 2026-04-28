@@ -3,6 +3,9 @@
 
 #include <vector>
 #include "Point.h"
+#include "Funkcje/graham_scan.h"
+#include "Funkcje/distance.h"
+#include <cmath>
 
 class BorderPatrolSolver {
 private:

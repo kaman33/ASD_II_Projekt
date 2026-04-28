@@ -1,5 +1,4 @@
 #include "Point.h"
-#include "Funkcje/EPS.h"
 
 Point::Point(double x, double y) : x(x), y(y) {}
 

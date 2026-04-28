@@ -68,3 +68,8 @@ wydajeniejszy
 
 20.04.2026 - Eryk
 - Dodatnie testów dla data loadera
+
+28.04.2026 - Aleks
+- Zarys dokumentacji (dajcie znać jak się podoba)
+^- UWAGA - jak dajecie odczyt kodu z pliku to może być błąd jak w pliku są polskie znaki albo znaki unicode (- _) a nie ascii (ai dobrze je podmienia)
+(misie kochane dajcie wszystkie include w .h a nie .cpp)
