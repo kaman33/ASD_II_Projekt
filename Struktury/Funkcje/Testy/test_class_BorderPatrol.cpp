@@ -66,14 +66,14 @@ bool test6() {
 }
 
 int main() {
-    std::cout << "Testy dla BorderPatrolSolver:" << std::endl << std::endl;
+    std::cout << "Testy dla BorderPatrolSolver:" << std::endl;
 
     std::cout << "Test 1: " << (test1() ? "OK" : "ERROR") << " (pusty zbior)" << std::endl;
-    std::cout << "Test 2: " << (test2() ? "OK" : "ERROR") << "(jedna kopalnia)" << std::endl;
-    std::cout << "Test 3: " << (test3() ? "OK" : "ERROR") << "(dwie kopalnie)"<< std::endl;
-    std::cout << "Test 4: " << (test4() ? "OK" : "ERROR") << "(kwadrat)" << std::endl;
-    std::cout << "Test 5: " << (test5() ? "OK" : "ERROR") << "(punkt wewnatrz)" << std::endl;
-    std::cout << "Test 6: " << (test6() ? "OK" : "ERROR") << "(poprawnosc otoczki)" << std::endl;
+    std::cout << "Test 2: " << (test2() ? "OK" : "ERROR") << " (jedna kopalnia)" << std::endl;
+    std::cout << "Test 3: " << (test3() ? "OK" : "ERROR") << " (dwie kopalnie)"<< std::endl;
+    std::cout << "Test 4: " << (test4() ? "OK" : "ERROR") << " (kwadrat)" << std::endl;
+    std::cout << "Test 5: " << (test5() ? "OK" : "ERROR") << " (punkt wewnatrz)" << std::endl;
+    std::cout << "Test 6: " << (test6() ? "OK" : "ERROR") << " (poprawnosc otoczki)" << std::endl;
 
     return 0;
 }

@@ -41,10 +41,10 @@ bool test5()
 int main(){
     std::cout<<"Testy dla funkcji do_segments_intersect:"<<std::endl;
     std::cout<<"Test 1: "<<(test1()?"OK":"ERROR")<<" (do not intersect)"<<std::endl;
-    std::cout<<"Test 2: "<<(test2()?"OK":"ERROR")<<"(intersect)"<<std::endl;
-    std::cout<<"Test 3: "<<(test3()?"OK":"ERROR")<<"(touch at endpoint)"<<std::endl;
-    std::cout<<"Test 4: "<<(test4()?"OK":"ERROR")<<"(collinear overlapping)"<<std::endl; // wspollionowe nachodzace
-    std::cout<<"Test 5: "<<(test5()?"OK":"ERROR")<<"(collinear disjoing)"<<std::endl; // wspolliniowe rozlaczne
+    std::cout<<"Test 2: "<<(test2()?"OK":"ERROR")<<" (intersect)"<<std::endl;
+    std::cout<<"Test 3: "<<(test3()?"OK":"ERROR")<<" (touch at endpoint)"<<std::endl;
+    std::cout<<"Test 4: "<<(test4()?"OK":"ERROR")<<" (collinear overlapping)"<<std::endl; // wspollionowe nachodzace
+    std::cout<<"Test 5: "<<(test5()?"OK":"ERROR")<<" (collinear disjoing)"<<std::endl; // wspolliniowe rozlaczne
 
     return 0;
 }

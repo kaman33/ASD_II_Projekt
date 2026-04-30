@@ -1,11 +1,13 @@
 PROPOZYCJE:
 - Cos pomyslec nad dokumentacja? (jakies propozycje?)
 ^ proponuje Overleaf, korzysta z Latexa, mozna edytowac jednoczesnie i wydaje sie okej - Gosia
+^ zapraszam do folderu dokumentacja
 
 DO ZROBIENIA:
 - Wprowadzanie danych w main.cpp
 - Wiecej testow
 - Testy dla struktur
+- Uzycie Huffmana do kompresji plikow
 
 Problem przydzialu pracy
 - Struktury Grafu i Krawedzi
@@ -23,3 +25,4 @@ ZROBIONE:
 - Przeniesienie point do folderu ze strukturami żeby były w jednym miejscu
 - Przerzucenie funckji dystansu z otoczki do osobnego pliku
 - Natywne odpalanie testow w powershellu na windowsie
+- Algorytm Huffmana

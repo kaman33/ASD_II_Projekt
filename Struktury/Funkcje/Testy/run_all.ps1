@@ -38,3 +38,6 @@ Run-Test "test_point" "test_point.exe" `
 
 Run-Test "test_class_BorderPatrol" "test_class_BorderPatrol.exe" `
 "test_class_BorderPatrol.cpp ../../BorderPatrolSolver.cpp ../../Funkcje/graham_scan.cpp ../../Funkcje/det.cpp ../../Funkcje/distance.cpp ../../Point.cpp"
+
+Run-Test "test_huffman" "test_huffman.exe" `
+"test_huffman.cpp ../../Huffman.cpp"

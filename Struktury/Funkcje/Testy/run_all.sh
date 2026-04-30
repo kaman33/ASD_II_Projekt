@@ -13,3 +13,5 @@ echo ""
 ./run_test_graham_scan.sh
 echo ""
 ./run_test_class_BorderPatrol.sh
+echo ""
+./run_test_huffman.sh
