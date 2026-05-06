@@ -9,9 +9,9 @@ int main() {
         DataLoader loader;
         InputData data = loader.loadFromFile("../Dane/dane.txt");
 
-        cout << "Krasnale: " << data.krasnale.size() << '\n';
-        cout << "Kopalnie: " << data.kopalnie.size() << '\n';
-        cout << "Straznicy: " << data.straznicy.size() << '\n';
+        cout << "Krasnale: " << data.dwarves.size() << '\n';
+        cout << "Kopalnie: " << data.mines.size() << '\n';
+        cout << "Straznicy: " << data.guards.size() << '\n';
     }
     catch (const std::exception& e) {
         cerr << "Blad: " << e.what() << '\n';

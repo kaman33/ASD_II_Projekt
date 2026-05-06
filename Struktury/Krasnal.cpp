@@ -1,67 +1,68 @@
 #include "Krasnal.h"
 
-Krasnal::Krasnal() : id(0), dom(0.0, 0.0), kompetencje({}), ulubionySurowiec(""), czyUlubionySurowiec(false) {}
+Krasnal::Krasnal()
+    : id(0), home(0.0, 0.0), skills({}), preferredResource(""), assignedToPreferredResource(false) {}
 
-Krasnal::Krasnal(int id, const Point& dom,
-                 const std::vector<std::string>& kompetencje,
-                 const std::string& ulubionySurowiec,
-                 bool czyUlubionySurowiec)
+Krasnal::Krasnal(int id, const Point& home,
+                 const std::vector<std::string>& skills,
+                 const std::string& preferredResource,
+                 bool assignedToPreferredResource)
     : id(id),
-      dom(dom),
-      kompetencje(kompetencje),
-      ulubionySurowiec(ulubionySurowiec),
-      czyUlubionySurowiec(czyUlubionySurowiec) {}
+      home(home),
+      skills(skills),
+      preferredResource(preferredResource),
+      assignedToPreferredResource(assignedToPreferredResource) {}
 
 int Krasnal::getId() const{
   return id;
 }
 
-const Point& Krasnal::getDom() const{
-  return dom;
+const Point& Krasnal::getHome() const{
+  return home;
 }
 
-double Krasnal::getYDom() const{
-  return dom.y;
+double Krasnal::getHomeY() const{
+  return home.y;
 }
 
-double Krasnal::getXDom() const{
-    return dom.x;
+double Krasnal::getHomeX() const{
+    return home.x;
 }
 
-const std::vector<std::string>& Krasnal::getKompetencje() const{
-  return kompetencje;
+const std::vector<std::string>& Krasnal::getSkills() const{
+  return skills;
 }
 
-const std::string& Krasnal::getUlubionySurowiec() const{
-  return ulubionySurowiec;
+const std::string& Krasnal::getPreferredResource() const{
+  return preferredResource;
 }
 
-bool Krasnal::isUlubionySurowiec() const{
-  return czyUlubionySurowiec;
+bool Krasnal::isAssignedToPreferredResource() const{
+  return assignedToPreferredResource;
 }
 
-void Krasnal::setId(int noweId){
-  this->id = noweId;
+void Krasnal::setId(int newId){
+  this->id = newId;
 }
 
-void Krasnal::setDom(const Point& nowyDom){
-  this->dom = nowyDom;
+void Krasnal::setHome(const Point& newHome){
+  this->home = newHome;
 }
 
-void Krasnal::setXDom(double noweX){
-  this->dom.x = noweX;
+void Krasnal::setHomeX(double newX){
+  this->home.x = newX;
 }
 
-void Krasnal::setYDom(double noweY){
-  this->dom.y = noweY;
+void Krasnal::setHomeY(double newY){
+  this->home.y = newY;
 }
 
-void Krasnal::setKompetencje(const std::vector<std::string>& noweKompetencje){
-  this->kompetencje = noweKompetencje;
+void Krasnal::setSkills(const std::vector<std::string>& newSkills){
+  this->skills = newSkills;
 }
-void Krasnal::setUlubionySurowiec(const std::string& nowySurowiec){
-  this->ulubionySurowiec = nowySurowiec;
+void Krasnal::setPreferredResource(const std::string& newPreferredResource){
+  this->preferredResource = newPreferredResource;
 }
-void Krasnal::setCzyUlubionySurowiec(bool czyUlubionySurowiec){
-  this->czyUlubionySurowiec = czyUlubionySurowiec;
+void Krasnal::setAssignedToPreferredResource(bool assignedToPreferredResource){
+  this->assignedToPreferredResource = assignedToPreferredResource;
 }

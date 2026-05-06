@@ -9,7 +9,7 @@
 #include <unordered_set>
 using namespace std;
 
-typedef enum { None, Krasnale, Kopalnie, Straznicy } Section;
+enum class Section { None, Dwarves, Mines, Guards };
 
 
 InputData DataLoader::loadFromFile(const std::string& filePath) const
@@ -20,7 +20,7 @@ InputData DataLoader::loadFromFile(const std::string& filePath) const
         throw runtime_error("Failed to open file");
     }
 
-    Section currentSection = None;
+    Section currentSection = Section::None;
     InputData data;
 
     string line;
@@ -30,96 +30,96 @@ InputData DataLoader::loadFromFile(const std::string& filePath) const
 
         if (line.find("KRASNALE") == 0)
         {
-            currentSection = Krasnale;
+            currentSection = Section::Dwarves;
             continue;
         }
         if (line.find("KOPALNIE") == 0)
         {
-            currentSection = Kopalnie;
+            currentSection = Section::Mines;
             continue;
         }
         if (line.find("STRAZNICY") == 0)
         {
-            currentSection = Straznicy;
+            currentSection = Section::Guards;
             continue;
         }
 
         //WCZYTYWANIE DANYCH KRASNALA
-        if (currentSection == Krasnale)
+        if (currentSection == Section::Dwarves)
         {
             istringstream iss(line);
             int id;
             double x, y;
-            string ulubionySurowiec;
-            int liczbaKompetencji;
+            string preferredResource;
+            int skillCount;
 
-            if (!(iss >> id >> x >> y >> ulubionySurowiec >> liczbaKompetencji))
+            if (!(iss >> id >> x >> y >> preferredResource >> skillCount))
             {
                 throw runtime_error("Failed to parse line");
             }
 
 
-            if (liczbaKompetencji < 0)
+            if (skillCount < 0)
             {
-                throw runtime_error("Negative liczbaKompetencji");
+                throw runtime_error("Negative skill count");
             }
 
-            vector<string> kompetencje;
-            for (int i = 0; i < liczbaKompetencji; i++)
+            vector<string> skills;
+            for (int i = 0; i < skillCount; i++)
             {
-                string temp_kompetencje;
-                if (!(iss >> temp_kompetencje))
+                string skill;
+                if (!(iss >> skill))
                 {
                     throw runtime_error("Failed to parse line");
                 }
 
-                    kompetencje.push_back(temp_kompetencje);
+                skills.push_back(skill);
             }
 
-            data.krasnale.emplace_back(id, Point(x,y), kompetencje, ulubionySurowiec, false);
+            data.dwarves.emplace_back(id, Point(x, y), skills, preferredResource, false);
 
         }
 
         //WCZYTYWANIE DANYCH KOPALNI
-        if (currentSection == Kopalnie)
+        if (currentSection == Section::Mines)
         {
             istringstream iss(line);
             int id;
             double x, y;
-            string typSurowca;
-            int pojemnosc;
+            string resourceType;
+            int capacity;
 
-            if (!(iss >> id >> x >> y >> typSurowca >> pojemnosc))
+            if (!(iss >> id >> x >> y >> resourceType >> capacity))
             {
                 throw runtime_error("Failed to parse line");
             }
 
-            if (pojemnosc < 0)
+            if (capacity < 0)
             {
-                throw runtime_error("Negative pojemnosc");
+                throw runtime_error("Negative capacity");
             }
 
-            data.kopalnie.emplace_back(id, Point(x,y), typSurowca, pojemnosc, vector<int>{});
+            data.mines.emplace_back(id, Point(x, y), resourceType, capacity, vector<int>{});
 
         }
         //WCZYTYWANIE DANYCH STRAZNIKOW
-        if (currentSection == Straznicy)
+        if (currentSection == Section::Guards)
         {
             istringstream iss(line);
             int id;
-            int glosnosc;
+            int loudness;
 
-            if (!(iss >> id  >> glosnosc))
+            if (!(iss >> id >> loudness))
             {
                 throw runtime_error("Failed to parse line");
             }
 
-            if (glosnosc < 0)
+            if (loudness < 0)
             {
-                throw runtime_error("Negative glosnosc");
+                throw runtime_error("Negative loudness");
             }
 
-            data.straznicy.emplace_back(id, glosnosc);
+            data.guards.emplace_back(id, loudness);
         }
 
     }

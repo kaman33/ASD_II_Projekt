@@ -43,9 +43,9 @@ bool test1(){
         InputData data = loader.loadFromFile(fileName);
         std::remove(fileName.c_str());
 
-        return data.krasnale.size() == 2 &&
-               data.kopalnie.size() == 2 &&
-               data.straznicy.size() == 2;
+        return data.dwarves.size() == 2 &&
+               data.mines.size() == 2 &&
+               data.guards.size() == 2;
     } catch(...){
         std::remove(fileName.c_str());
         return false;
@@ -66,19 +66,19 @@ bool test2(){
         InputData data = loader.loadFromFile(fileName);
         std::remove(fileName.c_str());
 
-        if(data.krasnale.size() != 1){
+        if(data.dwarves.size() != 1){
             return false;
         }
 
-        Krasnal krasnal = data.krasnale[0];
-        const std::vector<std::string> expectedKompetencje = {"zloto", "miedz"};
+        Krasnal dwarf = data.dwarves[0];
+        const std::vector<std::string> expectedSkills = {"zloto", "miedz"};
 
-        return krasnal.getId() == 1 &&
-               compareDouble(krasnal.getXDom(), -3.5) &&
-               compareDouble(krasnal.getYDom(), 4.25) &&
-               krasnal.getUlubionySurowiec() == "zloto" &&
-               krasnal.getKompetencje() == expectedKompetencje &&
-               krasnal.isUlubionySurowiec() == false;
+        return dwarf.getId() == 1 &&
+               compareDouble(dwarf.getHomeX(), -3.5) &&
+               compareDouble(dwarf.getHomeY(), 4.25) &&
+               dwarf.getPreferredResource() == "zloto" &&
+               dwarf.getSkills() == expectedSkills &&
+               dwarf.isAssignedToPreferredResource() == false;
     } catch(...){
         std::remove(fileName.c_str());
         return false;
@@ -99,18 +99,18 @@ bool test3(){
         InputData data = loader.loadFromFile(fileName);
         std::remove(fileName.c_str());
 
-        if(data.kopalnie.size() != 1){
+        if(data.mines.size() != 1){
             return false;
         }
 
-        Kopalnia kopalnia = data.kopalnie[0];
+        Kopalnia mine = data.mines[0];
 
-        return kopalnia.getId() == 10 &&
-               compareDouble(kopalnia.getX(), 2.5) &&
-               compareDouble(kopalnia.getY(), -1.25) &&
-               kopalnia.getTypSurowca() == "zloto" &&
-               kopalnia.getPojemnosc() == 3 &&
-               kopalnia.getPrzypisaneKrasnale().empty();
+        return mine.getId() == 10 &&
+               compareDouble(mine.getX(), 2.5) &&
+               compareDouble(mine.getY(), -1.25) &&
+               mine.getResourceType() == "zloto" &&
+               mine.getCapacity() == 3 &&
+               mine.getAssignedDwarves().empty();
     } catch(...){
         std::remove(fileName.c_str());
         return false;
@@ -131,14 +131,14 @@ bool test4(){
         InputData data = loader.loadFromFile(fileName);
         std::remove(fileName.c_str());
 
-        if(data.straznicy.size() != 1){
+        if(data.guards.size() != 1){
             return false;
         }
 
-        Straznik straznik = data.straznicy[0];
+        Straznik guard = data.guards[0];
 
-        return straznik.getId() == 100 &&
-               straznik.getGlosnosc() == 14;
+        return guard.getId() == 100 &&
+               guard.getLoudness() == 14;
     } catch(...){
         std::remove(fileName.c_str());
         return false;
@@ -196,7 +196,7 @@ bool test7(){
         loader.loadFromFile(fileName);
     } catch(const std::runtime_error& e){
         std::remove(fileName.c_str());
-        return std::string(e.what()) == "Negative liczbaKompetencji";
+        return std::string(e.what()) == "Negative skill count";
     } catch(...){
         std::remove(fileName.c_str());
         return false;
@@ -220,7 +220,7 @@ bool test8(){
         loader.loadFromFile(fileName);
     } catch(const std::runtime_error& e){
         std::remove(fileName.c_str());
-        return std::string(e.what()) == "Negative pojemnosc";
+        return std::string(e.what()) == "Negative capacity";
     } catch(...){
         std::remove(fileName.c_str());
         return false;
@@ -244,7 +244,7 @@ bool test9(){
         loader.loadFromFile(fileName);
     } catch(const std::runtime_error& e){
         std::remove(fileName.c_str());
-        return std::string(e.what()) == "Negative glosnosc";
+        return std::string(e.what()) == "Negative loudness";
     } catch(...){
         std::remove(fileName.c_str());
         return false;

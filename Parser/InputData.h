@@ -8,9 +8,9 @@
 #include <vector>
 
 struct InputData {
-    std::vector<Krasnal> krasnale;
-    std::vector<Kopalnia> kopalnie;
-    std::vector<Straznik> straznicy;
+    std::vector<Krasnal> dwarves;
+    std::vector<Kopalnia> mines;
+    std::vector<Straznik> guards;
 };
 
 #endif

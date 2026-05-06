@@ -4,17 +4,17 @@
 class Straznik {
 private:
     int id;
-    int glosnosc;
+    int loudness;
 
 public:
     Straznik();
 
-    Straznik(int id, int glosnosc);
+    Straznik(int id, int loudness);
     int getId() const;
-    int getGlosnosc() const;
+    int getLoudness() const;
 
-    void setGlosnosc(int nowaGlosnosc);
-    void setId(int noweId);
+    void setLoudness(int newLoudness);
+    void setId(int newId);
 };
 
 #endif

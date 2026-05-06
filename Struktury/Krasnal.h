@@ -8,33 +8,33 @@
 class Krasnal {
 private:
     int id;
-    Point dom;
-    std::vector<std::string> kompetencje;
-    std::string ulubionySurowiec;
-    bool czyUlubionySurowiec;
+    Point home;
+    std::vector<std::string> skills;
+    std::string preferredResource;
+    bool assignedToPreferredResource;
 
 public:
     Krasnal();
 
-    Krasnal(int id, const Point& dom,
-            const std::vector<std::string>& kompetencje,
-            const std::string& ulubionySurowiec, bool czyUlubionySurowiec);
+    Krasnal(int id, const Point& home,
+            const std::vector<std::string>& skills,
+            const std::string& preferredResource, bool assignedToPreferredResource);
 
     int getId() const;
-    const Point& getDom() const;
-    double getXDom() const;
-    double getYDom() const;
-    const std::vector<std::string>& getKompetencje() const;
-    const std::string& getUlubionySurowiec() const;
-    bool isUlubionySurowiec() const;
+    const Point& getHome() const;
+    double getHomeX() const;
+    double getHomeY() const;
+    const std::vector<std::string>& getSkills() const;
+    const std::string& getPreferredResource() const;
+    bool isAssignedToPreferredResource() const;
 
-    void setId(int noweId);
-    void setDom(const Point& nowyDom);
-    void setXDom(double noweX);
-    void setYDom(double noweY);
-    void setKompetencje(const std::vector<std::string>& noweKompetencje);
-    void setUlubionySurowiec(const std::string& nowySurowiec);
-    void setCzyUlubionySurowiec(bool czyUlubionySurowiec);
+    void setId(int newId);
+    void setHome(const Point& newHome);
+    void setHomeX(double newX);
+    void setHomeY(double newY);
+    void setSkills(const std::vector<std::string>& newSkills);
+    void setPreferredResource(const std::string& newPreferredResource);
+    void setAssignedToPreferredResource(bool assignedToPreferredResource);
 };
 
 #endif

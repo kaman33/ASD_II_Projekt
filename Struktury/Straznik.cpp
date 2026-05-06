@@ -1,21 +1,21 @@
 #include "Straznik.h"
 
-Straznik::Straznik() : id(0), glosnosc(0) {}
+Straznik::Straznik() : id(0), loudness(0) {}
 
-Straznik::Straznik(int id, int glosnosc) : id(id), glosnosc(glosnosc) {}
+Straznik::Straznik(int id, int loudness) : id(id), loudness(loudness) {}
 
 int Straznik::getId() const {
     return id;
 }
 
-int Straznik::getGlosnosc() const {
-    return glosnosc;
+int Straznik::getLoudness() const {
+    return loudness;
 }
 
-void Straznik::setGlosnosc(int nowaGlosnosc) {
-    this->glosnosc = nowaGlosnosc;
+void Straznik::setLoudness(int newLoudness) {
+    this->loudness = newLoudness;
 }
 
-void Straznik::setId(int noweId) {
-    this->id = noweId;
+void Straznik::setId(int newId) {
+    this->id = newId;
 }

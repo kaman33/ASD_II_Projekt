@@ -9,38 +9,38 @@
 class Kopalnia {
 private:
     int id;
-    Point lokalizacja;
-    std::string typSurowca;
-    int pojemnosc;
-    std::vector<int> przypisaneKrasnale;
+    Point location;
+    std::string resourceType;
+    int capacity;
+    std::vector<int> assignedDwarves;
 
 public:
     Kopalnia();
 
-    Kopalnia(int id, const Point& lokalizacja, const std::string& typSurowca,
-             int pojemnosc, const std::vector<int>& przypisaneKrasnale);
+    Kopalnia(int id, const Point& location, const std::string& resourceType,
+             int capacity, const std::vector<int>& assignedDwarves);
 
     int getId() const;
-    const Point& getLokalizacja() const;
+    const Point& getLocation() const;
     double getX() const;
     double getY() const;
-    const std::string& getTypSurowca() const;
-    int getPojemnosc() const;
-    const std::vector<int>& getPrzypisaneKrasnale() const;
+    const std::string& getResourceType() const;
+    int getCapacity() const;
+    const std::vector<int>& getAssignedDwarves() const;
 
-    void setId(int noweId);
-    void setLokalizacja(const Point& nowaLokalizacja);
-    void setX(double noweX);
-    void setY(double noweY);
-    void setTypSurowca(const std::string& nowyTypSurowca);
-    void setPojemnosc(int nowaPojemnosc);
-    void setPrzypisaneKrasnale(const std::vector<int>& nowePrzypisaneKrasnale);
+    void setId(int newId);
+    void setLocation(const Point& newLocation);
+    void setX(double newX);
+    void setY(double newY);
+    void setResourceType(const std::string& newResourceType);
+    void setCapacity(int newCapacity);
+    void setAssignedDwarves(const std::vector<int>& newAssignedDwarves);
 
-    int getDostepnaPojemnosc() const;
-    bool maWolneMiejsce() const;
-    bool czyUzywana() const;
-    void dodajKrasnala(int idKrasnala);
-    void usunKrasnala(int idKrasnala);
+    int getAvailableCapacity() const;
+    bool hasAvailableSpace() const;
+    bool isInUse() const;
+    void addDwarf(int dwarfId);
+    void removeDwarf(int dwarfId);
 };
 
 #endif
