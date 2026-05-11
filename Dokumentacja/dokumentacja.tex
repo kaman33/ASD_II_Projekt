@@ -45,6 +45,9 @@
 \lstset{inputencoding=utf8}
 \lstset{style=mystyle}
 
+\renewcommand\lstlistingname{Plik źródłowy}
+\renewcommand\lstlistlistingname{Pliki źródłowe}
+
 \title{\textbf{Projekt: Krasnal}}
 \author{\textbf{Eryk Duczyński} \\ \textbf{Małgorzata Maćkowiak} \\ \textbf{Jeremiasz Wacławski} \\ \textbf{Aleks Zieliński}}
 \date{\today}
@@ -58,7 +61,60 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Informacje wstępne}
+\subsection{Treść projektu}
+Pracując nad poniższym projektem, należy: odfiltrować informacje istotne od nieistotnych \\
+sformalizować problem i podać jego specyfikację; do rozwiązania wykorzystać odpowiednie\\
+struktury danych oraz algorytmy; opisać teoretycznie rozwiązanie; przeanalizować jego\\ optymalność oraz złożoność czasową/pamięciową; zaimplementować rozwiązanie w dowolnym\\ języku
+programowania; przeprowadzić testy na różnych przykładach. \\
+\centerline{\textbf{Problem}}\\
+Odkąd królewna Śnieżka wraz z księciem z bajki rządzą krasnoludkami, ich królestwo \\nabiera siły i rośnie. Obecnie zamieszkuje je o wiele więcej niż tylko siedmiu krasnoludków. \\Każdy
+z nich jest specjalistą w swoim fachu i w kopalniach lub wyrobiskach potrafi wydobywać \\różne
+minerały. Królewna zna każdego ze swoich poddanych i wie jakie minerały każdy z nich\\ potrafi
+wydobywać. To ona decyduje o miejscu pracy każdego z krasnoludków, jest to dla \\niej niełatwym zadaniem. Chcąc dbać o swoich obywateli, zapewniając im dostatek, królewna\\ zleciła
+badania geologiczne w swoim kraju. Dzięki temu ma informacje o położeniu\\ poszczególnych
+złóż w swoim kraju i wie, jaka jest ich wydajność (ilu krasnoludków może \\pracować w tym
+miejscu). Okazuje się, że najważniejsza jest miłość do pracy, którą się wykonuje.\\ To znaczy, że
+jeśli krasnoludek pracuje przy materii zgodnej z jego preferencjami, wydobędzie \\kruszec o stałej
+wartości, niezależnie czy kopie złoto, węgiel, rudę miedzi, czy inny surowiec. \\Królewna Śnieżka
+poprosiła, abyś na podstawie posiadanych przez nią informacji pomógł\\ jej przydzielić pracę
+każdemu z krasnoludków.
+\\Po rozmowie z księciem okazało się, że jego ukochana bardzo dużo czasu spędza w kuchni,\\
+nadzorując gotowanie owsianki dla wygłodniałych brodaczy. Ilość potrzebnej owsianki zwiększa\\ się, gdy krasnoludki muszą pokonać większą odległość z domu do pracy (można przyjąć,
+że\\ jest to jedyny czynnik). Książę, chcąc ulżyć swojej wybrance, zmierzył i spisał odległości,\\
+pomiędzy każdym z wyrobisk i domkiem każdego z krasnoludków. Prosi, abyś uwzględnił te\\
+informacje. Przy podziale pracy chciałby, aby sumaryczna odległość, którą każdego dnia \\muszą pokonać krasnoludki była możliwie jak najmniejsza, przy czym nie możemy pozwolić,\\ żeby
+spadła wartość produkowanych dóbr.
+\\Niestety nie jest to jedyny problem. Królewna Śnieżka po incydencie ze złą królową jest\\
+nieco drażliwa, gdy pojawia się temat jabłek. Nakazała wyciąć wszystkie jabłonie w królestwie\\
+i zabroniła spożywania owoców. Krnąbrne krasnoludki starają się jednak wzbogacić swoją\\ dietę
+o pyszne renety, antonówki, cortlandy, papierówki i ligole. Szmuglują przez granice \\królestwa
+pewne ilości tych owoców. W celu egzekucji prawa, zakazującego spożywania \\jabłek na terenie królestwa, książę codziennie rano musi okrążyć teren, na którym znajdują\\ się wszystkie
+użytkowane kopalnie. Chciałby, żeby ta codziennie pokonywana odległość była \\możliwie mała.
+Gdy i to nie przynosiło skutku, książę wzdłuż trasy swego przejazdu \\rozstawił dekametrowców (krasnoludki uzbrojone w łuki ustawione co określoną liczbę \\metrów). Mają one zapobiec
+przerzucaniu jabłek przez granicę. Ataki takie wciąż zdarzają\\ się często, atakowany jest dany
+wielometrowy odcinek granicy, przez który leci niezliczona\\ liczba jabłek w jednym momencie.
+Dekametrowcy nie mogą opuścić swojego odcinka \\granicy, a najskuteczniejszą obroną przed
+lecącymi jabłkami okazuje się salwa. \\Najgłośniejszy z krasnoludków atakowanej części granicy
+powinien wydać sekwencję poleceń: \\„strzały na cięciwy \\- naciągnąć cięciwy \\- strzał!”.\\ Głos
+krasnoludka jest jego dumą i sprawą drażliwą, niełatwo więc przychodzi im ustalenie\\ najgłośniejszego. Zaproponuj szybki sposób znajdowania dekametrowca z danego \\kawałka granicy,
+który winien wydać rozkazy.
+\\Jak widać, królewna i książę muszą wykonać ogrom pracy, wykorzystując skomplikowane\\
+działania. Martwią się, że ta wiedza zaginie. Pomóż im zapisać cenną wiedzę w elektronicznych\\ księgach, oszczędzając elektroniczny papier. Zatroszcz się, żeby potomni mogli szybko\\
+wyszukiwać potrzebne informacje.\\
+\centerline{\textbf{Co powinny przygotować zespoły studenckie}}\\
+W ramach projektu należy przygotować rozwiązanie problemu przedstawionego powyżej.\\
+Rozwiązanie powinno składać się z:
+\begin{itemize}
+\item dokumentacji
+\item plików programów
+\item opisu poprawności rozwiązania
+\item raportów przeprowadzonych testów
+\end{itemize}
+Wyniki pracy powinny być zapisywane z wykorzystaniem systemu Git (prowadzący powinien \\mieć dostęp do repozytorium). Projekt będzie oceniany zgodnie z informacjami\\ przedstawionymi na USOS. Każda osoba będzie musiała wypełnić dwie ankiety: opisującą jej\\ wkład
+w rozwiązanie problemu oraz oceniającą kompletność rozwiązania problemów przez \\zespół, do
+którego należy.
 
+\subsection{temp}
 \begin{lstlisting}[language=C++, caption=x example]
 int main(){
     int i = 0;
@@ -70,17 +126,34 @@ int main(){
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Funkcje}
 \subsection{det()}
-\lstinputlisting[language=C++, caption=det.h]{../Struktury/Funkcje/det.h}
-\lstinputlisting[language=C++, caption=det.cpp]{../Struktury/Funkcje/det.cpp}
+Funkcja pozwalająca ustalić położenie punktu $p_3$ względem wektora $\overrightarrow{p_1p_2}$ \\ Jeżeli $det(p_1, p_2, p_3) > 0$, to $p_3$ leży po lewej stronie wektora $\overrightarrow{p_1p_2}$\\ Jeżeli $det(p_1, p_2, p_3) < 0$, to $p_3$ leży po prawej stronie wektora $\overrightarrow{p_1p_2}$\\ Jeżeli $det(p_1, p_2, p_3) = 0$, to punkty $p_1, p_2, p_3$ są współliniowe
+\lstinputlisting[language=C++, caption=/Struktury/Funkcje/det.cpp]{../Struktury/Funkcje/det.cpp}
 
 \subsection{cmpDouble() i sgn()}
-\lstinputlisting[language=C++, caption=EPS.h]{../Struktury/Funkcje/EPS.h}
+$cmpDouble(a, b)$ sprawdza która liczba jest większa z uwzględnieniem błędu typu liczbowego double \\
+$sgn(x)$ sprawdza znak liczby $x$, korzystając z $cmpDouble(x, 0.0)$ [dokładniej, to sprawdza czy\\ liczba jest większa od 0]
+\lstinputlisting[language=C++, caption=/Struktury/Funkcje/EPS.h]{../Struktury/Funkcje/EPS.h}
 
 \subsection{is\_point\_on\_segment()}
-\lstinputlisting[language=C++, caption={is\_point\_on\_segment.cpp}]{../Struktury/Funkcje/is_point_on_segment.cpp}
+W tej funkcji sprawdzamy przynależność punktu $P$ do odcinka $p_1p_2$ \\ Pierw sprawdzamy czy punkt $P$ jest współliniowy z $\overrightarrow{p_1p_2}$, jeżeli nie to nie należy do odcinka $p_1p_2$ \\ Następnie jeżeli jest współliniowy, to sprawdzamy kolejno współrzędne $x$ i $y$ czy spełniają \\warunki odpowiednio:\\ \centerline{$min(p_1.x, p_2.x) \leq P.x \leq max(p_1.x, p_2.x)$}\\ \centerline{$min(p_1.y, p_2.y) \leq P.y \leq max(p_1.y, p_2.y)$}\\ Jeżeli spełnione są oba te warunki to punkt $P$ należy do odcinka $p_1p_2$
+\lstinputlisting[language=C++, caption={/Struktury/Funkcje/is\_point\_on\_segment.cpp}]{../Struktury/Funkcje/is_point_on_segment.cpp}
 
 \subsection{do\_segments\_intersect()}
-\lstinputlisting[language=C++, caption={do\_segments\_intersect.cpp}]{../Struktury/Funkcje/do_segments_intersect.cpp}
+Funkcja sprawdza czy odcinki $p_1p_2$ i $p_3p_4$ przecinają się \\ Obliczamy $D_1 = det(p_1, p_2, p_3)$, $D_2 = det(p_1, p_2, p_4)$, $D_3 = det(p_3, p_4, p_1)$ i $D_4 = det(p_3, p_4, p_2)$ \\ Jeżeli $D_1 \cdot D_2 < 0$ i $D_3 \cdot D_4 < 0$ to $p_1p_2$ i $p_3p_4$ przecinają się \\
+Jeżeli $D_1 = 0$ lub $D_2 = 0$ lub $D_3 =0$ lub $D_4 = 0$ to sprawdzamy przynależności punktu do \\ prostej (ponieważ $\overrightarrow{p_1p_2}$ i $\overrightarrow{p_3p_4}$ są współliniowe)
+\lstinputlisting[language=C++, caption={/Struktury/Funkcje/do\_segments\_intersect.cpp}]{../Struktury/Funkcje/do_segments_intersect.cpp}
+
+\subsection{distance()}
+Funkcja oblicza kwadrat odlegości punktu $a$ od punktu $b$ według metryki euklidesowej
+\lstinputlisting[language=C++, caption={/Struktury/Funkcje/distance.cpp}]{../Struktury/Funkcje/distance.cpp}
+
+\subsection{is\_point\_in\_polygon()}
+Funkcja implementuje algorytm z wykładu sprawdzający czy punkt $p$ należy do listy \\wierzchołków (punktów $Point$) wielokąta $polygon$ \\
+Ustalmy $u = min(x : x \in polygon)$, $v = max(x : x \in polygon)$ \\ Jeżeli $p.x < u$ lub $p.x > v$ to $p$ nie leży w wielokącie $polygon$ \\ Jeżeli $p$ leży na dowolnej krawędzi wielokąta $polygon$ to $p$ leży w wielokącie $polygon$\\Niech $q = (v + 1, p.y)$ i $l = 0$, i dla każdej krawędzi $p.y$ należy do domknięto-otwartego \\przedziału współrzędnych $y$ tej krawędzi oraz $pq$ ją przecina, to zwiększ $l$ o \\ Jeżeli $l$ jest nieparzyste, to punkt $p$ leży w wielokącie $polygon$  
+\lstinputlisting[language=C++, caption={/Struktury/Funkcje/is\_point\_in\_polygon.cpp}]{../Struktury/Funkcje/is\_point\_in\_polygon.cpp}
+
+\subsection{graham\_scan()}
+\lstinputlisting[language=C++, caption={/Struktury/Funkcje/graham\_scan.cpp}]{../Struktury/Funkcje/graham_scan.cpp}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Struktury}
