@@ -45,3 +45,10 @@ add_executable(DataLoaderTests
         Struktury/Straznik.cpp)
 
 add_test(NAME DataLoaderTests COMMAND DataLoaderTests)
+
+add_executable(MinCostMaxFlowTests
+        Struktury/Funkcje/Testy/test_min_cost_max_flow.cpp
+        Struktury/Graph.cpp
+        Struktury/MinCostMaxFlow.cpp)
+
+add_test(NAME MinCostMaxFlowTests COMMAND MinCostMaxFlowTests)

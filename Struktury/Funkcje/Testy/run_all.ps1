@@ -41,3 +41,6 @@ Run-Test "test_class_BorderPatrol" "test_class_BorderPatrol.exe" `
 
 Run-Test "test_huffman" "test_huffman.exe" `
 "test_huffman.cpp ../../Huffman.cpp"
+
+Run-Test "test_min_cost_max_flow" "test_min_cost_max_flow.exe" `
+"test_min_cost_max_flow.cpp ../../Graph.cpp ../../MinCostMaxFlow.cpp"

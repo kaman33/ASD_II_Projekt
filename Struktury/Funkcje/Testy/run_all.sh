@@ -15,3 +15,5 @@ echo ""
 ./run_test_class_BorderPatrol.sh
 echo ""
 ./run_test_huffman.sh
+echo ""
+./run_test_min_cost_max_flow.sh
