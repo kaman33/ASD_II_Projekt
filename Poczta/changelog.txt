@@ -76,3 +76,8 @@ wydajeniejszy
 
 30.04.2026 - Aleks
 - zrobilem huffmana (sam algo i testy)
+
+17.05.2026 - Eryk
+- Zrobiony BellmanFord
+- Zrobiony MinMaxFlow
+- Dodane testy

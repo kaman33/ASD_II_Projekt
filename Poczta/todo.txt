@@ -8,12 +8,13 @@ DO ZROBIENIA:
 - Wiecej testow
 - Testy dla struktur
 - Uzycie Huffmana do kompresji plikow
+- Obsługa błędów dla MinMax
+- Powoli zacząć to spinać w spójną całość
+- Pomyślec jak to zwizualizować
 
 Problem przydzialu pracy
 - Struktury Grafu i Krawedzi
 - Funkcja na tworzajaca siec przeplywu
-- Algorytm Bellmana-Forda
-- Funkcja minCostMaxFlow
 - WorkAssigmentSolver - spiecie wszystkiego w klase
 
 ZROBIONE:
@@ -26,3 +27,5 @@ ZROBIONE:
 - Przerzucenie funckji dystansu z otoczki do osobnego pliku
 - Natywne odpalanie testow w powershellu na windowsie
 - Algorytm Huffmana
+- Algorytm Bellmana-Forda
+- Funkcja minCostMaxFlow
