@@ -17,3 +17,5 @@ echo ""
 ./run_test_huffman.sh
 echo ""
 ./run_test_min_cost_max_flow.sh
+echo ""
+./run_test_kmp.sh

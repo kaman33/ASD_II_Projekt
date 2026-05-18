@@ -1,7 +1,7 @@
 #include <iostream>
 #include "../do_segments_intersect.cpp"
 
-// Odcinki rozlączne - nie przecinaja sie
+// Odcinki rozlacznie, nie przecinaja sie
 bool test1(){
     Point A(1, 1), B(4, 2), C(2, 4), D(5, 5);
     const bool expected = false;
