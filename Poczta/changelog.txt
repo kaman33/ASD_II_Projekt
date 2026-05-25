@@ -86,3 +86,7 @@ wydajeniejszy
 - Algorytm KMP do wyszukiwania wzorca
 ^- zrobie więcej testów i dodam do dokumentacji na dniach oraz ogarne kompresje i ogolnie dzialanie na plikach
 - Więcej dokumentacji
+
+25.05.2026 - Aleks
+- Wyszukiwarka tekstu w pliku
+^- trzeba dodac do dokumentacji i moze jakies testy
