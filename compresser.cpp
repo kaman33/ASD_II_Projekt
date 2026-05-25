@@ -1,13 +1,24 @@
+#include "Struktury/Huffman.h"
 #include "Struktury/Funkcje/KMP.h"
 #include<iostream>
 #include<filesystem>
-#include<fstream>
 #include<string>
-#include<sstream>
-using namespace std;
+#include<fstream>
 namespace fs = std::filesystem;
+using namespace std;
 
-string currentPath = fs::current_path().string();
+string currentPath = fs::current_path().string();;
+
+int modeSelector(){
+    int mode;
+    do{
+    cout<<"Select mode:"<<endl;
+    cout<<"1. Compress file"<<endl;
+    cout<<"2. Decompress file"<<endl;
+    cin>>mode;
+    } while(mode != 1 && mode != 2);
+    return mode;
+}
 
 int printFolderContents(string path = currentPath){
     int i = 0;
@@ -75,13 +86,6 @@ string getFile(){
     return path;
 }
 
-string getPattern(){
-    cout<<"Enter the pattern to search for: ";
-    string pattern;
-    cin>>pattern;
-    return pattern;
-}
-
 string getFileContent(string path){
     string content;
     ifstream file(path);
@@ -95,59 +99,28 @@ string getFileContent(string path){
     return content;
 }
 
-vector<string> breakString(string text, char separator){
-    vector<string> lines;
-
-    stringstream ss(text);
-    string line;
-
-    while(getline(ss, line)){
-        lines.push_back(line);
-    }
-
-    return lines;
-}
-
-void writePositions(vector<string> lines, string pattern){
-    int lineNumber = 1;
-    int totalFound = 0;
-    for(const auto& eachLine : lines){
-        vector<int> positions = KMP(eachLine, pattern);
-        if(!positions.empty()){
-            cout<<"Pattern found at line: "<<lineNumber<<" at positions: ";
-            for(int pos : positions){
-                cout<<pos<<" ";
-                totalFound++;
-            }
-            cout<<endl;
-        }
-        lineNumber++;
-    }
-
-    if(totalFound == 0){
-        cout<<"No pattern found in the file."<<endl;
-    } else{
-        cout<<"Total occurrences found: "<<totalFound<<endl;
-    }
-}
-
 int main(){
+    int mode = modeSelector();
+
     string file = getFile();
-    if(file.empty()){
-        cout<<"Error in getting file"<<endl;
-        return -1;
+ 
+    if(mode == 1){
+        string content = getFileContent(file);
+        
+        vector<char> C;
+        vector<int> F;
+        for(int i = 0; i<256; i++){
+            vector<int> kmp =  KMP(content, string(1, (char)i));
+            if(kmp.size() > 0){
+                C.push_back((char)i);
+                F.push_back(kmp.size());
+            }
+        }
+
+        vector<HuffmanCode> codes = Huffman(C, F);
+        
+        // dalej trzeba przepisac caly plik uzywajac kodow do innego pliku oraz zapisac tabele kodow do odkodowania pliku       
+    } else if(mode == 2){
+        // dekompresja
     }
-
-    string pattern = getPattern();
-    if(pattern.empty()){
-        cout<<"Error in getting pattern"<<endl;
-        return -1;
-    }
-
-    string fileContent = getFileContent(file);
-    vector<string> lines = breakString(fileContent, '\n');
-
-    writePositions(lines, pattern);
-
-    return 0;
 }

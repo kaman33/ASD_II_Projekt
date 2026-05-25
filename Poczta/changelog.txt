@@ -90,3 +90,4 @@ wydajeniejszy
 25.05.2026 - Aleks
 - Wyszukiwarka tekstu w pliku
 ^- trzeba dodac do dokumentacji i moze jakies testy
+- Początek kompresji
