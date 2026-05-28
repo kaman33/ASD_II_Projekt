@@ -29,3 +29,4 @@ ZROBIONE:
 - Algorytm Huffmana
 - Algorytm Bellmana-Forda
 - Funkcja minCostMaxFlow
+- Drzewo Przedziałowe

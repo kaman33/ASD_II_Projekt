@@ -91,3 +91,7 @@ wydajeniejszy
 - Wyszukiwarka tekstu w pliku
 ^- trzeba dodac do dokumentacji i moze jakies testy
 - Początek kompresji
+
+28.05.2026 - Gosia
+- Napisałam strukture drzewa przedziału (najglosniejszy krasnal) + testy dla niej
+    - obsluguje MaxQuery i Update

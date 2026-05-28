@@ -44,3 +44,6 @@ Run-Test "test_huffman" "test_huffman.exe" `
 
 Run-Test "test_min_cost_max_flow" "test_min_cost_max_flow.exe" `
 "test_min_cost_max_flow.cpp ../../Graph.cpp ../../MinCostMaxFlow.cpp"
+
+Run-Test "test_segment_tree" "test_segment_tree.exe" `
+"test_segment_tree.cpp ../../SegmentTree.cpp"
