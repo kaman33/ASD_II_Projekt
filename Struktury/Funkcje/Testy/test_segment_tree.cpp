@@ -1,7 +1,7 @@
 #include "../../SegmentTree.h"
 #include <iostream>
 
-// Test 1: Przykład z wykładu (indeksowanie od 0)
+// Test 1: Przyklad z wykladu (indeksowanie od 0)
 bool test1()
 {
     SegmentTree t1({5, 2, 7, 1, 3, 6, 4, 8});
@@ -9,7 +9,7 @@ bool test1()
     return (t1.query(2, 7) == expected);
 }
 
-// Test 2: Twój test dla innego przedziału
+// Test 2
 bool test2()
 {
     SegmentTree t2({2, 3, -1, 5, -2, 4, 8, 10});
@@ -17,7 +17,7 @@ bool test2()
     return (t2.query(2, 4) == expected);
 }
 
-// Test 3: Same wartości ujemne (sprawdzenie czy poprawnie zwraca wartości poniżej 0)
+// Test 3: Same wartosci ujemne (sprawdzenie czy poprawnie zwraca wartosci ponizej 0)
 bool test3()
 {
     SegmentTree t3({-10, -5, -20, -3, -15});
@@ -25,7 +25,7 @@ bool test3()
     return (t3.query(0, 4) == expected);
 }
 
-// Test 4: Zapytanie o przedział jednoelementowy (L == R)
+// Test 4: Zapytanie o przedzial jednoelementowy (L == R)
 bool test4()
 {
     SegmentTree t4({1, 5, 9, 2});
@@ -42,7 +42,7 @@ bool test5()
     return (t5.query(0, 3) == expected);
 }
 
-// Test 6: Test operacji UPDATE, która zmniejsza maksimum
+// Test 6: Test operacji UPDATE, ktora zmniejsza maksimum
 bool test6()
 {
     SegmentTree t6({5, 20, 10});

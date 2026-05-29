@@ -92,6 +92,8 @@ int main(){
 Funkcja pozwalająca ustalić położenie punktu $p_3$ względem wektora $\overrightarrow{p_1p_2}$ \\ Jeżeli $det(p_1, p_2, p_3) > 0$, to $p_3$ leży po lewej stronie wektora $\overrightarrow{p_1p_2}$\\ Jeżeli $det(p_1, p_2, p_3) < 0$, to $p_3$ leży po prawej stronie wektora $\overrightarrow{p_1p_2}$\\ Jeżeli $det(p_1, p_2, p_3) = 0$, to punkty $p_1, p_2, p_3$ są współliniowe
 \lstinputlisting[language=C++, caption=/Struktury/Funkcje/det.cpp]{../Struktury/Funkcje/det.cpp}
 
+
+
 \subsection{EPS.h}
 \subsubsection{cmpDouble()}
 $cmpDouble(a, b)$ sprawdza która liczba jest większa z uwzględnieniem błędu typu liczbowego double
@@ -119,6 +121,11 @@ Funkcja implementuje algorytm z wykładu sprawdzający czy punkt $p$ należy do 
 \subsection{graham\_scan()}
 Funkcja implementuje algorytm Grahama do wyznaczenia otoczki wypukłej \\ Pierw sortujemy rosnąco punkty względem $p.y$, gdy $p.y$ taki sam to względem $p.x$ \\ Następnie usuwamy duplikaty (te same punkty) ze zbioru \\ Jeżeli zbiór zawiera mniej niż 4 unikalne elementy to zwracamy ten zbiór \\ Następnie sortujemy zbiór rosnąco względem współrzędnych kątowych, kolejno usuwamy \\ bliższe punkty z tą samą współrzędną kątową co dalszy punkt \\ Tworzymy stos i dodajemy do niego pierwsze trzy punkty oraz dla każdego kolejnego \\ punktu $p_i$ z wcześniej przygotowanej tablicy dopóki następnik i następnik następnika \\ punktu $p_i$ nie jest skrętem w lewo to usuwamy element ze stosu, następnie dodajemy $p_i$ \\ Ostatecznym wynikiem jest zbiór punktów otoczki wypukłej zbioru wejściowego 
 \lstinputlisting[language=C++, caption={/Struktury/Funkcje/graham\_scan.cpp}]{../Struktury/Funkcje/graham_scan.cpp}
+
+\subsection{KMP()}
+-> Opis
+\lstinputlisting[language=C++, caption={/Struktury/Funkcje/KMP.cpp}]{../Struktury/Funkcje/KMP.cpp}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Struktury}
@@ -149,6 +156,48 @@ Funkcja sortuje tablicę kodów Huffmana alfabetycznie według znaku $c$
 \subsubsection{Kod źródłowy}
 \lstinputlisting[language=C++, caption={/Struktury/Huffman.cpp}]{../Struktury/Huffman.cpp}
 
+\subsection{Edge.h}
+-> Opis
+\lstinputlisting[language=C++, caption={/Struktury/Edge.h}]{../Struktury/Edge.h}
+
+\subsection{Graph.cpp}
+->Opis
+\lstinputlisting[language=C++, caption={/Struktury/Graph.cpp}]{../Struktury/Graph.cpp}
+
+\subsection{Kopalnia.cpp}
+-> Opis
+\lstinputlisting[language=C++, caption={/Struktury/Kopalnia.cpp}]{../Struktury/Kopalnia.cpp}
+
+\subsection{Krasnal.cpp}
+-> Opis
+\lstinputlisting[language=C++, caption={/Struktury/Krasnal.cpp}]{../Struktury/Krasnal.cpp}
+
+\subsection{MinCostMaxFlow.cpp}
+-> Opis
+\lstinputlisting[language=C++, caption={/Struktury/MinCostMaxFlow.cpp}]{../Struktury/MinCostMaxFlow.cpp}
+
+\subsection{SegmentTree.cpp}
+Struktura danych jest drzewem przedziałowym, służącym do efektywnego wykonywania operacji wyszukiwania maksimum na zadanym przedziale tablicy oraz aktualizacji pojedynczych elementów.
+\subsubsection{build()}
+Proces budowy drzewa realizowany jest rekurencyjnie. Dla przedziału zawierającego jeden element wartość węzła ustawiana jest bezpośrednio na wartość elementu tablicy. W.p.p. przedział dzielony jest na dwie części. Następnie rekurencyjnie budowane są poddrzewa reprezentujące oba fragmenty.
+\subsubsection{query()}
+Umożliwia znalezienie największej wartości w zadanym przedziale indeksów. Algorytm analizuje relację pomiędzy aktualnym przedziałem reprezentowanym przez węzeł a zakresem zapytania. W przypadku braku części wspólnej zwracana jest najmniejsza możliwa wartość typu całkowitego. Jeżeli aktualny przedział w całości zawiera się w zakresie zapytania, zwracana jest wartość zapisana w danym węźle. W przeciwnym przypadku wykonywane są rekurencyjne zapytania dla lewego i prawego poddrzewa, a wyniki łączone są za pomocą operacji maksimum. 
+\subsubsection{update()}
+Pozwala zmienić wartość pojedynczego elementu tablicy. Algorytm przechodzi od korzenia drzewa do odpowiedniego liścia reprezentującego aktualizowany indeks. Po zmianie wartości liścia następuje ponowne przeliczenie wartości wszystkich odwiedzonych wcześniej węzłów, dzięki czemu drzewo zachowuje poprawność przechowywanych danych
+
+\lstinputlisting[language=C++, caption={/Struktury/SegmentTree.cpp}]{../Struktury/SegmentTree.cpp}
+
+\subsection{Straznik.cpp}
+-> Opis
+\lstinputlisting[language=C++, caption={/Struktury/Straznik.cpp}]{../Struktury/Straznik.cpp}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Solvery}
+\subsection{WorkAssigmentSolver}
+-> Opis
+\subsection{BorderPatrolSolver}
+-> Opis
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Testy funkcji}
 
@@ -189,6 +238,10 @@ Sprawdzamy poprawność struktury $Point$ poprzez sprawdzenie czy określone ope
 Sprawdzamy poprawność zbioru funkcji $Huffman$ poprzez sprawdzenie czy funkcja \\ $Huffman$ zwraca poprawne wyniki (przy okazji sprawdzamy wszystkie zdefiniowane funkcje \\ pomocnicze)
 \lstinputlisting[language=C++, caption={/Struktury/Funkcje/Testy/test\_huffman.cpp}]{../Struktury/Funkcje/Testy/test\_huffman.cpp}
 \lstinputlisting[language=bash, caption={/Struktury/Funkcje/Testy/run\_test\_huffman.sh}]{../Struktury/Funkcje/Testy/run\_test\_huffman.sh}
+
+\subsection{test\_segment\_tree}
+Sprawdzamy poprawność struktury $SegmentTree$ poprzez sprawdzenie czy funkcje \\ $query$ oraz $update$ zwracją poprawne wyniki.
+\lstinputlisting[language=C++, caption={/Struktury/Funkcje/Testy/test\_segment\_tree.cpp}]{../Struktury/Funkcje/Testy/test\_segment\_tree.cpp}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Prezentacja działania}

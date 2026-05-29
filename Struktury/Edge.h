@@ -2,11 +2,11 @@
 #define EDGE_H
 
 struct Edge {
-    int to;       // dokąd idzie
-    int flow;     // przepływ
-    int capacity; // pojemność
-    int rev;      // ile węzłów ma dany node
-    int cost;     // ile posiłków musi zjeść krasnolud, żeby przebyć drogę
+    int to;       // dokad idzie
+    int flow;     // przeplyw
+    int capacity; // pojemnosc
+    int rev;      // ile wezlow ma dany node
+    int cost;     // ile posilkow musi zjesc krasnolud, zeby przebyc droge
 
     Edge(int to, int capacity, int rev, int cost) :
         to(to), flow(0), capacity(capacity), rev(rev), cost(cost) {}

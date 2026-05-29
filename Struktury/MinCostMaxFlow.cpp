@@ -10,7 +10,7 @@ static bool bellman_ford(const Graph& graph, int source, int sink,
     const long long INF = numeric_limits<long long>::max() / 4;
 
     dist.assign(graph.n, INF);
-    //Wierzechołek
+    //Wierzecholek
     parentVertex.assign(graph.n, -1);
     parentEdge.assign(graph.n, -1);
     dist[source] = 0;

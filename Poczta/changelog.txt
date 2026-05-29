@@ -94,4 +94,7 @@ wydajeniejszy
 
 28.05.2026 - Gosia
 - Napisałam strukture drzewa przedziału (najglosniejszy krasnal) + testy dla niej
-    - obsluguje MaxQuery i Update
+    - obsluguje MaxQuery i Update   
+
+29.05.2025 - Gosia
+- Czesciowe uzupelnienie dokumentacji

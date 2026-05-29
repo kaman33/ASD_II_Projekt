@@ -17,6 +17,15 @@ Problem przydzialu pracy
 - Funkcja na tworzajaca siec przeplywu
 - WorkAssigmentSolver - spiecie wszystkiego w klase
 
+DOKUMENTACJA (pomocniczna lista)
+-> Opisac
+    - KMP
+    - Edge.h
+    - Kopalnie
+    - Krasnala
+    - MinCostMaxFlow
+    - Straznika
+
 ZROBIONE:
 - Przeciecie dwoch odcinkow
 - Nalezenie punktu do odcinka
