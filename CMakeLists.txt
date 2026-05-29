@@ -12,6 +12,12 @@ add_executable(ASD_II_Projekt
         Parser/DataLoader.cpp
         Struktury/BorderPatrolSolver.h
         Struktury/BorderPatrolSolver.cpp
+        Struktury/Graph.h
+        Struktury/Graph.cpp
+        Struktury/MinCostMaxFlow.h
+        Struktury/MinCostMaxFlow.cpp
+        Struktury/WorkAssignmentSolver/WorkAssignmentSolver.h
+        Struktury/WorkAssignmentSolver/WorkAssignmentSolver.cpp
         Struktury/Point.h
         Struktury/Point.cpp
         Struktury/Krasnal.h
@@ -52,3 +58,15 @@ add_executable(MinCostMaxFlowTests
         Struktury/MinCostMaxFlow.cpp)
 
 add_test(NAME MinCostMaxFlowTests COMMAND MinCostMaxFlowTests)
+
+add_executable(WorkAssignmentSolverTests
+        Struktury/WorkAssignmentSolver/Testy/test_work_assignment_solver.cpp
+        Struktury/WorkAssignmentSolver/WorkAssignmentSolver.cpp
+        Struktury/Graph.cpp
+        Struktury/MinCostMaxFlow.cpp
+        Struktury/Point.cpp
+        Struktury/Krasnal.cpp
+        Struktury/Kopalnia.cpp
+        Struktury/Funkcje/distance.cpp)
+
+add_test(NAME WorkAssignmentSolverTests COMMAND WorkAssignmentSolverTests)
