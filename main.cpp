@@ -1,10 +1,12 @@
 #include "Parser/DataLoader.h"
+#include "Struktury/BorderPatrolSolver.h"
 #include "Struktury/WorkAssignmentSolver/WorkAssignmentSolver.h"
 #include <exception>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -51,6 +53,43 @@ int main() {
         cout << "\nPrzydzielono: " << result.assignedCount << "/" << data.dwarves.size() << '\n';
         cout << "Przydzialy preferowane: " << result.preferredAssignedCount << '\n';
         cout << "Laczny dystans: " << fixed << setprecision(2) << result.totalDistance << '\n';
+
+        vector<Point> activeMineLocations;
+
+        cout << "\nAktywne kopalnie:\n";
+        for (const Kopalnia& mine : solver.getMines()) {
+            if (!mine.isInUse()) {
+                continue;
+            }
+
+            activeMineLocations.push_back(mine.getLocation());
+            cout << "Kopalnia " << mine.getId()
+                 << " (" << mine.getResourceType() << ") "
+                 << mine.getLocation()
+                 << ", krasnale:";
+
+            for (int dwarfId : mine.getAssignedDwarves()) {
+                cout << ' ' << dwarfId;
+            }
+
+            cout << '\n';
+        }
+
+        BorderPatrolSolver patrolSolver(activeMineLocations);
+        vector<Point> patrolHull = patrolSolver.calculateConvexHull();
+        double patrolDistance = patrolSolver.calculatePatrolDistance();
+
+        cout << "\nPunkty trasy patrolu:\n";
+        if (patrolHull.empty()) {
+            cout << "Brak aktywnych kopalni.\n";
+        }
+        else {
+            for (const Point& point : patrolHull) {
+                cout << point << '\n';
+            }
+        }
+
+        cout << "Dlugosc trasy patrolu: " << fixed << setprecision(2) << patrolDistance << '\n';
     }
     catch (const std::exception& e) {
         cerr << "Blad: " << e.what() << '\n';

@@ -59,6 +59,16 @@ add_executable(MinCostMaxFlowTests
 
 add_test(NAME MinCostMaxFlowTests COMMAND MinCostMaxFlowTests)
 
+add_executable(BorderPatrolSolverTests
+        Struktury/Funkcje/Testy/test_class_BorderPatrol.cpp
+        Struktury/BorderPatrolSolver.cpp
+        Struktury/Funkcje/graham_scan.cpp
+        Struktury/Funkcje/det.cpp
+        Struktury/Funkcje/distance.cpp
+        Struktury/Point.cpp)
+
+add_test(NAME BorderPatrolSolverTests COMMAND BorderPatrolSolverTests)
+
 add_executable(WorkAssignmentSolverTests
         Struktury/WorkAssignmentSolver/Testy/test_work_assignment_solver.cpp
         Struktury/WorkAssignmentSolver/WorkAssignmentSolver.cpp
