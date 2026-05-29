@@ -44,6 +44,13 @@
 
 \lstset{inputencoding=utf8}
 \lstset{style=mystyle}
+\lstset{
+    literate=
+    {ą}{{\k{a}}}1 {ć}{{\'c}}1 {ę}{{\k{e}}}1 {ł}{{\l{}}}1 {ń}{{\'n}}1
+    {ó}{{\'o}}1 {ś}{{\'s}}1 {ź}{{\'z}}1 {ż}{{\.z}}1
+    {Ą}{{\k{A}}}1 {Ć}{{\'C}}1 {Ę}{{\k{E}}}1 {Ł}{{\L{}}}1 {Ń}{{\'N}}1
+    {Ó}{{\'O}}1 {Ś}{{\'S}}1 {Ź}{{\'Z}}1 {Ż}{{\.Z}}1
+}
 
 \renewcommand\lstlistingname{Plik źródłowy}
 \renewcommand\lstlistlistingname{Pliki źródłowe}
@@ -194,10 +201,44 @@ Pozwala zmienić wartość pojedynczego elementu tablicy. Algorytm przechodzi od
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Solvery}
-\subsection{WorkAssigmentSolver}
--> Opis
 \subsection{BorderPatrolSolver}
--> Opis
+Klasa $BorderPatrolSolver$ spina problem wyznaczania trasy patrolu po aktywnych kopalniach. Na wejściu otrzymuje listę punktów reprezentujących położenia kopalni, w których faktycznie pracują krasnale. Następnie za pomocą funkcji $graham\_scan()$ wyznacza otoczkę wypukłą tych punktów. Długość patrolu jest liczona jako suma długości kolejnych krawędzi tej otoczki. Funkcja $distance()$ zwraca kwadrat odległości, dlatego przy sumowaniu używany jest pierwiastek.
+
+\subsubsection{calculateConvexHull()}
+Metoda wyznacza i zapamiętuje otoczkę wypukłą aktywnych kopalni. Jeżeli wynik został już wcześniej policzony, zwracana jest zapamiętana otoczka.
+
+\subsubsection{calculatePatrolDistance()}
+Metoda zwraca długość zamkniętej trasy patrolu po punktach otoczki. Dla zera lub jednego punktu zwracana jest wartość $0$, ponieważ nie istnieje rzeczywista trasa do okrążenia.
+
+\subsubsection{Kod źródłowy}
+\lstinputlisting[language=C++, caption={/Struktury/BorderPatrolSolver.h}]{../Struktury/BorderPatrolSolver.h}
+\lstinputlisting[language=C++, caption={/Struktury/BorderPatrolSolver.cpp}]{../Struktury/BorderPatrolSolver.cpp}
+
+\subsection{WorkAssignmentSolver}
+Klasa $WorkAssignmentSolver$ rozwiązuje problem przydziału krasnali do kopalni. Problem został zamodelowany jako sieć przepływu o minimalnym koszcie. Wierzchołki grafu odpowiadają źródłu, krasnalom, kopalniom oraz ujściu. Krawędź ze źródła do krasnala ma przepustowość $1$, ponieważ jeden krasnal może dostać najwyżej jedną pracę. Krawędź z kopalni do ujścia ma przepustowość równą pojemności kopalni. Krawędź z krasnala do kopalni istnieje tylko wtedy, gdy krasnal posiada kompetencję wymaganą przez surowiec kopalni.
+
+\subsubsection{Model kosztu}
+Koszt krawędzi krasnal--kopalnia składa się z odległości domu krasnala od kopalni oraz ewentualnej kary za brak preferowanego surowca. Odległość jest liczona jako odległość euklidesowa i skalowana do liczby całkowitej, ponieważ $MinCostMaxFlow$ operuje na kosztach typu $int$. Kara za brak preferencji jest większa niż maksymalna możliwa różnica sumy odległości, dzięki czemu solver najpierw preferuje pracę przy ulubionym surowcu, a dopiero potem minimalizuje dystans.
+
+\subsubsection{Wynik}
+Wynikiem działania solvera jest struktura $WorkAssignmentResult$, która zawiera listę przydziałów, listę nieprzydzielonych krasnali, liczbę przydziałów, liczbę przydziałów zgodnych z preferencjami oraz łączny dystans. Solver przechowuje też kopie kopalni i krasnali po aktualizacji, dzięki czemu kolejne moduły mogą korzystać z informacji o aktywnych kopalniach.
+
+\subsubsection{Kod źródłowy}
+\lstinputlisting[language=C++, caption={/Struktury/WorkAssignmentSolver/WorkAssignmentSolver.h}]{../Struktury/WorkAssignmentSolver/WorkAssignmentSolver.h}
+\lstinputlisting[language=C++, caption={/Struktury/WorkAssignmentSolver/WorkAssignmentSolver.cpp}]{../Struktury/WorkAssignmentSolver/WorkAssignmentSolver.cpp}
+
+\subsection{GuardCommandSolver}
+Klasa $GuardCommandSolver$ wykorzystuje $SegmentTree$ do znajdowania najgłośniejszego strażnika na zadanym odcinku granicy. Na wejściu otrzymuje listę strażników w kolejności ustawienia wzdłuż trasy patrolu. Zapytanie $findLoudestGuard(l, r)$ zwraca identyfikator strażnika, jego indeks na trasie oraz głośność.
+
+\subsubsection{Rozstrzyganie remisów}
+Samo drzewo przedziałowe zwraca maksimum liczbowe, dlatego w solverze głośność jest kodowana razem z indeksem strażnika. Jeżeli kilku strażników ma taką samą głośność, wybierany jest pierwszy z nich na danym odcinku. Daje to deterministyczny wynik.
+
+\subsubsection{Aktualizacja}
+Metoda $updateLoudness(index, newLoudness)$ zmienia głośność strażnika i aktualizuje odpowiadający liść drzewa. Pozwala to reagować na zmianę danych bez przebudowy całej struktury od zera.
+
+\subsubsection{Kod źródłowy}
+\lstinputlisting[language=C++, caption={/Struktury/GuardCommandSolver/GuardCommandSolver.h}]{../Struktury/GuardCommandSolver/GuardCommandSolver.h}
+\lstinputlisting[language=C++, caption={/Struktury/GuardCommandSolver/GuardCommandSolver.cpp}]{../Struktury/GuardCommandSolver/GuardCommandSolver.cpp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Testy funkcji}
 
@@ -244,6 +285,66 @@ Sprawdzamy poprawność struktury $SegmentTree$ poprzez sprawdzenie czy funkcje 
 \lstinputlisting[language=C++, caption={/Struktury/Funkcje/Testy/test\_segment\_tree.cpp}]{../Struktury/Funkcje/Testy/test\_segment\_tree.cpp}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{test\_class\_BorderPatrol.cpp}
+Testy sprawdzają zachowanie $BorderPatrolSolver$ dla pustego zbioru kopalni, jednej kopalni, dwóch kopalni, kwadratu oraz punktu znajdującego się wewnątrz otoczki. Dzięki temu weryfikowana jest zarówno długość patrolu, jak i poprawność wyznaczonej otoczki.
+\lstinputlisting[language=C++, caption={/Struktury/Funkcje/Testy/test\_class\_BorderPatrol.cpp}]{../Struktury/Funkcje/Testy/test_class_BorderPatrol.cpp}
+
+\subsection{test\_work\_assignment\_solver.cpp}
+Testy $WorkAssignmentSolver$ sprawdzają prosty przydział jeden do jednego, priorytet preferowanego surowca względem krótszej drogi, obsługę pojemności kopalni oraz sytuację, w której krasnal nie ma możliwego przydziału.
+\lstinputlisting[language=C++, caption={/Struktury/WorkAssignmentSolver/Testy/test\_work\_assignment\_solver.cpp}]{../Struktury/WorkAssignmentSolver/Testy/test_work_assignment_solver.cpp}
+
+\subsection{test\_segment\_tree.cpp}
+Testy drzewa przedziałowego sprawdzają zapytania o maksimum na różnych zakresach, obsługę wartości ujemnych, zapytanie jednoelementowe oraz aktualizacje zwiększające i zmniejszające maksimum.
+\lstinputlisting[language=C++, caption={/Struktury/Funkcje/Testy/test\_segment\_tree.cpp}]{../Struktury/Funkcje/Testy/test_segment_tree.cpp}
+
+\subsection{test\_guard\_command\_solver.cpp}
+Testy $GuardCommandSolver$ sprawdzają wybór najgłośniejszego strażnika na całym zakresie, na podzakresie, rozstrzyganie remisu przez wybór pierwszego strażnika, aktualizację głośności, błędny zakres oraz pustą listę strażników.
+\lstinputlisting[language=C++, caption={/Struktury/GuardCommandSolver/Testy/test\_guard\_command\_solver.cpp}]{../Struktury/GuardCommandSolver/Testy/test_guard_command_solver.cpp}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Prezentacja działania}
+
+\subsection{Główny przepływ programu}
+Główny program łączy przygotowane moduły w jeden przepływ danych:
+\begin{enumerate}
+    \item $DataLoader$ wczytuje krasnale, kopalnie i strażników z pliku wejściowego.
+    \item $WorkAssignmentSolver$ przydziela krasnale do kopalni za pomocą minimalnego kosztu maksymalnego przepływu.
+    \item Z wyniku przydziału wybierane są tylko aktywne kopalnie, czyli te, do których trafił przynajmniej jeden krasnal.
+    \item $BorderPatrolSolver$ wyznacza otoczkę wypukłą aktywnych kopalni i długość trasy patrolu.
+    \item $GuardCommandSolver$ odpowiada na zapytania o najgłośniejszego strażnika na wskazanym odcinku granicy.
+\end{enumerate}
+
+\subsection{Przykładowy wynik dla Dane/dane.txt}
+Dla przykładowych danych wejściowych program przydziela wszystkie trzy krasnale do kopalni zgodnych z ich preferencjami. Aktywne są kopalnie $10$, $11$ oraz $12$. Długość trasy patrolu po ich otoczce wynosi około $19.23$.
+
+\begin{lstlisting}[caption={Przykładowe wyjście programu}]
+Krasnale: 3
+Kopalnie: 4
+Straznicy: 6
+
+Przydzial pracy:
+Krasnal 1 -> kopalnia 10 (zloto), dystans: 2.83 [preferowany surowiec]
+Krasnal 2 -> kopalnia 11 (wegiel), dystans: 1.41 [preferowany surowiec]
+Krasnal 3 -> kopalnia 12 (miedz), dystans: 2.24 [preferowany surowiec]
+
+Przydzielono: 3/3
+Przydzialy preferowane: 3
+Laczny dystans: 6.48
+
+Aktywne kopalnie:
+Kopalnia 10 (zloto) (2.00, 2.00), krasnale: 1
+Kopalnia 11 (wegiel) (9.00, 2.00), krasnale: 2
+Kopalnia 12 (miedz) (5.00, 7.00), krasnale: 3
+
+Punkty trasy patrolu:
+(2.00, 2.00)
+(9.00, 2.00)
+(5.00, 7.00)
+Dlugosc trasy patrolu: 19.23
+
+Obrona granicy:
+Najglosniejszy na calej trasie: straznik 102 na pozycji 2, glosnosc: 18
+Odcinek ataku [1, 3]: straznik 102 na pozycji 2, glosnosc: 18
+\end{lstlisting}
 
 \end{document}

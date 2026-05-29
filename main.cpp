@@ -1,6 +1,8 @@
 #include "Parser/DataLoader.h"
 #include "Struktury/BorderPatrolSolver.h"
+#include "Struktury/GuardCommandSolver/GuardCommandSolver.h"
 #include "Struktury/WorkAssignmentSolver/WorkAssignmentSolver.h"
+#include <algorithm>
 #include <exception>
 #include <fstream>
 #include <iomanip>
@@ -90,6 +92,35 @@ int main() {
         }
 
         cout << "Dlugosc trasy patrolu: " << fixed << setprecision(2) << patrolDistance << '\n';
+
+        GuardCommandSolver guardSolver(data.guards);
+
+        cout << "\nObrona granicy:\n";
+        if (guardSolver.size() == 0) {
+            cout << "Brak straznikow.\n";
+        }
+        else {
+            GuardCommandResult fullRange = guardSolver.findLoudestGuard(0, guardSolver.size() - 1);
+            if (fullRange.found) {
+                cout << "Najglosniejszy na calej trasie: straznik "
+                     << fullRange.guardId
+                     << " na pozycji " << fullRange.index
+                     << ", glosnosc: " << fullRange.loudness << '\n';
+            }
+
+            if (guardSolver.size() >= 3) {
+                const int left = 1;
+                const int right = std::min(3, guardSolver.size() - 1);
+                GuardCommandResult attackedRange = guardSolver.findLoudestGuard(left, right);
+
+                if (attackedRange.found) {
+                    cout << "Odcinek ataku [" << left << ", " << right << "]: straznik "
+                         << attackedRange.guardId
+                         << " na pozycji " << attackedRange.index
+                         << ", glosnosc: " << attackedRange.loudness << '\n';
+                }
+            }
+        }
     }
     catch (const std::exception& e) {
         cerr << "Blad: " << e.what() << '\n';

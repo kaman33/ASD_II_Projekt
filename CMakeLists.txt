@@ -18,6 +18,10 @@ add_executable(ASD_II_Projekt
         Struktury/MinCostMaxFlow.cpp
         Struktury/WorkAssignmentSolver/WorkAssignmentSolver.h
         Struktury/WorkAssignmentSolver/WorkAssignmentSolver.cpp
+        Struktury/GuardCommandSolver/GuardCommandSolver.h
+        Struktury/GuardCommandSolver/GuardCommandSolver.cpp
+        Struktury/SegmentTree.h
+        Struktury/SegmentTree.cpp
         Struktury/Point.h
         Struktury/Point.cpp
         Struktury/Krasnal.h
@@ -80,3 +84,11 @@ add_executable(WorkAssignmentSolverTests
         Struktury/Funkcje/distance.cpp)
 
 add_test(NAME WorkAssignmentSolverTests COMMAND WorkAssignmentSolverTests)
+
+add_executable(GuardCommandSolverTests
+        Struktury/GuardCommandSolver/Testy/test_guard_command_solver.cpp
+        Struktury/GuardCommandSolver/GuardCommandSolver.cpp
+        Struktury/SegmentTree.cpp
+        Struktury/Straznik.cpp)
+
+add_test(NAME GuardCommandSolverTests COMMAND GuardCommandSolverTests)
