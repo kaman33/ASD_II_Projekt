@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.31)
 project(ASD_II_Projekt)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -30,6 +30,8 @@ add_executable(ASD_II_Projekt
         Struktury/Kopalnia.cpp
         Struktury/Straznik.h
         Struktury/Straznik.cpp
+        Struktury/Visualizer.h
+        Struktury/Visualizer.cpp
         Struktury/Funkcje/det.h
         Struktury/Funkcje/det.cpp
         Struktury/Funkcje/distance.h
@@ -44,7 +46,21 @@ add_executable(ASD_II_Projekt
         Struktury/Funkcje/is_point_in_polygon.cpp
         Struktury/Funkcje/EPS.h)
 
+        target_include_directories(ASD_II_Projekt PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Struktury/SFML/include)
+        target_link_directories(ASD_II_Projekt PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Struktury/SFML/lib)
+        target_link_libraries(ASD_II_Projekt PRIVATE sfml-graphics sfml-window sfml-system)
+
 enable_testing()
+
+# Automatyczne kopiowanie plików DLL z SFML do folderu binarnego po kompilacji
+add_custom_command(TARGET ASD_II_Projekt POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_CURRENT_SOURCE_DIR}/Struktury/SFML/bin/sfml-graphics-3.dll"
+        "${CMAKE_CURRENT_SOURCE_DIR}/Struktury/SFML/bin/sfml-window-3.dll"
+        "${CMAKE_CURRENT_SOURCE_DIR}/Struktury/SFML/bin/sfml-system-3.dll"
+        $<TARGET_FILE_DIR:ASD_II_Projekt>
+    COMMENT "Kopiowanie bibliotek DLL SFML do folderu uruchomieniowego..."
+)
 
 add_executable(DataLoaderTests
         Parser/Testy/test_data_loader.cpp

@@ -98,3 +98,10 @@ wydajeniejszy
 
 29.05.2025 - Gosia
 - Czesciowe uzupelnienie dokumentacji
+
+30.05.2026 - Jerry
+- Visualizer a wraz z nim:
+    - dodanie biblioteki SFML do projektu
+    - zaktualizowanie CMake na nowszą wersję (z 14 na 17, aby działał SFML) i dodanie do niego paru 
+    - dodanie folderu assets do sprite'ów w wizualizacji
+^- Visualizer działa i jest na tyle działający, że można go pokazać, ale jeszcze jest parę kwestii "quality of life", które dodam

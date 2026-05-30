@@ -2,6 +2,7 @@
 #include "Struktury/BorderPatrolSolver.h"
 #include "Struktury/GuardCommandSolver/GuardCommandSolver.h"
 #include "Struktury/WorkAssignmentSolver/WorkAssignmentSolver.h"
+#include "Struktury/Visualizer.h"
 #include <algorithm>
 #include <exception>
 #include <fstream>
@@ -121,6 +122,19 @@ int main() {
                 }
             }
         }
+
+        Visualizer visualizer(
+            solver.getDwarves(),
+            solver.getMines(),
+            data.guards, 
+            result, 
+            patrolHull, 
+            patrolDistance, 
+            guardSolver
+        );
+        
+        visualizer.run(); 
+        
     }
     catch (const std::exception& e) {
         cerr << "Blad: " << e.what() << '\n';
