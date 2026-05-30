@@ -22,7 +22,7 @@ string getFolderFilePath(int id, string path = currentPath){
     int i = 0;
     for (const auto& entry : fs::directory_iterator(path)){
         if(!fs::is_regular_file(entry.path())) continue;
-        if (++i == id) {
+        if (++i == id){
             return entry.path().string();
         }
     }

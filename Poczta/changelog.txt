@@ -105,3 +105,8 @@ wydajeniejszy
     - zaktualizowanie CMake na nowszą wersję (z 14 na 17, aby działał SFML) i dodanie do niego paru 
     - dodanie folderu assets do sprite'ów w wizualizacji
 ^- Visualizer działa i jest na tyle działający, że można go pokazać, ale jeszcze jest parę kwestii "quality of life", które dodam
+
+30.05.2026 - Aleks
+- Dokonczenie kompresji
+- Dokumentacja dla finder i compresser
+- pliki _test sluza do np pokazania kompresji i dekompresji aby nie usunac czegos przypadkiem, takie manekiny do bicia

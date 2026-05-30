@@ -200,6 +200,54 @@ Pozwala zmienić wartość pojedynczego elementu tablicy. Algorytm przechodzi od
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Wyszukiwanie wzorca}
+\subsection{Funkcje pomocnicze}
+\begin{itemize}
+    \item printFolderContents - wypisywanie zawartości folderu
+    \item getFolderFilePath - wypisuje zawartość foldera i numeruje pliki
+    \item getFile - wybieranie trybu wczytywania pliku i zawracanie scieżki do tego pliku
+    \item getPattern - pobiera wzorzec podane od użytkowanika
+    \item getFileContent - pobiera zawartość pliku
+    \item breakString - dzieli tekst ze względu na separator
+    \item writePositions - wypisuje linijkę i miejsce wzorca w pliku
+\end{itemize}
+\subsection{Jak działa}
+Program pobiera plik od użytkownika na 3 sposoby
+\begin{enumerate}
+    \item Ścieżka do pliku
+    \item Wybieranie pliku w obecnym folderze
+    \item Ścieżka do folderu i następnie wybranie pliku z niego
+\end{enumerate}
+Następnie pobiera od użytkownika wzorzec, czyta plik i zapisuje do zmiennej, dzieli zawartość ze względu na wiersze, szuka wzorzec osobno w każdej linijce oraz jeżeli znalazł to wypisuje linijkę oraz miejsce w linijce (pierwsze miejsce to 0) 
+\subsection{Kod źródłowy}
+\lstinputlisting[language=C++, caption={/finder.cpp}]{../finder.cpp}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Kompresja i dekompresja}
+\subsection{Funkcje pomocnicze}
+Podobnie jak w wyszukiwaniu wzorca
+\begin{itemize}
+    \item modeSelector - wybranie trybu programu
+    \item printFolderContents - wypisywanie zawartości folderu
+    \item getFolderFilePath - wypisuje zawartość foldera i numeruje pliki
+    \item getFile - wybieranie trybu wczytywania pliku i zawracanie scieżki do tego pliku
+    \item getFileContent - pobiera zawartość pliku 
+\end{itemize}
+\subsection{Część wspólna}
+Pierw użytkownik wybiera tryb jego działania, kompresja czy dekompresja. Następnie jest pytany, tak jak w wyszukiwaniu wzorca, jak chce podać plik.
+\begin{enumerate}
+    \item Ścieżka do pliku
+    \item Wybieranie pliku w obecnym folderze
+    \item Ścieżka do folderu i następnie wybranie pliku z niego
+\end{enumerate}
+\subsection{Kompresja}
+Czytamy zawartość pliku, używając algorytmu KMP szukamy dla każdego znaku liczbę jego wystąpień (nie trzeba KMP, można by zachłannie). Tworzymy dla każdego znaku, który występuje przynajmniej raz, kody Huffmana. Tworzymy mapę znaku na jego kod. Zapisujemy binarnie przetłumaczony plik jako nazwaPliku.huff oraz tablicę kodów Huffmana do .nazwaPliku.huff
+\subsection{Dekompresja}
+Czytamy plik, odtwarzamy oryginalną nazwę, czytamy tabelę kodów Huffmana do tego pliku. Odczytujemy zawartość pliku. Używając tabeli Huffmana dla tego pliku tłumaczymy go i zapisujemy do pliku. 
+\subsection{Kod źródłowy}
+\lstinputlisting[language=C++, caption={/compresser.cpp}]{../compresser.cpp}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Solvery}
 \subsection{BorderPatrolSolver}
 Klasa $BorderPatrolSolver$ spina problem wyznaczania trasy patrolu po aktywnych kopalniach. Na wejściu otrzymuje listę punktów reprezentujących położenia kopalni, w których faktycznie pracują krasnale. Następnie za pomocą funkcji $graham\_scan()$ wyznacza otoczkę wypukłą tych punktów. Długość patrolu jest liczona jako suma długości kolejnych krawędzi tej otoczki. Funkcja $distance()$ zwraca kwadrat odległości, dlatego przy sumowaniu używany jest pierwiastek.
@@ -228,7 +276,7 @@ Wynikiem działania solvera jest struktura $WorkAssignmentResult$, która zawier
 \lstinputlisting[language=C++, caption={/Struktury/WorkAssignmentSolver/WorkAssignmentSolver.cpp}]{../Struktury/WorkAssignmentSolver/WorkAssignmentSolver.cpp}
 
 \subsection{GuardCommandSolver}
-Klasa $GuardCommandSolver$ wykorzystuje $SegmentTree$ do znajdowania najgłośniejszego strażnika na zadanym odcinku granicy. Na wejściu otrzymuje listę strażników w kolejności ustawienia wzdłuż trasy patrolu. Zapytanie $findLoudestGuard(l, r)$ zwraca identyfikator strażnika, jego indeks na trasie oraz głośność.
+Klasa $GuardCommandSolver$ wykorzystuje $SegmentTree$ do znajdowania najgłośniejszego \\ strażnika na zadanym odcinku granicy. Na wejściu otrzymuje listę strażników w kolejności ustawienia wzdłuż trasy patrolu. Zapytanie $findLoudestGuard(l, r)$ zwraca identyfikator strażnika, jego indeks na trasie oraz głośność.
 
 \subsubsection{Rozstrzyganie remisów}
 Samo drzewo przedziałowe zwraca maksimum liczbowe, dlatego w solverze głośność jest kodowana razem z indeksem strażnika. Jeżeli kilku strażników ma taką samą głośność, wybierany jest pierwszy z nich na danym odcinku. Daje to deterministyczny wynik.
@@ -308,7 +356,7 @@ Testy $GuardCommandSolver$ sprawdzają wybór najgłośniejszego strażnika na c
 Główny program łączy przygotowane moduły w jeden przepływ danych:
 \begin{enumerate}
     \item $DataLoader$ wczytuje krasnale, kopalnie i strażników z pliku wejściowego.
-    \item $WorkAssignmentSolver$ przydziela krasnale do kopalni za pomocą minimalnego kosztu maksymalnego przepływu.
+    \item $WorkAssignmentSolver$ przydziela krasnale do kopalni za pomocą minimalnego kosztu \\ maksymalnego przepływu.
     \item Z wyniku przydziału wybierane są tylko aktywne kopalnie, czyli te, do których trafił przynajmniej jeden krasnal.
     \item $BorderPatrolSolver$ wyznacza otoczkę wypukłą aktywnych kopalni i długość trasy patrolu.
     \item $GuardCommandSolver$ odpowiada na zapytania o najgłośniejszego strażnika na wskazanym odcinku granicy.
