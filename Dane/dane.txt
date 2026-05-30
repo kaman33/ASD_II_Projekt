@@ -1,18 +1,67 @@
 KRASNALE
-1 0 0 zloto 2 zloto miedz
-2 8 1 wegiel 1 wegiel
-3 4 5 miedz 3 miedz zloto srebro
+1 2 3 zloto 2 zloto miedz
+2 6 12 miedz 3 miedz zloto kamien
+3 12 5 wegiel 2 wegiel zelazo
+4 18 18 srebro 3 srebro miedz zloto
+5 24 7 zelazo 2 zelazo wegiel
+6 31 11 kamien 2 kamien miedz
+7 36 3 wegiel 3 wegiel kamien zelazo
+8 44 16 zloto 2 zloto srebro
+9 50 6 miedz 2 miedz zelazo
+10 57 14 srebro 3 srebro zloto kamien
+11 64 9 kamien 2 kamien wegiel
+12 72 18 miedz 3 miedz srebro zloto
+13 10 31 zelazo 2 zelazo zloto
+14 17 43 kamien 3 kamien zelazo wegiel
+15 25 34 zloto 2 zloto miedz
+16 33 29 wegiel 2 wegiel kamien
+17 41 39 miedz 3 miedz zelazo srebro
+18 49 33 srebro 2 srebro zloto
+19 56 44 zelazo 3 zelazo wegiel kamien
+20 67 39 kamien 2 kamien miedz
+21 75 50 zloto 3 zloto srebro miedz
+22 5 57 srebro 2 srebro kamien
+23 14 65 kamien 2 kamien zelazo
+24 22 59 miedz 3 miedz zloto wegiel
+25 30 70 zelazo 2 zelazo srebro
+26 39 62 wegiel 3 wegiel kamien miedz
+27 47 74 srebro 2 srebro zloto
+28 58 66 zloto 3 zloto zelazo miedz
+29 68 72 kamien 2 kamien wegiel
+30 78 61 wegiel 3 wegiel zelazo srebro
 
 KOPALNIE
-10 2 2 zloto 1
-11 9 2 wegiel 2
-12 5 7 miedz 1
-13 1 8 srebro 1
+10 8 8 zloto 4
+11 22 14 miedz 4
+12 38 9 wegiel 5
+13 52 20 srebro 3
+14 15 38 zelazo 4
+15 35 42 kamien 5
+16 58 47 zloto 3
+17 70 12 miedz 3
+18 75 36 wegiel 3
+19 26 63 srebro 2
+20 48 68 zelazo 2
+21 8 55 kamien 2
 
 STRAZNICY
 100 14
 101 9
-102 18
-103 13
-104 18
-105 11
+102 23
+103 17
+104 28
+105 12
+106 31
+107 19
+108 25
+109 31
+110 16
+111 22
+112 11
+113 27
+114 20
+115 30
+116 18
+117 26
+118 15
+119 24

@@ -52,14 +52,19 @@ add_executable(ASD_II_Projekt
 
 enable_testing()
 
+get_filename_component(MINGW_RUNTIME_DIR "${CMAKE_CXX_COMPILER}" DIRECTORY)
+
 # Automatyczne kopiowanie plików DLL z SFML do folderu binarnego po kompilacji
 add_custom_command(TARGET ASD_II_Projekt POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${CMAKE_CURRENT_SOURCE_DIR}/Struktury/SFML/bin/sfml-graphics-3.dll"
         "${CMAKE_CURRENT_SOURCE_DIR}/Struktury/SFML/bin/sfml-window-3.dll"
         "${CMAKE_CURRENT_SOURCE_DIR}/Struktury/SFML/bin/sfml-system-3.dll"
+        "${MINGW_RUNTIME_DIR}/libgcc_s_seh-1.dll"
+        "${MINGW_RUNTIME_DIR}/libstdc++-6.dll"
+        "${MINGW_RUNTIME_DIR}/libwinpthread-1.dll"
         $<TARGET_FILE_DIR:ASD_II_Projekt>
-    COMMENT "Kopiowanie bibliotek DLL SFML do folderu uruchomieniowego..."
+    COMMENT "Kopiowanie bibliotek DLL SFML i runtime MinGW do folderu uruchomieniowego..."
 )
 
 add_executable(DataLoaderTests

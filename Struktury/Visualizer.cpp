@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <sstream>
 #include <iomanip>
+#include <cstdint>
 
 static sf::Color hex(uint32_t c) {
     return sf::Color(
@@ -23,6 +24,7 @@ static const sf::Color COL_HULL      = hex(0xff6b6b);
 static const sf::Color COL_LOUDEST   = hex(0xff4444);
 static const sf::Color COL_GRID      = sf::Color(50, 55, 80, 180);
 static const sf::Color COL_GRID_LABEL= sf::Color(120, 130, 160, 220);
+static const float ATTACK_RESOLVE_TIME = 2.0f;
 
 Visualizer::Visualizer(
     const std::vector<Krasnal>&      dwarves,
@@ -244,7 +246,7 @@ void Visualizer::handleEvents(const sf::Event& e) {
                 m_phase = Phase::BORDER_PATROL; m_popup.visible = false; return;
             }
             if (m_btnPhase3.getGlobalBounds().contains(mp)) {
-                m_phase = Phase::GUARD_COMMAND; m_guardRangeL = m_guardRangeR = -1; m_loudestIdx = -1; m_guardQueryDone = false; m_popup.visible = false; return;
+                m_phase = Phase::GUARD_COMMAND; m_guardRangeL = m_guardRangeR = -1; m_loudestIdx = -1; m_guardQueryDone = false; m_attackTimer = 0.f; m_attackResolved = false; m_popup.visible = false; return;
             }
             if (mp.x < MAP_W && mp.y < MAP_H) {
                 if (m_phase == Phase::GUARD_COMMAND) onClickGuardRange(mp);
@@ -261,6 +263,16 @@ void Visualizer::handleEvents(const sf::Event& e) {
 }
 
 void Visualizer::update(float dt) {
+    if (m_phase == Phase::GUARD_COMMAND) {
+        if (m_guardQueryDone && !m_attackResolved) {
+            m_attackTimer += dt;
+            if (m_attackTimer >= ATTACK_RESOLVE_TIME) {
+                m_attackResolved = true;
+            }
+        }
+        return;
+    }
+
     if (m_phase != Phase::WORK_ASSIGNMENT || m_animDone) return;
     bool allDone = true;
     for (auto& da : m_dwarfAnims) {
@@ -447,7 +459,18 @@ void Visualizer::drawPhase2() {
 void Visualizer::drawPhase3() {
     drawHullEdges();
     drawMines();
+    drawBorderAttack();
     drawGuards();
+
+    if (m_guardRangeL >= 0 && m_guardRangeR < 0 && m_guardRangeL < (int)m_guardPos.size()) {
+        sf::CircleShape ci(GUARD_R + 9.f);
+        ci.setOrigin({GUARD_R + 9.f, GUARD_R + 9.f});
+        ci.setPosition(m_guardPos[m_guardRangeL]);
+        ci.setFillColor(sf::Color::Transparent);
+        ci.setOutlineColor(hex(0xffaa00));
+        ci.setOutlineThickness(3.f);
+        m_window.draw(ci);
+    }
 
     if (m_guardRangeL >= 0 && m_guardRangeR >= m_guardRangeL) {
         for (int i = m_guardRangeL; i <= m_guardRangeR && i < (int)m_guardPos.size(); i++) {
@@ -467,7 +490,7 @@ void Visualizer::drawPhase3() {
         drawTextAt("NAJGLOSNIEJSZY!", gp.x - 55, gp.y - 32, 13, COL_LOUDEST);
     }
 
-    drawTextAt("KLIKNIJ 2 straznikow aby wybrac zakres [L..R]",
+    drawTextAt("KLIKNIJ 2 straznikow aby wybrac atakowany odcinek",
                10, MAP_H - 22, 13, hex(0x888888));
 }
 
@@ -494,6 +517,157 @@ void Visualizer::drawHullEdges() {
         sf::Vector2f b = worldToScreen(m_hull[(i + 1) % m_hull.size()]);
         drawThickLine(a, b, COL_HULL, 3.f);
     }
+}
+
+void Visualizer::drawBorderAttack() {
+    if (m_guardRangeL < 0 || m_guardRangeR < m_guardRangeL || m_guardPos.empty()) {
+        return;
+    }
+
+    const int left = std::max(0, m_guardRangeL);
+    const int right = std::min(m_guardRangeR, static_cast<int>(m_guardPos.size()) - 1);
+    if (left > right) {
+        return;
+    }
+
+    const int middle = left + (right - left) / 2;
+    sf::Vector2f center = m_guardPos[middle];
+    if ((right - left) % 2 == 1 && middle + 1 <= right) {
+        center.x = (m_guardPos[middle].x + m_guardPos[middle + 1].x) / 2.f;
+        center.y = (m_guardPos[middle].y + m_guardPos[middle + 1].y) / 2.f;
+    }
+
+    sf::Vector2f borderCenter(0.f, 0.f);
+    int borderPointCount = 0;
+    if (!m_hull.empty()) {
+        for (const Point& point : m_hull) {
+            borderCenter += worldToScreen(point);
+            borderPointCount++;
+        }
+    }
+    else {
+        for (const sf::Vector2f& guardPos : m_guardPos) {
+            borderCenter += guardPos;
+            borderPointCount++;
+        }
+    }
+
+    if (borderPointCount > 0) {
+        borderCenter.x /= static_cast<float>(borderPointCount);
+        borderCenter.y /= static_cast<float>(borderPointCount);
+    }
+    else {
+        borderCenter = {MAP_W / 2.f, MAP_H / 2.f};
+    }
+
+    sf::Vector2f outward = center - borderCenter;
+    float length = std::sqrt(outward.x * outward.x + outward.y * outward.y);
+    if (length < 0.01f) {
+        outward = {0.f, -1.f};
+        length = 1.f;
+    }
+    outward /= length;
+
+    sf::Vector2f tangent(-outward.y, outward.x);
+    sf::Vector2f labelPos = center + outward * 48.f;
+    if (m_attackResolved) {
+        for (int i = left; i <= right; i++) {
+            sf::CircleShape zone(GUARD_R + 12.f);
+            zone.setOrigin({GUARD_R + 12.f, GUARD_R + 12.f});
+            zone.setPosition(m_guardPos[i]);
+            zone.setFillColor(sf::Color(20, 210, 135, 35));
+            zone.setOutlineColor(sf::Color(20, 210, 135, 140));
+            zone.setOutlineThickness(2.f);
+            m_window.draw(zone);
+        }
+
+        for (int i = left; i < right; i++) {
+            drawThickLine(m_guardPos[i], m_guardPos[i + 1], sf::Color(20, 210, 135, 120), 7.f);
+        }
+
+        sf::CircleShape burst(16.f);
+        burst.setOrigin({16.f, 16.f});
+        burst.setPosition(center);
+        burst.setFillColor(sf::Color(20, 210, 135, 55));
+        burst.setOutlineColor(sf::Color(170, 255, 220, 180));
+        burst.setOutlineThickness(2.f);
+        m_window.draw(burst);
+
+        drawTextAt("ODPARTO", labelPos.x - 34.f, labelPos.y - 8.f, 14, sf::Color(80, 255, 180));
+        return;
+    }
+
+    const float volleyProgress = std::min(1.f, m_attackTimer / 1.05f);
+    const float attackFade = std::max(0.25f, 1.f - std::max(0.f, m_attackTimer - 1.0f) / 1.0f);
+    const std::uint8_t attackAlpha = static_cast<std::uint8_t>(120.f * attackFade);
+
+    for (int i = left; i <= right; i++) {
+        sf::CircleShape zone(GUARD_R + 14.f);
+        zone.setOrigin({GUARD_R + 14.f, GUARD_R + 14.f});
+        zone.setPosition(m_guardPos[i]);
+        zone.setFillColor(sf::Color(255, 60, 40, static_cast<std::uint8_t>(45.f * attackFade)));
+        zone.setOutlineColor(sf::Color(255, 60, 40, attackAlpha));
+        zone.setOutlineThickness(2.f);
+        m_window.draw(zone);
+    }
+
+    for (int i = left; i < right; i++) {
+        drawThickLine(m_guardPos[i], m_guardPos[i + 1], sf::Color(255, 60, 40, attackAlpha), 9.f);
+    }
+
+    for (int i = 0; i < 3; i++) {
+        const float offset = static_cast<float>(i - 1) * 26.f;
+        sf::Vector2f target = center + tangent * offset;
+        sf::Vector2f targetOutward = target - borderCenter;
+        float targetLength = std::sqrt(targetOutward.x * targetOutward.x +
+                                       targetOutward.y * targetOutward.y);
+        if (targetLength < 0.01f) {
+            targetOutward = outward;
+        }
+        else {
+            targetOutward /= targetLength;
+        }
+
+        sf::Vector2f start = target + targetOutward * (78.f + static_cast<float>(i) * 12.f);
+
+        drawThickLine(start, target, sf::Color(255, 90, 45, static_cast<std::uint8_t>(190.f * attackFade)), 3.f);
+
+        sf::CircleShape marker(5.f);
+        marker.setOrigin({5.f, 5.f});
+        marker.setPosition(target);
+        marker.setFillColor(sf::Color(255, 120, 55, static_cast<std::uint8_t>(255.f * attackFade)));
+        marker.setOutlineColor(sf::Color(255, 220, 180, static_cast<std::uint8_t>(220.f * attackFade)));
+        marker.setOutlineThickness(1.f);
+        m_window.draw(marker);
+    }
+
+    for (int i = left; i <= right; i++) {
+        sf::Vector2f guard = m_guardPos[i];
+        sf::Vector2f target = center + tangent * (static_cast<float>((i - left) % 5) - 2.f) * 9.f;
+        sf::Vector2f shotEnd = guard + (target - guard) * volleyProgress;
+        std::uint8_t shotAlpha = static_cast<std::uint8_t>(230.f * std::max(0.35f, volleyProgress));
+
+        drawThickLine(guard, shotEnd, sf::Color(255, 210, 70, shotAlpha), 2.2f);
+
+        sf::CircleShape arrowHead(3.5f);
+        arrowHead.setOrigin({3.5f, 3.5f});
+        arrowHead.setPosition(shotEnd);
+        arrowHead.setFillColor(sf::Color(255, 245, 150, shotAlpha));
+        m_window.draw(arrowHead);
+    }
+
+    if (m_attackTimer > 0.9f) {
+        const float radius = 12.f + std::min(1.f, (m_attackTimer - 0.9f) / 0.7f) * 24.f;
+        sf::CircleShape burst(radius);
+        burst.setOrigin({radius, radius});
+        burst.setPosition(center);
+        burst.setFillColor(sf::Color(255, 230, 80, 35));
+        burst.setOutlineColor(sf::Color(255, 230, 120, 170));
+        burst.setOutlineThickness(2.f);
+        m_window.draw(burst);
+    }
+
+    drawTextAt("ATAK", labelPos.x - 18.f, labelPos.y - 8.f, 14, sf::Color(255, 95, 55));
 }
 
 void Visualizer::drawMines() {
@@ -710,11 +884,20 @@ void Visualizer::drawSidePanel() {
         line("Straznicy: " + std::to_string(m_guards.size()));
         sep();
         if (m_guardRangeL >= 0) {
-            std::string rangeStr = "Zakres: [" + std::to_string(m_guardRangeL);
-            if (m_guardRangeR >= 0) rangeStr += " .. " + std::to_string(m_guardRangeR);
-            else                    rangeStr += " .. ?]";
+            std::string rangeStr = "Wybrano: [" + std::to_string(m_guardRangeL);
+            if (m_guardRangeR >= 0) rangeStr += ", " + std::to_string(m_guardRangeR);
+            else                    rangeStr += ", ....";
             rangeStr += "]";
             line(rangeStr);
+            if (m_guardRangeR >= 0) {
+                if (m_attackResolved) {
+                    line("Atak odparty", sf::Color(80, 255, 180));
+                }
+                else {
+                    line("Salwa w toku", hex(0xffcc00));
+                    line("Atakowany odcinek granicy", sf::Color(255, 120, 55));
+                }
+            }
             if (m_guardQueryDone && m_loudestIdx >= 0) {
                 line("Najglosniejszy:", COL_LOUDEST);
                 line("  idx: "    + std::to_string(m_loudestIdx), COL_LOUDEST);
@@ -822,15 +1005,18 @@ void Visualizer::onClickGuardRange(sf::Vector2f mp) {
             if (m_guardRangeL < 0) {
                 m_guardRangeL = (int)i; m_guardRangeR = -1;
                 m_loudestIdx = -1; m_guardQueryDone = false;
+                m_attackTimer = 0.f; m_attackResolved = false;
             } else if (m_guardRangeR < 0) {
                 int l = std::min(m_guardRangeL, (int)i);
                 int r = std::max(m_guardRangeL, (int)i);
                 m_guardRangeL = l; m_guardRangeR = r;
                 GuardCommandResult res = m_guardSolver.findLoudestGuard(l, r);
                 if (res.found) { m_loudestIdx = res.index; m_guardQueryDone = true; }
+                m_attackTimer = 0.f; m_attackResolved = false;
             } else {
                 m_guardRangeL = (int)i; m_guardRangeR = -1;
                 m_loudestIdx = -1; m_guardQueryDone = false;
+                m_attackTimer = 0.f; m_attackResolved = false;
             }
             return;
         }

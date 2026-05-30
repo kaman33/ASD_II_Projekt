@@ -24,7 +24,7 @@ constexpr float MARGIN      = 40.f;
 constexpr float NODE_R      = 22.f;
 constexpr float GUARD_R     = 10.f;
 constexpr float DWARF_R     = 10.f;
-constexpr float ANIM_SPEED  = 120.f;
+constexpr float ANIM_SPEED  = 60.f;
 
 enum class Phase {
     WORK_ASSIGNMENT,
@@ -96,6 +96,8 @@ private:
     int  m_guardRangeR    = -1;
     int  m_loudestIdx     = -1;
     bool m_guardQueryDone = false;
+    float m_attackTimer   = 0.f;
+    bool m_attackResolved = false;
 
     // --- popup ---
     InfoPopup m_popup;
@@ -140,6 +142,7 @@ private:
     void drawMines();
     void drawHomes();
     void drawGuards();
+    void drawBorderAttack();
     void drawDwarfAnims();
     void drawSidePanel();
     void drawButtons();
