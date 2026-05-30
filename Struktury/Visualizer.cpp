@@ -62,10 +62,10 @@ void Visualizer::loadAssets() {
         if (m_font.openFromFile(fp)) break;
     }
 
-    m_hasDwarfTex = m_texDwarf.loadFromFile("assets/dwarf.png");
-    m_hasMineTex  = m_texMine.loadFromFile("assets/mine.png");
-    m_hasHomeTex  = m_texHome.loadFromFile("assets/home.png");
-    m_hasGuardTex = m_texGuard.loadFromFile("assets/guard.png");
+    m_hasDwarfTex = m_texDwarf.loadFromFile("Zasoby/dwarf.png");
+    m_hasMineTex  = m_texMine.loadFromFile("Zasoby/mine.png");
+    m_hasHomeTex  = m_texHome.loadFromFile("Zasoby/home.png");
+    m_hasGuardTex = m_texGuard.loadFromFile("Zasoby/guard.png");
 
     if (m_hasDwarfTex) m_texDwarf.setSmooth(true);
     if (m_hasMineTex)  m_texMine.setSmooth(true);
