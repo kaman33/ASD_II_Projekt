@@ -22,7 +22,7 @@ constexpr float WIN_H       = MAP_H + 80.f;
 constexpr float MARGIN      = 40.f;
 
 constexpr float NODE_R      = 22.f;
-constexpr float GUARD_R     = 10.f;
+constexpr float GUARD_R     = 20.f;
 constexpr float DWARF_R     = 10.f;
 constexpr float ANIM_SPEED  = 60.f;
 
@@ -101,6 +101,8 @@ private:
 
     // --- popup ---
     InfoPopup m_popup;
+
+    float m_panelScrollY = 0.f;
 
     // --- pozycje ekranowe ---
     std::vector<sf::Vector2f> m_minePos;
