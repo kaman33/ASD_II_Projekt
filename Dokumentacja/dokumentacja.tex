@@ -207,6 +207,10 @@ Algorytm działa iteracyjnie. W każdej iteracji uruchamiany jest Bellman-Ford, 
 Po znalezieniu ścieżki obliczane jest jej wąskie gardło, czyli maksymalny przepływ, który można nią jeszcze przesłać. Następnie przepływ jest dodawany na krawędziach właściwych i odejmowany na krawędziach odwrotnych. Krawędzie odwrotne z ujemnym kosztem pozwalają algorytmowi cofnąć część wcześniejszych decyzji, jeżeli późniejsza konfiguracja okaże się tańsza.
 
 Wynikiem jest struktura $MinCostMaxFlowResult$, która przechowuje łączną wartość przepływu oraz jego całkowity koszt.
+
+
+{\scriptsize Pewnego poranka do królestwa dotarła tajemnicza gazetka, według której w pobliskiej Biedronce obowiązywała promocja $12 + 12$ na piwa. Wiadomość ta wywołała wśród krasnali tak duże poruszenie, że dotychczasowy problem minimalizacji drogi do kopalni musiał zostać chwilowo rozszerzony o koszt dojścia do alejki promocyjnej. Królewna Śnieżka nakazała zachować spokój i nie przekraczać budżetu, książę rozpoczął ponowne przeliczanie przepływu, a strażnicy graniczni otrzymali dodatkowe zadanie ochrony koszyków przed nieautoryzowaną zamianą miejsc w kolejce.\par}
+
 \lstinputlisting[language=C++, caption={/Struktury/MinCostMaxFlow.h}]{../Struktury/MinCostMaxFlow.h}
 \lstinputlisting[language=C++, caption={/Struktury/MinCostMaxFlow.cpp}]{../Struktury/MinCostMaxFlow.cpp}
 
