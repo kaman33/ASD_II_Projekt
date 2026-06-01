@@ -20,6 +20,8 @@ add_executable(ASD_II_Projekt
         Struktury/WorkAssignmentSolver/WorkAssignmentSolver.cpp
         Struktury/GuardCommandSolver/GuardCommandSolver.h
         Struktury/GuardCommandSolver/GuardCommandSolver.cpp
+        Struktury/Manager/KingdomManager.h
+        Struktury/Manager/KingdomManager.cpp
         Struktury/SegmentTree.h
         Struktury/SegmentTree.cpp
         Struktury/Point.h

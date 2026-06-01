@@ -53,7 +53,6 @@ Visualizer::Visualizer(
 
 void Visualizer::loadAssets() {
     const std::vector<std::string> fontPaths = {
-        "assets/font.ttf",
         "C:/Windows/Fonts/arial.ttf",
         "C:/Windows/Fonts/calibri.ttf",
         "C:/Windows/Fonts/segoeui.ttf"
