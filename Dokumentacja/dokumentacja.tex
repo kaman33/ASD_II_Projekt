@@ -83,14 +83,26 @@ W ramach projektu należy przygotować rozwiązanie problemu przedstawionego pow
 \end{itemize}
 Wyniki pracy powinny być zapisywane z wykorzystaniem systemu Git (prowadzący powinien \\ mieć dostęp do repozytorium). Projekt będzie oceniany zgodnie z informacjami \\ przedstawionymi na USOS. Każda osoba będzie musiała wypełnić dwie ankiety: opisującą jej \\ wkład w rozwiązanie problemu oraz oceniającą kompletność rozwiązania problemów przez \\ zespół, do którego należy.
 
-\subsection{temp}
-\begin{lstlisting}[language=C++, caption=x example]
-int main(){
-    int i = 0;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Wczytywanie danych}
 
-    return i;
-}
-\end{lstlisting}
+\subsection{Format pliku wejściowego}
+Dane wejściowe są przechowywane w pliku \texttt{Dane/dane.txt}. Plik jest podzielony na trzy sekcje:
+\begin{itemize}
+    \item \texttt{KRASNALE} -- identyfikator krasnala, współrzędne domu, preferowany surowiec, liczba umiejętności i lista umiejętności,
+    \item \texttt{KOPALNIE} -- identyfikator kopalni, współrzędne, wydobywany surowiec i pojemność,
+    \item \texttt{STRAZNICY} -- identyfikator strażnika i jego głośność.
+\end{itemize}
+Wczytane dane są zapisywane w strukturze $InputData$, która przechowuje trzy wektory: krasnali, kopalni i strażników.
+
+\subsection{DataLoader}
+Klasa $DataLoader$ odpowiada za odczytanie pliku wejściowego i przekształcenie kolejnych linii na obiekty programu. Podczas czytania zapamiętywana jest aktualna sekcja pliku, dzięki czemu każda linia jest interpretowana jako krasnal, kopalnia albo strażnik.
+Parser sprawdza również podstawowe błędy danych: brak pliku, niepoprawny format linii, ujemną liczbę umiejętności, ujemną pojemność kopalni oraz ujemną głośność strażnika.
+
+\subsubsection{Kod źródłowy}
+\lstinputlisting[language=C++, caption={/Parser/InputData.h}]{../Parser/InputData.h}
+\lstinputlisting[language=C++, caption={/Parser/DataLoader.h}]{../Parser/DataLoader.h}
+\lstinputlisting[language=C++, caption={/Parser/DataLoader.cpp}]{../Parser/DataLoader.cpp}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Funkcje}
@@ -169,23 +181,33 @@ Funkcja sortuje tablicę kodów Huffmana alfabetycznie według znaku $c$
 \lstinputlisting[language=C++, caption={/Struktury/Huffman.cpp}]{../Struktury/Huffman.cpp}
 
 \subsection{Edge.h}
--> Opis
+Struktura $Edge$ reprezentuje pojedynczą krawędź w grafie przepływowym. Przechowuje wierzchołek docelowy $to$, aktualny przepływ $flow$, przepustowość $capacity$, indeks krawędzi odwrotnej $rev$ oraz koszt jednostkowy $cost$. Pole $rev$ pozwala szybko odnaleźć krawędź przeciwną w grafie rezydualnym podczas aktualizacji przepływu.
 \lstinputlisting[language=C++, caption={/Struktury/Edge.h}]{../Struktury/Edge.h}
 
 \subsection{Graph.cpp}
-->Opis
+Klasa $Graph$ przechowuje graf jako listę sąsiedztwa. Metoda $add\_edge(from, to, capacity, cost)$ dodaje jednocześnie krawędź właściwą oraz krawędź odwrotną. Krawędź odwrotna ma początkową przepustowość $0$ i koszt przeciwny do kosztu krawędzi właściwej. Dzięki temu algorytm minimalnego kosztu maksymalnego przepływu może cofać wcześniejsze decyzje i poprawiać przydział globalnie, a nie tylko zachłannie.
+\lstinputlisting[language=C++, caption={/Struktury/Graph.h}]{../Struktury/Graph.h}
 \lstinputlisting[language=C++, caption={/Struktury/Graph.cpp}]{../Struktury/Graph.cpp}
 
 \subsection{Kopalnia.cpp}
--> Opis
+Klasa $Kopalnia$ opisuje jedno miejsce pracy. Przechowuje identyfikator, położenie, typ wydobywanego surowca, pojemność oraz listę identyfikatorów przydzielonych krasnali. Metody $getAvailableCapacity()$, $hasAvailableSpace()$ oraz $isInUse()$ pozwalają sprawdzić, czy kopalnia ma jeszcze wolne miejsca i czy została użyta w wyznaczonym przydziale. Metoda $addDwarf()$ nie dodaje krasnala, jeżeli kopalnia jest pełna albo dany krasnal znajduje się już na liście.
+\lstinputlisting[language=C++, caption={/Struktury/Kopalnia.h}]{../Struktury/Kopalnia.h}
 \lstinputlisting[language=C++, caption={/Struktury/Kopalnia.cpp}]{../Struktury/Kopalnia.cpp}
 
 \subsection{Krasnal.cpp}
--> Opis
+Klasa $Krasnal$ opisuje pracownika. Przechowuje identyfikator, położenie domu, listę umiejętności, preferowany surowiec oraz informację, czy ostatecznie został przydzielony do pracy zgodnej z preferencją. Umiejętności krasnala są później porównywane z surowcem kopalni, aby określić, czy dana krawędź krasnal--kopalnia może istnieć w grafie przydziału pracy.
+\lstinputlisting[language=C++, caption={/Struktury/Krasnal.h}]{../Struktury/Krasnal.h}
 \lstinputlisting[language=C++, caption={/Struktury/Krasnal.cpp}]{../Struktury/Krasnal.cpp}
 
 \subsection{MinCostMaxFlow.cpp}
--> Opis
+Funkcja $min\_cost\_max\_flow()$ wyznacza przepływ o możliwie najmniejszym koszcie. W projekcie służy do przydzielania krasnali do kopalni. Jedna jednostka przepływu odpowiada jednemu przydzielonemu krasnalowi.
+
+Algorytm działa iteracyjnie. W każdej iteracji uruchamiany jest Bellman-Ford, który znajduje najtańszą dostępną ścieżkę od źródła do ujścia w grafie rezydualnym. Brane są pod uwagę tylko te krawędzie, dla których pozostała dodatnia przepustowość, czyli $capacity - flow > 0$. Dla każdego wierzchołka zapamiętywany jest poprzedni wierzchołek oraz indeks krawędzi, aby po znalezieniu ścieżki można było ją odtworzyć.
+
+Po znalezieniu ścieżki obliczane jest jej wąskie gardło, czyli maksymalny przepływ, który można nią jeszcze przesłać. Następnie przepływ jest dodawany na krawędziach właściwych i odejmowany na krawędziach odwrotnych. Krawędzie odwrotne z ujemnym kosztem pozwalają algorytmowi cofnąć część wcześniejszych decyzji, jeżeli późniejsza konfiguracja okaże się tańsza.
+
+Wynikiem jest struktura $MinCostMaxFlowResult$, która przechowuje łączną wartość przepływu oraz jego całkowity koszt.
+\lstinputlisting[language=C++, caption={/Struktury/MinCostMaxFlow.h}]{../Struktury/MinCostMaxFlow.h}
 \lstinputlisting[language=C++, caption={/Struktury/MinCostMaxFlow.cpp}]{../Struktury/MinCostMaxFlow.cpp}
 
 \subsection{SegmentTree.cpp}
@@ -200,7 +222,8 @@ Pozwala zmienić wartość pojedynczego elementu tablicy. Algorytm przechodzi od
 \lstinputlisting[language=C++, caption={/Struktury/SegmentTree.cpp}]{../Struktury/SegmentTree.cpp}
 
 \subsection{Straznik.cpp}
--> Opis
+Klasa $Straznik$ przechowuje identyfikator strażnika oraz jego głośność. Dane te są wykorzystywane przez $GuardCommandSolver$, który na podstawie głośności wybiera strażnika wydającego rozkaz na zadanym odcinku granicy.
+\lstinputlisting[language=C++, caption={/Struktury/Straznik.h}]{../Struktury/Straznik.h}
 \lstinputlisting[language=C++, caption={/Struktury/Straznik.cpp}]{../Struktury/Straznik.cpp}
 
 
@@ -292,8 +315,32 @@ Metoda $updateLoudness(index, newLoudness)$ zmienia głośność strażnika i ak
 \subsubsection{Kod źródłowy}
 \lstinputlisting[language=C++, caption={/Struktury/GuardCommandSolver/GuardCommandSolver.h}]{../Struktury/GuardCommandSolver/GuardCommandSolver.h}
 \lstinputlisting[language=C++, caption={/Struktury/GuardCommandSolver/GuardCommandSolver.cpp}]{../Struktury/GuardCommandSolver/GuardCommandSolver.cpp}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Integracja programu}
+
+\subsection{KingdomManager}
+Klasa $KingdomManager$ odpowiada za wykonanie głównego scenariusza programu. Najpierw ustala ścieżkę do pliku wejściowego, następnie uruchamia $DataLoader$, wykonuje przydział pracy, wyznacza aktywne kopalnie, liczy trasę patrolu i przygotowuje solver zapytań dla strażników. Dzięki temu plik $main.cpp$ pozostaje krótki i ogranicza się do utworzenia managera oraz wywołania metody $run()$.
+
+\subsubsection{processWorkAssignment()}
+Metoda wczytuje dane, tworzy $WorkAssignmentSolver$, uruchamia przydział pracy i wypisuje listę przydziałów, liczbę przydzielonych krasnali, liczbę przydziałów zgodnych z preferencjami oraz łączny dystans.
+
+\subsubsection{processBorderPatrol()}
+Metoda wybiera kopalnie, do których trafił przynajmniej jeden krasnal, a następnie przekazuje ich położenia do $BorderPatrolSolver$. Wynikiem jest otoczka wypukła aktywnych kopalni i długość trasy patrolu.
+
+\subsubsection{processGuardCommand()}
+Metoda tworzy $GuardCommandSolver$ na podstawie listy strażników i wykonuje przykładowe zapytania: dla całej trasy oraz dla przykładowego odcinka ataku.
+
+\subsubsection{Kod źródłowy}
+\lstinputlisting[language=C++, caption={/main.cpp}]{../main.cpp}
+\lstinputlisting[language=C++, caption={/Struktury/Manager/KingdomManager.h}]{../Struktury/Manager/KingdomManager.h}
+\lstinputlisting[language=C++, caption={/Struktury/Manager/KingdomManager.cpp}]{../Struktury/Manager/KingdomManager.cpp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Testy funkcji}
+
+\subsection{test\_kmp.cpp}
+Test funkcji $KMP$ sprawdza, czy algorytm znajduje wszystkie wystąpienia wzorca w tekście. Dla przykładowego tekstu oczekiwane są dwa dopasowania wzorca.
+\lstinputlisting[language=C++, caption={/Struktury/Funkcje/Testy/test\_kmp.cpp}]{../Struktury/Funkcje/Testy/test_kmp.cpp}
 
 \subsection{test\_det.cpp}
 Sprawdzamy poprawność działania funkcji $det()$ wywołując kilka razy tę funkcję i sprawdzania \\ czy wynik jej jest poprawny z oczekiwanym
@@ -323,6 +370,14 @@ Sprawdzamy poprawność działania funkcji $graham\_scan()$ wywołując kilka ra
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Testy struktur}
 
+\subsection{test\_data\_loader.cpp}
+Testy $DataLoader$ sprawdzają poprawne wczytywanie liczby obiektów, pełne dane pojedynczego krasnala, kopalni i strażnika, obsługę braku pliku oraz błędów formatu. Osobne przypadki testują ujemną liczbę umiejętności, ujemną pojemność kopalni i ujemną głośność strażnika.
+\lstinputlisting[language=C++, caption={/Parser/Testy/test\_data\_loader.cpp}]{../Parser/Testy/test_data_loader.cpp}
+
+\subsection{test\_min\_cost\_max\_flow.cpp}
+Testy $MinCostMaxFlow$ sprawdzają wybór najtańszej ścieżki dla przepływu równego $1$, poprawne wysłanie przepływu przez dwie ścieżki oraz sytuację, w której nie istnieje ścieżka ze źródła do ujścia.
+\lstinputlisting[language=C++, caption={/Struktury/Funkcje/Testy/test\_min\_cost\_max\_flow.cpp}]{../Struktury/Funkcje/Testy/test_min_cost_max_flow.cpp}
+
 \subsection{test\_point.cpp}
 Sprawdzamy poprawność struktury $Point$ poprzez sprawdzenie czy określone operatory \\ poprawnie działają i wykonują to co chcemy
 \lstinputlisting[language=C++, caption={/Struktury/Funkcje/Testy/test\_point.cpp}]{../Struktury/Funkcje/Testy/test\_point.cpp}
@@ -333,8 +388,8 @@ Sprawdzamy poprawność zbioru funkcji $Huffman$ poprzez sprawdzenie czy funkcja
 \lstinputlisting[language=C++, caption={/Struktury/Funkcje/Testy/test\_huffman.cpp}]{../Struktury/Funkcje/Testy/test\_huffman.cpp}
 \lstinputlisting[language=bash, caption={/Struktury/Funkcje/Testy/run\_test\_huffman.sh}]{../Struktury/Funkcje/Testy/run\_test\_huffman.sh}
 
-\subsection{test\_segment\_tree}
-Sprawdzamy poprawność struktury $SegmentTree$ poprzez sprawdzenie czy funkcje \\ $query$ oraz $update$ zwracją poprawne wyniki.
+\subsection{test\_segment\_tree.cpp}
+Testy drzewa przedziałowego sprawdzają zapytania o maksimum na różnych zakresach, obsługę wartości ujemnych, zapytanie jednoelementowe oraz aktualizacje zwiększające i zmniejszające maksimum.
 \lstinputlisting[language=C++, caption={/Struktury/Funkcje/Testy/test\_segment\_tree.cpp}]{../Struktury/Funkcje/Testy/test\_segment\_tree.cpp}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -346,19 +401,22 @@ Testy sprawdzają zachowanie $BorderPatrolSolver$ dla pustego zbioru kopalni, je
 Testy $WorkAssignmentSolver$ sprawdzają prosty przydział jeden do jednego, priorytet preferowanego surowca względem krótszej drogi, obsługę pojemności kopalni oraz sytuację, w której krasnal nie ma możliwego przydziału.
 \lstinputlisting[language=C++, caption={/Struktury/WorkAssignmentSolver/Testy/test\_work\_assignment\_solver.cpp}]{../Struktury/WorkAssignmentSolver/Testy/test_work_assignment_solver.cpp}
 
-\subsection{test\_segment\_tree.cpp}
-Testy drzewa przedziałowego sprawdzają zapytania o maksimum na różnych zakresach, obsługę wartości ujemnych, zapytanie jednoelementowe oraz aktualizacje zwiększające i zmniejszające maksimum.
-\lstinputlisting[language=C++, caption={/Struktury/Funkcje/Testy/test\_segment\_tree.cpp}]{../Struktury/Funkcje/Testy/test_segment_tree.cpp}
-
 \subsection{test\_guard\_command\_solver.cpp}
 Testy $GuardCommandSolver$ sprawdzają wybór najgłośniejszego strażnika na całym zakresie, na podzakresie, rozstrzyganie remisu przez wybór pierwszego strażnika, aktualizację głośności, błędny zakres oraz pustą listę strażników.
 \lstinputlisting[language=C++, caption={/Struktury/GuardCommandSolver/Testy/test\_guard\_command\_solver.cpp}]{../Struktury/GuardCommandSolver/Testy/test_guard_command_solver.cpp}
+
+\subsection{Uruchamianie testów}
+Główne testy projektu są zintegrowane z CMake i CTest. Po zbudowaniu projektu można uruchomić je poleceniem:
+\begin{lstlisting}[language=bash]
+ctest --test-dir cmake-build-debug --output-on-failure
+\end{lstlisting}
+Aktualnie w CTest znajdują się testy parsera danych, minimalnego kosztu maksymalnego przepływu, patrolu granicy, przydziału pracy oraz wyboru strażnika.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Prezentacja działania}
 
 \subsection{Główny przepływ programu}
-Główny program łączy przygotowane moduły w jeden przepływ danych:
+Główny program łączy przygotowane moduły w jeden przepływ danych. Za koordynację odpowiada $KingdomManager$, który kolejno:
 \begin{enumerate}
     \item $DataLoader$ wczytuje krasnale, kopalnie i strażników z pliku wejściowego.
     \item $WorkAssignmentSolver$ przydziela krasnale do kopalni za pomocą minimalnego kosztu \\ maksymalnego przepływu.
@@ -368,36 +426,33 @@ Główny program łączy przygotowane moduły w jeden przepływ danych:
 \end{enumerate}
 
 \subsection{Przykładowy wynik dla Dane/dane.txt}
-Dla przykładowych danych wejściowych program przydziela wszystkie trzy krasnale do kopalni zgodnych z ich preferencjami. Aktywne są kopalnie $10$, $11$ oraz $12$. Długość trasy patrolu po ich otoczce wynosi około $19.23$.
+Dla aktualnego pliku wejściowego program wczytuje większy zestaw danych: $30$ krasnali, $12$ kopalni oraz $20$ strażników. Następnie wypisuje przydział pracy, listę ewentualnych krasnali bez przydziału, aktywne kopalnie, punkty trasy patrolu oraz przykładowe zapytania dla obrony granicy.
 
 \begin{lstlisting}[caption={Przykładowe wyjście programu}]
-Krasnale: 3
-Kopalnie: 4
-Straznicy: 6
+Krasnale: 30
+Kopalnie: 12
+Straznicy: 20
 
 Przydzial pracy:
-Krasnal 1 -> kopalnia 10 (zloto), dystans: 2.83 [preferowany surowiec]
-Krasnal 2 -> kopalnia 11 (wegiel), dystans: 1.41 [preferowany surowiec]
-Krasnal 3 -> kopalnia 12 (miedz), dystans: 2.24 [preferowany surowiec]
+Krasnal ... -> kopalnia ... (...), dystans: ... [preferowany surowiec]
+...
 
-Przydzielono: 3/3
-Przydzialy preferowane: 3
-Laczny dystans: 6.48
+Przydzielono: .../30
+Przydzialy preferowane: ...
+Laczny dystans: ...
 
 Aktywne kopalnie:
-Kopalnia 10 (zloto) (2.00, 2.00), krasnale: 1
-Kopalnia 11 (wegiel) (9.00, 2.00), krasnale: 2
-Kopalnia 12 (miedz) (5.00, 7.00), krasnale: 3
+Kopalnia ... (...), krasnale: ...
+...
 
 Punkty trasy patrolu:
-(2.00, 2.00)
-(9.00, 2.00)
-(5.00, 7.00)
-Dlugosc trasy patrolu: 19.23
+(...)
+...
+Dlugosc trasy patrolu: ...
 
 Obrona granicy:
-Najglosniejszy na calej trasie: straznik 102 na pozycji 2, glosnosc: 18
-Odcinek ataku [1, 3]: straznik 102 na pozycji 2, glosnosc: 18
+Najglosniejszy na calej trasie: straznik ... na pozycji ..., glosnosc: ...
+Odcinek ataku [1, 3]: straznik ... na pozycji ..., glosnosc: ...
 \end{lstlisting}
 
 \end{document}
