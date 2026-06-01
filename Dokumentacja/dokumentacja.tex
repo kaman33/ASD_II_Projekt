@@ -130,7 +130,12 @@ Funkcja implementuje algorytm Grahama do wyznaczenia otoczki wypukłej \\ Pierw 
 \lstinputlisting[language=C++, caption={/Struktury/Funkcje/graham\_scan.cpp}]{../Struktury/Funkcje/graham_scan.cpp}
 
 \subsection{KMP()}
--> Opis
+Pierw wykonujemy funkcję buildPi na naszym wzoru, funkcja tworzy tablicę pi (prefiksów wzorca). Ta tablica przechowuje długość nadłuższego prefiksu będącego jednocześnie sufiksem. Funkcja KMP pierw wykonuje buildPi na wzorcu, następnie wykonuje algorytm przy tablicy pi. Algorytm porównuje kolejne znaki wzorca z kolejnymi znakami tekstu i śledzi długość aktualnego dopasowania.
+\begin{itemize}
+    \item Jeśli znaki są zgodne, dopasowanie jest rozszerzane.
+    \item Jeśli wystąpi niezgodność, algorytm wykorzystuje wcześniej obliczoną tablicę prefiksów, aby określić najdłuższy fragment wzorca, który nadal może pasować do już przeanalizowanej części tekstu.
+\end{itemize}
+Gdy zostanie dopasowany cały wzorzec, algorytm zapisuje pozycję jego wystąpienia i kontynuuje wyszukiwanie kolejnych wystąpień, również takich, które częściowo się nakładają.
 \lstinputlisting[language=C++, caption={/Struktury/Funkcje/KMP.cpp}]{../Struktury/Funkcje/KMP.cpp}
 
 
