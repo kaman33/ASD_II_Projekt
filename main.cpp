@@ -4,6 +4,8 @@ int main() {
     try {
         KingdomManager manager;
         manager.run();
+        manager.saveToFile();
+        manager.visualize();
     }
     catch (const std::exception& e) {
         std::cerr << "Blad: " << e.what() << '\n';

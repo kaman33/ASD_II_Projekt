@@ -113,12 +113,56 @@ void KingdomManager::processGuardCommand() {
     }
 }
 
-void KingdomManager::run() {
-    resolvePath();
-    processWorkAssignment();
-    processBorderPatrol();
-    processGuardCommand();
+void KingdomManager::saveToFile(const std::string& outputPath) {
+    std::ofstream out(outputPath);
+    
+    out << "Przydzial pracy:\n";
+    for (const WorkAssignment& assignment : result.assignments) {
+        out << "Krasnal " << assignment.dwarfId
+            << " -> kopalnia " << assignment.mineId
+            << " (" << assignment.resourceType << "), dystans: "
+            << std::fixed << std::setprecision(2) << assignment.distance;
+        if (assignment.preferredResource) out << " [preferowany surowiec]";
+        out << '\n';
+    }
+    out << "Laczny dystans: " << std::fixed << std::setprecision(2) << result.totalDistance << '\n';
 
+    out << "\nTrasa patrolu:\n";
+    for (const Point& point : patrolHull) {
+        out << point << '\n';
+    }
+    out << "Dlugosc trasy patrolu: " << std::fixed << std::setprecision(2) << patrolDistance << '\n';
+
+    out << "\nObrona granicy:\n";
+
+    if (guardSolver.size() == 0) {
+        out << "Brak straznikow.\n";
+    } else {
+        GuardCommandResult fullRange = guardSolver.findLoudestGuard(0, guardSolver.size() - 1);
+        if (fullRange.found) {
+            out << "Najglosniejszy na calej trasie: straznik "
+                << fullRange.guardId
+                << " na pozycji " << fullRange.index
+                << ", glosnosc: " << fullRange.loudness << '\n';
+        }
+
+        if (guardSolver.size() >= 3) {
+            const int left = 1;
+            const int right = std::min(3, guardSolver.size() - 1);
+            GuardCommandResult attackedRange = guardSolver.findLoudestGuard(left, right);
+            if (attackedRange.found) {
+                out << "Odcinek ataku [" << left << ", " << right << "]: straznik "
+                    << attackedRange.guardId
+                    << " na pozycji " << attackedRange.index
+                    << ", glosnosc: " << attackedRange.loudness << '\n';
+            }
+        }
+    }
+
+    out.close();
+}
+
+void KingdomManager::visualize() {
     Visualizer visualizer(
         solver.getDwarves(),
         solver.getMines(),
@@ -128,6 +172,13 @@ void KingdomManager::run() {
         patrolDistance, 
         guardSolver
     );
-
     visualizer.run(); 
+}
+
+void KingdomManager::run() {
+    resolvePath();
+    processWorkAssignment();
+    processBorderPatrol();
+    processGuardCommand();
+    saveToFile("output.txt");
 }

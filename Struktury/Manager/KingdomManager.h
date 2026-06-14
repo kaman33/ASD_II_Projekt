@@ -39,6 +39,8 @@ private:
 public:
     KingdomManager();
     void run();
+    void saveToFile(const std::string& outputPath = "output.txt");
+    void visualize();
 };
 
 #endif
