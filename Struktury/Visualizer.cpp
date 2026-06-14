@@ -4,6 +4,7 @@
 #include <sstream>
 #include <iomanip>
 #include <cstdint>
+#include <filesystem>
 
 static sf::Color hex(uint32_t c) {
     return sf::Color(
@@ -61,8 +62,11 @@ void Visualizer::loadAssets() {
         "C:/Windows/Fonts/segoeui.ttf"
     };
     for (const auto& fp : fontPaths) {
-        if (m_font.openFromFile(fp)) break;
+    if (std::filesystem::exists(fp)) {
+        m_font.openFromFile(fp);
+        break;
     }
+}
 
     m_hasDwarfTex = m_texDwarf.loadFromFile("Zasoby/dwarf.png");
     m_hasMineTex  = m_texMine.loadFromFile("Zasoby/mine.png");
