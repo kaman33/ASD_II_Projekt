@@ -3,6 +3,7 @@
 #include<iostream>
 #include<filesystem>
 #include<string>
+#include<sstream>
 #include<fstream>
 #include<unordered_map>
 namespace fs = std::filesystem;
