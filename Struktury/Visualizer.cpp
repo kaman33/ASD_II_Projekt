@@ -42,7 +42,7 @@ Visualizer::Visualizer(
       m_hull(patrolHull),
       m_patrolDist(patrolDistance),
       m_guardSolver(guardSolver),
-      m_window(sf::VideoMode(static_cast<unsigned>(WIN_W), static_cast<unsigned>(WIN_H)),
+      m_window(sf::VideoMode({static_cast<unsigned>(WIN_W), static_cast<unsigned>(WIN_H)}),
                "Krolestwo Krolewny Sniezki",
                sf::Style::Titlebar | sf::Style::Close)
 {
@@ -61,7 +61,7 @@ void Visualizer::loadAssets() {
         "C:/Windows/Fonts/segoeui.ttf"
     };
     for (const auto& fp : fontPaths) {
-        if (m_font.loadFromFile(fp)) break;
+        if (m_font.openFromFile(fp)) break;
     }
 
     m_hasDwarfTex = m_texDwarf.loadFromFile("Zasoby/dwarf.png");
@@ -87,7 +87,6 @@ void Visualizer::buildLayout() {
     float maxX = (float)*std::max_element(allX.begin(), allX.end());
     float maxY = (float)*std::max_element(allY.begin(), allY.end());
 
-    // Wymuś kwadratowy zakres — obie osie mają ten sam max
     float globalMax = std::max(maxX, maxY);
     maxX = globalMax;
     maxY = globalMax;
@@ -104,7 +103,6 @@ void Visualizer::buildLayout() {
     m_scaleX = scale;
     m_scaleY = scale;
 
-    // Zapisz zakres świata do rysowania siatki
     m_worldMaxX = globalMax;
     m_worldMaxY = globalMax;
 
@@ -116,7 +114,6 @@ void Visualizer::buildLayout() {
     for (const auto& k : m_dwarves)
         m_homePos.push_back(worldToScreen(k.getHomeX(), k.getHomeY()));
 
-    // Strażnicy wzdłuż otoczki
     m_guardPos.clear();
     int n = (int)m_guards.size();
     if (n == 0) return;
@@ -201,13 +198,13 @@ void Visualizer::buildButtons() {
         btn.setOutlineColor(sf::Color(100, 100, 160));
         btn.setOutlineThickness(2.f);
 
-        lbl.emplace(sf::String::fromUtf8(text.begin(), text.end()), m_font, 14u);
+        lbl.emplace(m_font, sf::String::fromUtf8(text.begin(), text.end()), 14u);
         lbl->setFillColor(sf::Color::White);
 
         sf::FloatRect bounds = lbl->getLocalBounds();
-        lbl->setOrigin(bounds.left + bounds.width / 2.f,
-                       bounds.top + bounds.height / 2.f);
-        lbl->setPosition(x + btnW / 2.f, btnY + btnH / 2.f);
+        lbl->setOrigin({bounds.position.x + bounds.size.x / 2.f,
+                        bounds.position.y + bounds.size.y / 2.f});
+        lbl->setPosition({x + btnW / 2.f, btnY + btnH / 2.f});
     };
 
     makeBtn(m_btnPhase1, m_lblPhase1, 5.f,                "1. Przydzielanie pracy");
@@ -218,10 +215,9 @@ void Visualizer::buildButtons() {
 void Visualizer::run() {
     m_clock.restart();
     while (m_window.isOpen()) {
-        sf::Event e;
-        while (m_window.pollEvent(e)) {
-            if (e.type == sf::Event::Closed) m_window.close();
-            handleEvents(e);
+        while (const auto e = m_window.pollEvent()) {
+            if (e->is<sf::Event::Closed>()) m_window.close();
+            handleEvents(*e);
         }
         float dt = m_clock.restart().asSeconds();
         update(dt);
@@ -232,10 +228,10 @@ void Visualizer::run() {
 }
 
 void Visualizer::handleEvents(const sf::Event& e) {
-    if (e.type == sf::Event::MouseButtonPressed) {
-        if (e.mouseButton.button == sf::Mouse::Left) {
-            sf::Vector2f mp(static_cast<float>(e.mouseButton.x),
-                            static_cast<float>(e.mouseButton.y));
+    if (const auto* mb = e.getIf<sf::Event::MouseButtonPressed>()) {
+        if (mb->button == sf::Mouse::Button::Left) {
+            sf::Vector2f mp(static_cast<float>(mb->position.x),
+                            static_cast<float>(mb->position.y));
             if (m_btnPhase1.getGlobalBounds().contains(mp)) {
                 m_phase = Phase::WORK_ASSIGNMENT; buildDwarfAnims(); m_animDone = false; m_popup.visible = false; m_panelScrollY = 0.f; return;
             }
@@ -251,17 +247,17 @@ void Visualizer::handleEvents(const sf::Event& e) {
             }
         }
     }
-    if (e.type == sf::Event::MouseWheelScrolled) {
-        if (e.mouseWheelScroll.x >= MAP_W) {
+    if (const auto* mw = e.getIf<sf::Event::MouseWheelScrolled>()) {
+        if (mw->position.x >= MAP_W) {
             const float visiblePanelHeight = WIN_H - 20.f;
             const float maxScroll = std::max(0.f, calculateSidePanelContentHeight() - visiblePanelHeight);
-            m_panelScrollY -= e.mouseWheelScroll.delta * 24.f;
+            m_panelScrollY -= mw->delta * 24.f;
             m_panelScrollY = std::max(0.f, std::min(m_panelScrollY, maxScroll));
         }
     }
-    if (e.type == sf::Event::KeyPressed) {
-        if (e.key.code == sf::Keyboard::Escape) m_popup.visible = false;
-        if (e.key.code == sf::Keyboard::Space && m_phase == Phase::WORK_ASSIGNMENT) {
+    if (const auto* kp = e.getIf<sf::Event::KeyPressed>()) {
+        if (kp->code == sf::Keyboard::Key::Escape) m_popup.visible = false;
+        if (kp->code == sf::Keyboard::Key::Space && m_phase == Phase::WORK_ASSIGNMENT) {
             buildDwarfAnims(); m_animDone = false;
         }
     }
@@ -405,16 +401,13 @@ void Visualizer::drawGrid() {
     float stepX = niceStep(worldW);
     float stepY = niceStep(worldH);
 
-    // Pierwsza linia siatki
     float startX = std::ceil(m_minX / stepX) * stepX;
     float startY = std::ceil(m_minY / stepY) * stepY;
 
-    // Rysuj linie pionowe
     for (float wx = startX; wx <= m_worldMaxX + stepX * 0.5f; wx += stepX) {
         sf::Vector2f top    = worldToScreen(wx, m_worldMaxY + stepY);
         sf::Vector2f bottom = worldToScreen(wx, m_minY - stepY);
 
-        // Ogranicz do obszaru mapy
         top.y    = std::max(top.y,    MARGIN * 0.3f);
         bottom.y = std::min(bottom.y, MAP_H - MARGIN * 0.3f);
 
@@ -424,19 +417,17 @@ void Visualizer::drawGrid() {
         };
         m_window.draw(line, 2, sf::PrimitiveType::Lines);
 
-        // Etykieta
         std::ostringstream oss;
         oss << std::fixed << std::setprecision(0) << wx;
-        sf::Text label(oss.str(), m_font, 10u);
+        sf::Text label(m_font, oss.str(), 10u);
         label.setFillColor(COL_GRID_LABEL);
         sf::FloatRect lb = label.getLocalBounds();
-        label.setOrigin(lb.left + lb.width / 2.f, lb.top);
+        label.setOrigin({lb.position.x + lb.size.x / 2.f, lb.position.y});
         sf::Vector2f labelPos = worldToScreen(wx, m_minY);
-        label.setPosition(labelPos.x, MAP_H - MARGIN + 4.f);
+        label.setPosition({labelPos.x, MAP_H - MARGIN + 4.f});
         m_window.draw(label);
     }
 
-    // Rysuj linie poziome
     for (float wy = startY; wy <= m_worldMaxY + stepY * 0.5f; wy += stepY) {
         sf::Vector2f left  = worldToScreen(m_minX - stepX, wy);
         sf::Vector2f right = worldToScreen(m_worldMaxX + stepX, wy);
@@ -452,12 +443,12 @@ void Visualizer::drawGrid() {
 
         std::ostringstream oss;
         oss << std::fixed << std::setprecision(0) << wy;
-        sf::Text label(oss.str(), m_font, 10u);
+        sf::Text label(m_font, oss.str(), 10u);
         label.setFillColor(COL_GRID_LABEL);
         sf::FloatRect lb = label.getLocalBounds();
-        label.setOrigin(lb.left + lb.width, lb.top + lb.height / 2.f);
+        label.setOrigin({lb.position.x + lb.size.x, lb.position.y + lb.size.y / 2.f});
         sf::Vector2f labelPos = worldToScreen(m_minX, wy);
-        label.setPosition(MARGIN - 4.f, labelPos.y);
+        label.setPosition({MARGIN - 4.f, labelPos.y});
         m_window.draw(label);
     }
 
@@ -578,7 +569,7 @@ void Visualizer::drawThickLine(sf::Vector2f a, sf::Vector2f b,
     rect.setSize({len, thickness});
     rect.setOrigin({0.f, thickness / 2.f});
     rect.setPosition(a);
-    rect.setRotation(std::atan2(diff.y, diff.x) * 180.f / 3.14159f);
+    rect.setRotation(sf::radians(std::atan2(diff.y, diff.x)));
     rect.setFillColor(col);
     m_window.draw(rect);
 }
@@ -766,7 +757,6 @@ void Visualizer::drawGuards() {
         sf::Color c = ((int)i == m_loudestIdx) ? COL_LOUDEST : COL_GUARD;
         sf::Vector2f pos = m_guardPos[i];
 
-        //  --- Kółko ---
         if (m_hasGuardTex) {
             sf::Sprite spr(m_texGuard);
             auto ts = m_texGuard.getSize();
@@ -785,25 +775,23 @@ void Visualizer::drawGuards() {
             m_window.draw(ci);
         }
 
-        //  --- ID strażnika ---
         {
             std::string idStr = "#" + std::to_string(m_guards[i].getId());
-            sf::Text idLabel(idStr, m_font, 17u);
+            sf::Text idLabel(m_font, idStr, 17u);
             idLabel.setFillColor(sf::Color(220, 220, 255));
             sf::FloatRect lb = idLabel.getLocalBounds();
-            idLabel.setOrigin(lb.left + lb.width / 2.f, lb.top + lb.height);
-            idLabel.setPosition(pos.x, pos.y - GUARD_R - 2.f);
+            idLabel.setOrigin({lb.position.x + lb.size.x / 2.f, lb.position.y + lb.size.y});
+            idLabel.setPosition({pos.x, pos.y - GUARD_R - 2.f});
             m_window.draw(idLabel);
         }
 
-        //  --- głośność ---
         {
             std::string loudStr = std::to_string(m_guards[i].getLoudness());
-            sf::Text loudLabel(loudStr, m_font, 17u);
+            sf::Text loudLabel(m_font, loudStr, 17u);
             loudLabel.setFillColor(c);
             sf::FloatRect lb = loudLabel.getLocalBounds();
-            loudLabel.setOrigin(lb.left + lb.width / 2.f, lb.top);
-            loudLabel.setPosition(pos.x, pos.y + GUARD_R + 2.f);
+            loudLabel.setOrigin({lb.position.x + lb.size.x / 2.f, lb.position.y});
+            loudLabel.setPosition({pos.x, pos.y + GUARD_R + 2.f});
             m_window.draw(loudLabel);
         }
     }
@@ -831,9 +819,9 @@ void Visualizer::drawDwarfAnims() {
             m_window.draw(ci);
         }
 
-        sf::Text lbl(std::to_string(da.dwarfId), m_font, 11u);
+        sf::Text lbl(m_font, std::to_string(da.dwarfId), 11u);
         lbl.setFillColor(sf::Color::White);
-        lbl.setPosition(da.pos.x + DWARF_R + 2.f, da.pos.y - 8.f);
+        lbl.setPosition({da.pos.x + DWARF_R + 2.f, da.pos.y - 8.f});
         m_window.draw(lbl);
     }
 }
@@ -850,7 +838,6 @@ void Visualizer::drawNode(sf::Vector2f pos, float r, sf::Color fill,
         spr.setPosition(pos);
         m_window.draw(spr);
 
-        // Obramowanie kółka na sprite
         sf::CircleShape outline(r);
         outline.setOrigin({r, r});
         outline.setPosition(pos);
@@ -868,11 +855,11 @@ void Visualizer::drawNode(sf::Vector2f pos, float r, sf::Color fill,
         m_window.draw(ci);
     }
 
-    sf::Text t(sf::String::fromUtf8(label.begin(), label.end()), m_font, 12u);
+    sf::Text t(m_font, sf::String::fromUtf8(label.begin(), label.end()), 12u);
     t.setFillColor(sf::Color::White);
     sf::FloatRect tb = t.getLocalBounds();
-    t.setOrigin(tb.left + tb.width / 2.f, tb.top);
-    t.setPosition(pos.x, pos.y + r + 3.f);
+    t.setOrigin({tb.position.x + tb.size.x / 2.f, tb.position.y});
+    t.setPosition({pos.x, pos.y + r + 3.f});
     m_window.draw(t);
 }
 
@@ -1031,10 +1018,10 @@ void Visualizer::drawPopup() {
     m_window.draw(bg);
 
     for (size_t i = 0; i < m_popup.lines.size(); i++) {
-        sf::Text t(sf::String::fromUtf8(
-            m_popup.lines[i].begin(), m_popup.lines[i].end()), m_font, 13u);
+        sf::Text t(m_font, sf::String::fromUtf8(
+            m_popup.lines[i].begin(), m_popup.lines[i].end()), 13u);
         t.setFillColor(sf::Color::White);
-        t.setPosition(px + 6.f, py + 6.f + static_cast<float>(i) * 18.f);
+        t.setPosition({px + 6.f, py + 6.f + static_cast<float>(i) * 18.f});
         m_window.draw(t);
     }
 }
@@ -1101,7 +1088,7 @@ void Visualizer::onClickGuardRange(sf::Vector2f mp) {
 }
 
 sf::Text Visualizer::makeText(const std::string& str, unsigned size, sf::Color col) const {
-    sf::Text t(sf::String::fromUtf8(str.begin(), str.end()), m_font, size);
+    sf::Text t(m_font, sf::String::fromUtf8(str.begin(), str.end()), size);
     t.setFillColor(col);
     return t;
 }
