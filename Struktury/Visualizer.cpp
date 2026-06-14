@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <sstream>
 #include <iomanip>
+#include <cstdint>
 
 static sf::Color hex(uint32_t c) {
     return sf::Color(
@@ -17,12 +18,13 @@ static const sf::Color COL_PANEL     = hex(0x16213e);
 static const sf::Color COL_MINE      = hex(0xe4a832);
 static const sf::Color COL_HOME      = hex(0x4ecdc4);
 static const sf::Color COL_GUARD     = hex(0xe84393);
-static const sf::Color COL_EDGE      = hex(0xa70dd1);
+static const sf::Color COL_EDGE      = hex(0x6c757d);
 static const sf::Color COL_PREF_EDGE = hex(0x00d4aa);
 static const sf::Color COL_HULL      = hex(0xff6b6b);
 static const sf::Color COL_LOUDEST   = hex(0xff4444);
 static const sf::Color COL_GRID      = sf::Color(50, 55, 80, 180);
 static const sf::Color COL_GRID_LABEL= sf::Color(120, 130, 160, 220);
+static const float ATTACK_RESOLVE_TIME = 2.0f;
 
 Visualizer::Visualizer(
     const std::vector<Krasnal>&      dwarves,
@@ -40,9 +42,9 @@ Visualizer::Visualizer(
       m_hull(patrolHull),
       m_patrolDist(patrolDistance),
       m_guardSolver(guardSolver),
-      m_window(sf::VideoMode({(unsigned)WIN_W, (unsigned)WIN_H}),
-         "Krolestwo Krolewny Sniezki",
-         sf::Style::Titlebar | sf::Style::Close)
+      m_window(sf::VideoMode(static_cast<unsigned>(WIN_W), static_cast<unsigned>(WIN_H)),
+               "Krolestwo Krolewny Sniezki",
+               sf::Style::Titlebar | sf::Style::Close)
 {
     m_window.setFramerateLimit(60);
     loadAssets();
@@ -53,12 +55,13 @@ Visualizer::Visualizer(
 
 void Visualizer::loadAssets() {
     const std::vector<std::string> fontPaths = {
+        "assets/font.ttf",
         "C:/Windows/Fonts/arial.ttf",
         "C:/Windows/Fonts/calibri.ttf",
         "C:/Windows/Fonts/segoeui.ttf"
     };
     for (const auto& fp : fontPaths) {
-        if (m_font.openFromFile(fp)) break;
+        if (m_font.loadFromFile(fp)) break;
     }
 
     m_hasDwarfTex = m_texDwarf.loadFromFile("Zasoby/dwarf.png");
@@ -198,18 +201,13 @@ void Visualizer::buildButtons() {
         btn.setOutlineColor(sf::Color(100, 100, 160));
         btn.setOutlineThickness(2.f);
 
-        lbl.emplace(m_font, sf::String::fromUtf8(text.begin(), text.end()), 14u);
+        lbl.emplace(sf::String::fromUtf8(text.begin(), text.end()), m_font, 14u);
         lbl->setFillColor(sf::Color::White);
 
         sf::FloatRect bounds = lbl->getLocalBounds();
-        lbl->setOrigin({
-            bounds.position.x + bounds.size.x / 2.f,
-            bounds.position.y + bounds.size.y / 2.f
-        });
-        lbl->setPosition({
-            x + btnW / 2.f,
-            btnY + btnH / 2.f
-        });
+        lbl->setOrigin(bounds.left + bounds.width / 2.f,
+                       bounds.top + bounds.height / 2.f);
+        lbl->setPosition(x + btnW / 2.f, btnY + btnH / 2.f);
     };
 
     makeBtn(m_btnPhase1, m_lblPhase1, 5.f,                "1. Przydzielanie pracy");
@@ -220,9 +218,10 @@ void Visualizer::buildButtons() {
 void Visualizer::run() {
     m_clock.restart();
     while (m_window.isOpen()) {
-        while (const std::optional<sf::Event> e = m_window.pollEvent()) {
-            if (e->is<sf::Event::Closed>()) m_window.close();
-            handleEvents(*e);
+        sf::Event e;
+        while (m_window.pollEvent(e)) {
+            if (e.type == sf::Event::Closed) m_window.close();
+            handleEvents(e);
         }
         float dt = m_clock.restart().asSeconds();
         update(dt);
@@ -233,17 +232,18 @@ void Visualizer::run() {
 }
 
 void Visualizer::handleEvents(const sf::Event& e) {
-    if (const auto* mb = e.getIf<sf::Event::MouseButtonPressed>()) {
-        if (mb->button == sf::Mouse::Button::Left) {
-            sf::Vector2f mp((float)mb->position.x, (float)mb->position.y);
+    if (e.type == sf::Event::MouseButtonPressed) {
+        if (e.mouseButton.button == sf::Mouse::Left) {
+            sf::Vector2f mp(static_cast<float>(e.mouseButton.x),
+                            static_cast<float>(e.mouseButton.y));
             if (m_btnPhase1.getGlobalBounds().contains(mp)) {
-                m_phase = Phase::WORK_ASSIGNMENT; buildDwarfAnims(); m_animDone = false; m_popup.visible = false; return;
+                m_phase = Phase::WORK_ASSIGNMENT; buildDwarfAnims(); m_animDone = false; m_popup.visible = false; m_panelScrollY = 0.f; return;
             }
             if (m_btnPhase2.getGlobalBounds().contains(mp)) {
-                m_phase = Phase::BORDER_PATROL; m_popup.visible = false; return;
+                m_phase = Phase::BORDER_PATROL; m_popup.visible = false; m_panelScrollY = 0.f; return;
             }
             if (m_btnPhase3.getGlobalBounds().contains(mp)) {
-                m_phase = Phase::GUARD_COMMAND; m_guardRangeL = m_guardRangeR = -1; m_loudestIdx = -1; m_guardQueryDone = false; m_popup.visible = false; return;
+                m_phase = Phase::GUARD_COMMAND; m_guardRangeL = m_guardRangeR = -1; m_loudestIdx = -1; m_guardQueryDone = false; m_attackTimer = 0.f; m_attackResolved = false; m_popup.visible = false; m_panelScrollY = 0.f; return;
             }
             if (mp.x < MAP_W && mp.y < MAP_H) {
                 if (m_phase == Phase::GUARD_COMMAND) onClickGuardRange(mp);
@@ -251,28 +251,33 @@ void Visualizer::handleEvents(const sf::Event& e) {
             }
         }
     }
-
-    if (const auto* mw = e.getIf<sf::Event::MouseWheelScrolled>()) {
-        if (mw->position.x >= MAP_W) {
-            m_panelScrollY -= mw->delta * 20.f;
-            if (m_panelScrollY < 0.f) m_panelScrollY = 0.f;
+    if (e.type == sf::Event::MouseWheelScrolled) {
+        if (e.mouseWheelScroll.x >= MAP_W) {
+            const float visiblePanelHeight = WIN_H - 20.f;
+            const float maxScroll = std::max(0.f, calculateSidePanelContentHeight() - visiblePanelHeight);
+            m_panelScrollY -= e.mouseWheelScroll.delta * 24.f;
+            m_panelScrollY = std::max(0.f, std::min(m_panelScrollY, maxScroll));
         }
     }
-
-    if (const auto* kp = e.getIf<sf::Event::KeyPressed>()) {
-        if (kp->code == sf::Keyboard::Key::Escape) m_popup.visible = false;
-        if (kp->code == sf::Keyboard::Key::Space) {
-            if (m_phase == Phase::WORK_ASSIGNMENT) {
-                buildDwarfAnims(); m_animDone = false;
-            } else if (m_phase == Phase::GUARD_COMMAND) {
-                m_guardRangeL = -1; m_guardRangeR = -1;
-                m_loudestIdx = -1; m_guardQueryDone = false;
-            }
+    if (e.type == sf::Event::KeyPressed) {
+        if (e.key.code == sf::Keyboard::Escape) m_popup.visible = false;
+        if (e.key.code == sf::Keyboard::Space && m_phase == Phase::WORK_ASSIGNMENT) {
+            buildDwarfAnims(); m_animDone = false;
         }
     }
 }
 
 void Visualizer::update(float dt) {
+    if (m_phase == Phase::GUARD_COMMAND) {
+        if (m_guardQueryDone && !m_attackResolved) {
+            m_attackTimer += dt;
+            if (m_attackTimer >= ATTACK_RESOLVE_TIME) {
+                m_attackResolved = true;
+            }
+        }
+        return;
+    }
+
     if (m_phase != Phase::WORK_ASSIGNMENT || m_animDone) return;
     bool allDone = true;
     for (auto& da : m_dwarfAnims) {
@@ -310,6 +315,74 @@ void Visualizer::render() {
     drawSidePanel();
     drawButtons();
     drawPopup();
+}
+
+float Visualizer::calculateSidePanelContentHeight() const {
+    float y = 10.f;
+    auto line = [&](int count = 1) {
+        y += 20.f * static_cast<float>(count);
+    };
+    auto sep = [&]() {
+        y += 6.f;
+    };
+
+    switch (m_phase) {
+    case Phase::WORK_ASSIGNMENT:
+        line();
+        sep();
+        line(2);
+        sep();
+        line(3);
+        sep();
+        line(4);
+        sep();
+        line();
+        line(static_cast<int>(m_assignment.assignments.size()) * 2);
+        if (!m_assignment.unassignedDwarfIds.empty()) {
+            sep();
+            line();
+            line(static_cast<int>(m_assignment.unassignedDwarfIds.size()));
+        }
+        break;
+
+    case Phase::BORDER_PATROL:
+        line();
+        sep();
+        line(2);
+        sep();
+        line();
+        line(static_cast<int>(m_hull.size()));
+        break;
+
+    case Phase::GUARD_COMMAND:
+        line();
+        sep();
+        line();
+        sep();
+        if (m_guardRangeL >= 0) {
+            line();
+            if (m_guardRangeR >= 0) {
+                if (m_attackResolved) {
+                    line();
+                } else {
+                    line(2);
+                }
+            }
+            if (m_guardQueryDone && m_loudestIdx >= 0) {
+                line(4);
+                sep();
+                line(4);
+            }
+        } else {
+            line(2);
+        }
+        sep();
+        line();
+        line(static_cast<int>(m_guards.size()));
+        break;
+    }
+
+    return y + 10.f;
 }
 
 void Visualizer::drawGrid() {
@@ -354,12 +427,12 @@ void Visualizer::drawGrid() {
         // Etykieta
         std::ostringstream oss;
         oss << std::fixed << std::setprecision(0) << wx;
-        sf::Text label(m_font, oss.str(), 10u);
+        sf::Text label(oss.str(), m_font, 10u);
         label.setFillColor(COL_GRID_LABEL);
         sf::FloatRect lb = label.getLocalBounds();
-        label.setOrigin({lb.size.x / 2.f, 0.f});
+        label.setOrigin(lb.left + lb.width / 2.f, lb.top);
         sf::Vector2f labelPos = worldToScreen(wx, m_minY);
-        label.setPosition({labelPos.x, MAP_H - MARGIN + 4.f});
+        label.setPosition(labelPos.x, MAP_H - MARGIN + 4.f);
         m_window.draw(label);
     }
 
@@ -379,12 +452,12 @@ void Visualizer::drawGrid() {
 
         std::ostringstream oss;
         oss << std::fixed << std::setprecision(0) << wy;
-        sf::Text label(m_font, oss.str(), 10u);
+        sf::Text label(oss.str(), m_font, 10u);
         label.setFillColor(COL_GRID_LABEL);
         sf::FloatRect lb = label.getLocalBounds();
-        label.setOrigin({lb.size.x, lb.size.y / 2.f});
+        label.setOrigin(lb.left + lb.width, lb.top + lb.height / 2.f);
         sf::Vector2f labelPos = worldToScreen(m_minX, wy);
-        label.setPosition({MARGIN - 4.f, labelPos.y});
+        label.setPosition(MARGIN - 4.f, labelPos.y);
         m_window.draw(label);
     }
 
@@ -459,43 +532,38 @@ void Visualizer::drawPhase2() {
 void Visualizer::drawPhase3() {
     drawHullEdges();
     drawMines();
+    drawBorderAttack();
     drawGuards();
 
-    for (int i = 0; i < (int)m_guardPos.size(); i++) {
-        bool isL = (i == m_guardRangeL);
-        bool isR = (m_guardRangeR >= 0 && i == m_guardRangeR);
-        bool inRange = (m_guardRangeL >= 0 && m_guardRangeR >= 0 &&
-                        i >= m_guardRangeL && i <= m_guardRangeR);
-
-        if (!isL && !isR && !inRange) continue;
-
-        sf::Color c;
-        if (i == m_loudestIdx)   c = COL_LOUDEST;
-        else if (isL || isR)     c = hex(0xffaa00);
-        else                     c = hex(0xffaa0066);  // półprzezroczysty dla środka
-
-        float s = GUARD_R + 8.f;
-        sf::RectangleShape sq({s * 2.f, s * 2.f});
-        sq.setOrigin({s, s});
-        sq.setPosition(m_guardPos[i]);
-        sq.setFillColor(sf::Color::Transparent);
-        sq.setOutlineColor(c);
-        sq.setOutlineThickness(2.5f);
-        m_window.draw(sq);
+    if (m_guardRangeL >= 0 && m_guardRangeR < 0 && m_guardRangeL < (int)m_guardPos.size()) {
+        sf::CircleShape ci(GUARD_R + 9.f);
+        ci.setOrigin({GUARD_R + 9.f, GUARD_R + 9.f});
+        ci.setPosition(m_guardPos[m_guardRangeL]);
+        ci.setFillColor(sf::Color::Transparent);
+        ci.setOutlineColor(hex(0xffaa00));
+        ci.setOutlineThickness(3.f);
+        m_window.draw(ci);
     }
 
-    if (m_guardRangeL >= 0 && m_guardRangeR >= 0) {
-        for (int i = m_guardRangeL; i < m_guardRangeR; i++) {
-            drawThickLine(m_guardPos[i], m_guardPos[i+1], hex(0xffaa0088), 2.f);
+    if (m_guardRangeL >= 0 && m_guardRangeR >= m_guardRangeL) {
+        for (int i = m_guardRangeL; i <= m_guardRangeR && i < (int)m_guardPos.size(); i++) {
+            sf::Color c = (i == m_loudestIdx) ? COL_LOUDEST : hex(0xffaa00);
+            sf::CircleShape ci(GUARD_R + 7.f);
+            ci.setOrigin({GUARD_R + 7.f, GUARD_R + 7.f});
+            ci.setPosition(m_guardPos[i]);
+            ci.setFillColor(sf::Color::Transparent);
+            ci.setOutlineColor(c);
+            ci.setOutlineThickness(3.f);
+            m_window.draw(ci);
         }
     }
 
     if (m_guardQueryDone && m_loudestIdx >= 0) {
         sf::Vector2f gp = m_guardPos[m_loudestIdx];
-        drawTextAt("NAJGLOSNIEJSZY", gp.x - 55, gp.y - 32, 13, COL_LOUDEST);
+        drawTextAt("NAJGLOSNIEJSZY!", gp.x - 55, gp.y - 32, 13, COL_LOUDEST);
     }
 
-    drawTextAt("KLIKNIJ straznika L, potem R  |  SPACJA = reset",
+    drawTextAt("KLIKNIJ 2 straznikow aby wybrac atakowany odcinek",
                10, MAP_H - 22, 13, hex(0x888888));
 }
 
@@ -510,7 +578,7 @@ void Visualizer::drawThickLine(sf::Vector2f a, sf::Vector2f b,
     rect.setSize({len, thickness});
     rect.setOrigin({0.f, thickness / 2.f});
     rect.setPosition(a);
-    rect.setRotation(sf::degrees(std::atan2(diff.y, diff.x) * 180.f / 3.14159f));
+    rect.setRotation(std::atan2(diff.y, diff.x) * 180.f / 3.14159f);
     rect.setFillColor(col);
     m_window.draw(rect);
 }
@@ -522,6 +590,157 @@ void Visualizer::drawHullEdges() {
         sf::Vector2f b = worldToScreen(m_hull[(i + 1) % m_hull.size()]);
         drawThickLine(a, b, COL_HULL, 3.f);
     }
+}
+
+void Visualizer::drawBorderAttack() {
+    if (m_guardRangeL < 0 || m_guardRangeR < m_guardRangeL || m_guardPos.empty()) {
+        return;
+    }
+
+    const int left = std::max(0, m_guardRangeL);
+    const int right = std::min(m_guardRangeR, static_cast<int>(m_guardPos.size()) - 1);
+    if (left > right) {
+        return;
+    }
+
+    const int middle = left + (right - left) / 2;
+    sf::Vector2f center = m_guardPos[middle];
+    if ((right - left) % 2 == 1 && middle + 1 <= right) {
+        center.x = (m_guardPos[middle].x + m_guardPos[middle + 1].x) / 2.f;
+        center.y = (m_guardPos[middle].y + m_guardPos[middle + 1].y) / 2.f;
+    }
+
+    sf::Vector2f borderCenter(0.f, 0.f);
+    int borderPointCount = 0;
+    if (!m_hull.empty()) {
+        for (const Point& point : m_hull) {
+            borderCenter += worldToScreen(point);
+            borderPointCount++;
+        }
+    }
+    else {
+        for (const sf::Vector2f& guardPos : m_guardPos) {
+            borderCenter += guardPos;
+            borderPointCount++;
+        }
+    }
+
+    if (borderPointCount > 0) {
+        borderCenter.x /= static_cast<float>(borderPointCount);
+        borderCenter.y /= static_cast<float>(borderPointCount);
+    }
+    else {
+        borderCenter = {MAP_W / 2.f, MAP_H / 2.f};
+    }
+
+    sf::Vector2f outward = center - borderCenter;
+    float length = std::sqrt(outward.x * outward.x + outward.y * outward.y);
+    if (length < 0.01f) {
+        outward = {0.f, -1.f};
+        length = 1.f;
+    }
+    outward /= length;
+
+    sf::Vector2f tangent(-outward.y, outward.x);
+    sf::Vector2f labelPos = center + outward * 48.f;
+    if (m_attackResolved) {
+        for (int i = left; i <= right; i++) {
+            sf::CircleShape zone(GUARD_R + 12.f);
+            zone.setOrigin({GUARD_R + 12.f, GUARD_R + 12.f});
+            zone.setPosition(m_guardPos[i]);
+            zone.setFillColor(sf::Color(20, 210, 135, 35));
+            zone.setOutlineColor(sf::Color(20, 210, 135, 140));
+            zone.setOutlineThickness(2.f);
+            m_window.draw(zone);
+        }
+
+        for (int i = left; i < right; i++) {
+            drawThickLine(m_guardPos[i], m_guardPos[i + 1], sf::Color(20, 210, 135, 120), 7.f);
+        }
+
+        sf::CircleShape burst(16.f);
+        burst.setOrigin({16.f, 16.f});
+        burst.setPosition(center);
+        burst.setFillColor(sf::Color(20, 210, 135, 55));
+        burst.setOutlineColor(sf::Color(170, 255, 220, 180));
+        burst.setOutlineThickness(2.f);
+        m_window.draw(burst);
+
+        drawTextAt("ODPARTO", labelPos.x - 34.f, labelPos.y - 8.f, 14, sf::Color(80, 255, 180));
+        return;
+    }
+
+    const float volleyProgress = std::min(1.f, m_attackTimer / 1.05f);
+    const float attackFade = std::max(0.25f, 1.f - std::max(0.f, m_attackTimer - 1.0f) / 1.0f);
+    const std::uint8_t attackAlpha = static_cast<std::uint8_t>(120.f * attackFade);
+
+    for (int i = left; i <= right; i++) {
+        sf::CircleShape zone(GUARD_R + 14.f);
+        zone.setOrigin({GUARD_R + 14.f, GUARD_R + 14.f});
+        zone.setPosition(m_guardPos[i]);
+        zone.setFillColor(sf::Color(255, 60, 40, static_cast<std::uint8_t>(45.f * attackFade)));
+        zone.setOutlineColor(sf::Color(255, 60, 40, attackAlpha));
+        zone.setOutlineThickness(2.f);
+        m_window.draw(zone);
+    }
+
+    for (int i = left; i < right; i++) {
+        drawThickLine(m_guardPos[i], m_guardPos[i + 1], sf::Color(255, 60, 40, attackAlpha), 9.f);
+    }
+
+    for (int i = 0; i < 3; i++) {
+        const float offset = static_cast<float>(i - 1) * 26.f;
+        sf::Vector2f target = center + tangent * offset;
+        sf::Vector2f targetOutward = target - borderCenter;
+        float targetLength = std::sqrt(targetOutward.x * targetOutward.x +
+                                       targetOutward.y * targetOutward.y);
+        if (targetLength < 0.01f) {
+            targetOutward = outward;
+        }
+        else {
+            targetOutward /= targetLength;
+        }
+
+        sf::Vector2f start = target + targetOutward * (78.f + static_cast<float>(i) * 12.f);
+
+        drawThickLine(start, target, sf::Color(255, 90, 45, static_cast<std::uint8_t>(190.f * attackFade)), 3.f);
+
+        sf::CircleShape marker(5.f);
+        marker.setOrigin({5.f, 5.f});
+        marker.setPosition(target);
+        marker.setFillColor(sf::Color(255, 120, 55, static_cast<std::uint8_t>(255.f * attackFade)));
+        marker.setOutlineColor(sf::Color(255, 220, 180, static_cast<std::uint8_t>(220.f * attackFade)));
+        marker.setOutlineThickness(1.f);
+        m_window.draw(marker);
+    }
+
+    for (int i = left; i <= right; i++) {
+        sf::Vector2f guard = m_guardPos[i];
+        sf::Vector2f target = center + tangent * (static_cast<float>((i - left) % 5) - 2.f) * 9.f;
+        sf::Vector2f shotEnd = guard + (target - guard) * volleyProgress;
+        std::uint8_t shotAlpha = static_cast<std::uint8_t>(230.f * std::max(0.35f, volleyProgress));
+
+        drawThickLine(guard, shotEnd, sf::Color(255, 210, 70, shotAlpha), 2.2f);
+
+        sf::CircleShape arrowHead(3.5f);
+        arrowHead.setOrigin({3.5f, 3.5f});
+        arrowHead.setPosition(shotEnd);
+        arrowHead.setFillColor(sf::Color(255, 245, 150, shotAlpha));
+        m_window.draw(arrowHead);
+    }
+
+    if (m_attackTimer > 0.9f) {
+        const float radius = 12.f + std::min(1.f, (m_attackTimer - 0.9f) / 0.7f) * 24.f;
+        sf::CircleShape burst(radius);
+        burst.setOrigin({radius, radius});
+        burst.setPosition(center);
+        burst.setFillColor(sf::Color(255, 230, 80, 35));
+        burst.setOutlineColor(sf::Color(255, 230, 120, 170));
+        burst.setOutlineThickness(2.f);
+        m_window.draw(burst);
+    }
+
+    drawTextAt("ATAK", labelPos.x - 18.f, labelPos.y - 8.f, 14, sf::Color(255, 95, 55));
 }
 
 void Visualizer::drawMines() {
@@ -569,22 +788,22 @@ void Visualizer::drawGuards() {
         //  --- ID strażnika ---
         {
             std::string idStr = "#" + std::to_string(m_guards[i].getId());
-            sf::Text idLabel(m_font, idStr, 17u);
+            sf::Text idLabel(idStr, m_font, 17u);
             idLabel.setFillColor(sf::Color(220, 220, 255));
             sf::FloatRect lb = idLabel.getLocalBounds();
-            idLabel.setOrigin({lb.size.x / 2.f, lb.size.y});
-            idLabel.setPosition({pos.x, pos.y - GUARD_R - 2.f});
+            idLabel.setOrigin(lb.left + lb.width / 2.f, lb.top + lb.height);
+            idLabel.setPosition(pos.x, pos.y - GUARD_R - 2.f);
             m_window.draw(idLabel);
         }
 
         //  --- głośność ---
         {
             std::string loudStr = std::to_string(m_guards[i].getLoudness());
-            sf::Text loudLabel(m_font, loudStr, 17u);
+            sf::Text loudLabel(loudStr, m_font, 17u);
             loudLabel.setFillColor(c);
             sf::FloatRect lb = loudLabel.getLocalBounds();
-            loudLabel.setOrigin({lb.size.x / 2.f, 0.f});
-            loudLabel.setPosition({pos.x, pos.y + GUARD_R + 2.f});
+            loudLabel.setOrigin(lb.left + lb.width / 2.f, lb.top);
+            loudLabel.setPosition(pos.x, pos.y + GUARD_R + 2.f);
             m_window.draw(loudLabel);
         }
     }
@@ -612,9 +831,9 @@ void Visualizer::drawDwarfAnims() {
             m_window.draw(ci);
         }
 
-        sf::Text lbl(m_font, std::to_string(da.dwarfId), 11u);
+        sf::Text lbl(std::to_string(da.dwarfId), m_font, 11u);
         lbl.setFillColor(sf::Color::White);
-        lbl.setPosition({da.pos.x + DWARF_R + 2.f, da.pos.y - 8.f});
+        lbl.setPosition(da.pos.x + DWARF_R + 2.f, da.pos.y - 8.f);
         m_window.draw(lbl);
     }
 }
@@ -649,15 +868,19 @@ void Visualizer::drawNode(sf::Vector2f pos, float r, sf::Color fill,
         m_window.draw(ci);
     }
 
-    sf::Text t(m_font, sf::String::fromUtf8(label.begin(), label.end()), 12u);
+    sf::Text t(sf::String::fromUtf8(label.begin(), label.end()), m_font, 12u);
     t.setFillColor(sf::Color::White);
     sf::FloatRect tb = t.getLocalBounds();
-    t.setOrigin({tb.position.x + tb.size.x / 2.f, 0.f});
-    t.setPosition({pos.x, pos.y + r + 3.f});
+    t.setOrigin(tb.left + tb.width / 2.f, tb.top);
+    t.setPosition(pos.x, pos.y + r + 3.f);
     m_window.draw(t);
 }
 
 void Visualizer::drawSidePanel() {
+    const float visiblePanelHeight = WIN_H - 20.f;
+    const float maxScroll = std::max(0.f, calculateSidePanelContentHeight() - visiblePanelHeight);
+    m_panelScrollY = std::max(0.f, std::min(m_panelScrollY, maxScroll));
+
     float x = MAP_W + 12.f;
     float y = 10.f - m_panelScrollY;
     const unsigned lh = 20;
@@ -676,7 +899,7 @@ void Visualizer::drawSidePanel() {
 
     switch (m_phase) {
     case Phase::WORK_ASSIGNMENT:
-        line("PRZYDZIELANIE PRACY", COL_MINE);
+        line("=== PRZYDZIELANIE PRACY ===", COL_MINE);
         sep();
         line("Krasnoludki: " + std::to_string(m_dwarves.size()));
         line("Kopalnie:    " + std::to_string(m_mines.size()));
@@ -693,14 +916,14 @@ void Visualizer::drawSidePanel() {
         }
         sep();
         line("Legenda:", hex(0xaaaaaa));
-        line("szary   = mozliwe krawedzie", hex(0x666688));
-        line("zielony = preferowany surowiec", COL_PREF_EDGE);
-        line("fiolet  = niepreferowany surowiec", COL_EDGE);
+        line("  szare: mozliwe krawedzie", hex(0x666688));
+        line("  zielony = preferowany", COL_PREF_EDGE);
+        line("  szary   = niepreferowany", COL_EDGE);
         sep();
         line("Przydzialy:");
         for (const auto& a : m_assignment.assignments) {
             std::ostringstream oss;
-            oss << "D" << a.dwarfId << " -> K" << a.mineId << " (" << a.resourceType << ")";
+            oss << " D" << a.dwarfId << " -> K" << a.mineId << " (" << a.resourceType << ")";
             line(oss.str(), a.preferredResource ? COL_PREF_EDGE : COL_EDGE);
             std::ostringstream oss2;
             oss2 << "   dist: " << std::fixed << std::setprecision(2) << a.distance;
@@ -715,7 +938,7 @@ void Visualizer::drawSidePanel() {
         break;
 
     case Phase::BORDER_PATROL:
-        line("PATROL GRANICY", COL_HULL);
+        line("=== PATROL GRANICY ===", COL_HULL);
         sep();
         {
             std::ostringstream oss;
@@ -727,41 +950,50 @@ void Visualizer::drawSidePanel() {
         line("Punkty otoczki:", hex(0xaaaaaa));
         for (const auto& p : m_hull) {
             std::ostringstream oss;
-            oss << "(" << std::fixed << std::setprecision(1) << p.x << ", " << p.y << ")";
+            oss << "  (" << std::fixed << std::setprecision(1) << p.x << ", " << p.y << ")";
             line(oss.str());
         }
         break;
 
     case Phase::GUARD_COMMAND:
-        line("OBRONA GRANICY", COL_GUARD);
+        line("=== OBRONA GRANICY ===", COL_GUARD);
         sep();
         line("Straznicy: " + std::to_string(m_guards.size()));
         sep();
         if (m_guardRangeL >= 0) {
-            std::string rangeStr = "Zakres: [" + std::to_string(m_guardRangeL);
-            if (m_guardRangeR >= 0) rangeStr += " .. " + std::to_string(m_guardRangeR);
-            else                    rangeStr += " .. ?";
+            std::string rangeStr = "Wybrano: [" + std::to_string(m_guardRangeL);
+            if (m_guardRangeR >= 0) rangeStr += ", " + std::to_string(m_guardRangeR);
+            else                    rangeStr += ", ....";
             rangeStr += "]";
             line(rangeStr);
+            if (m_guardRangeR >= 0) {
+                if (m_attackResolved) {
+                    line("Atak odparty", sf::Color(80, 255, 180));
+                }
+                else {
+                    line("Salwa w toku", hex(0xffcc00));
+                    line("Atakowany odcinek granicy", sf::Color(255, 120, 55));
+                }
+            }
             if (m_guardQueryDone && m_loudestIdx >= 0) {
-                line("Najglosniejszy krasnal:", COL_LOUDEST);
-                line("- indeks: " + std::to_string(m_loudestIdx), COL_LOUDEST);
-                line("- id: " + std::to_string(m_guards[m_loudestIdx].getId()), COL_LOUDEST);
-                line("- glosnosc: " + std::to_string(m_guards[m_loudestIdx].getLoudness()), COL_LOUDEST);
+                line("Najglosniejszy:", COL_LOUDEST);
+                line("  idx: "    + std::to_string(m_loudestIdx), COL_LOUDEST);
+                line("  id:  "    + std::to_string(m_guards[m_loudestIdx].getId()), COL_LOUDEST);
+                line("  glosnosc: "+ std::to_string(m_guards[m_loudestIdx].getLoudness()), COL_LOUDEST);
                 sep();
-                line(">>> Rozkaz <<<", hex(0xffd000));
-                line("Strzaly na cieciwy!", hex(0xffd000));
-                line("Naciagnac cieciwy!", hex(0xffd000));
-                line("Strzal!", hex(0xffd000));
+                line("Rozkaz:", hex(0xffcc00));
+                line("  Strzaly na cieciwy!", hex(0xffcc00));
+                line("  Naciagnac cieciwy!", hex(0xffcc00));
+                line("  Strzal!", hex(0xffcc00));
             }
         } else {
-            line("Wybierz przedzial", hex(0x888888));
-            line("[Straznik 1, Straznik 2]", hex(0x888888));
+            line("Kliknij straznika #1", hex(0x888888));
+            line("potem straznika #2", hex(0x888888));
         }
         sep();
         line("Wszyscy straznicy:", hex(0xaaaaaa));
         for (size_t i = 0; i < m_guards.size(); i++) {
-            std::string s = "[" + std::to_string(i) + "] #" +
+            std::string s = "  [" + std::to_string(i) + "] #" +
                             std::to_string(m_guards[i].getId()) +
                             " glos=" + std::to_string(m_guards[i].getLoudness());
             sf::Color c = ((int)i == m_loudestIdx) ? COL_LOUDEST : sf::Color::White;
@@ -799,10 +1031,10 @@ void Visualizer::drawPopup() {
     m_window.draw(bg);
 
     for (size_t i = 0; i < m_popup.lines.size(); i++) {
-        sf::Text t(m_font, sf::String::fromUtf8(
-            m_popup.lines[i].begin(), m_popup.lines[i].end()), 13u);
+        sf::Text t(sf::String::fromUtf8(
+            m_popup.lines[i].begin(), m_popup.lines[i].end()), m_font, 13u);
         t.setFillColor(sf::Color::White);
-        t.setPosition({px + 6.f, py + 6.f + (float)i * 18.f});
+        t.setPosition(px + 6.f, py + 6.f + static_cast<float>(i) * 18.f);
         m_window.draw(t);
     }
 }
@@ -848,19 +1080,20 @@ void Visualizer::onClickGuardRange(sf::Vector2f mp) {
         sf::Vector2f d = mp - m_guardPos[i];
         if (std::sqrt(d.x*d.x + d.y*d.y) <= GUARD_R + 12) {
             if (m_guardRangeL < 0) {
-                // pierwszy klik — zaznacz L
-                m_guardRangeL = (int)i;
-                m_guardRangeR = -1;
-                m_loudestIdx = -1;
-                m_guardQueryDone = false;
+                m_guardRangeL = (int)i; m_guardRangeR = -1;
+                m_loudestIdx = -1; m_guardQueryDone = false;
+                m_attackTimer = 0.f; m_attackResolved = false;
             } else if (m_guardRangeR < 0) {
-                // drugi klik — zaznacz R i odpytaj
                 int l = std::min(m_guardRangeL, (int)i);
                 int r = std::max(m_guardRangeL, (int)i);
-                m_guardRangeL = l;
-                m_guardRangeR = r;
+                m_guardRangeL = l; m_guardRangeR = r;
                 GuardCommandResult res = m_guardSolver.findLoudestGuard(l, r);
                 if (res.found) { m_loudestIdx = res.index; m_guardQueryDone = true; }
+                m_attackTimer = 0.f; m_attackResolved = false;
+            } else {
+                m_guardRangeL = (int)i; m_guardRangeR = -1;
+                m_loudestIdx = -1; m_guardQueryDone = false;
+                m_attackTimer = 0.f; m_attackResolved = false;
             }
             return;
         }
@@ -868,7 +1101,7 @@ void Visualizer::onClickGuardRange(sf::Vector2f mp) {
 }
 
 sf::Text Visualizer::makeText(const std::string& str, unsigned size, sf::Color col) const {
-    sf::Text t(m_font, sf::String::fromUtf8(str.begin(), str.end()), size);
+    sf::Text t(sf::String::fromUtf8(str.begin(), str.end()), m_font, size);
     t.setFillColor(col);
     return t;
 }
